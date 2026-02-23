@@ -89,11 +89,11 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {/* Reviews */}
       <ReviewsSection rating={product.rating} totalReviews={product.reviews} />
 
-      {/* Sticky Add to Cart CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#ffffff] border-t border-[#f0f0f0] px-4 py-3 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+      {/* Floating Add to Cart CTA */}
+      <div className="fixed bottom-5 left-4 right-4 z-40">
         <button
           onClick={handleAddToCart}
-          className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.98] transition-all flex items-center justify-center gap-2 ${
+          className={`w-full text-sm font-bold py-4 rounded-2xl uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.2)] ${
             added
               ? "bg-[#1a1a1a] text-[#ffffff]"
               : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
