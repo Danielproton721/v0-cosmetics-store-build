@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Heart, Star } from "lucide-react"
+import { Heart, Star, Check } from "lucide-react"
+import { useCart } from "@/lib/cart-context"
 
 interface ProductCardProps {
   name: string
@@ -16,8 +17,25 @@ interface ProductCardProps {
 
 export function ProductCard({ name, price, image, rating, reviews, slug }: ProductCardProps) {
   const [liked, setLiked] = useState(false)
+  const [added, setAdded] = useState(false)
+  const { addItem } = useCart()
 
   const productHref = slug ? `/product/${slug}` : "#"
+
+  const handleAddToCart = useCallback(() => {
+    const itemId = slug
+      ? slug.split("").reduce((acc, ch) => ((acc << 5) - acc + ch.charCodeAt(0)) | 0, 0)
+      : Math.floor(Math.random() * 100000)
+    addItem({
+      id: Math.abs(itemId),
+      slug: slug || "",
+      name,
+      price,
+      image,
+    })
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1500)
+  }, [addItem, slug, name, price, image])
 
   return (
     <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
@@ -80,8 +98,22 @@ export function ProductCard({ name, price, image, rating, reviews, slug }: Produ
         </p>
 
         {/* Add button */}
-        <button className="w-full mt-2.5 bg-[#1a1a1a] text-[#ffffff] text-xs font-semibold py-2.5 rounded-full hover:bg-[#1a1a1a]/85 active:scale-[0.98] transition-all duration-150 uppercase tracking-wider">
-          Adicionar
+        <button
+          onClick={handleAddToCart}
+          className={`w-full mt-2.5 text-xs font-semibold py-2.5 rounded-full active:scale-[0.98] transition-all duration-150 uppercase tracking-wider flex items-center justify-center gap-1.5 ${
+            added
+              ? "bg-[#22c55e] text-[#ffffff]"
+              : "bg-[#1a1a1a] text-[#ffffff] hover:bg-[#1a1a1a]/85"
+          }`}
+        >
+          {added ? (
+            <>
+              <Check size={14} />
+              Adicionado
+            </>
+          ) : (
+            "Adicionar"
+          )}
         </button>
       </div>
     </div>

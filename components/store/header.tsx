@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import { Menu, Search, ShoppingBag, User, X, Heart, Home, Grid3X3, Tag } from "lucide-react"
+import { useCart } from "@/lib/cart-context"
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [cartCount] = useState(0)
+  const { totalItems, toggleCart } = useCart()
 
   return (
     <>
@@ -38,13 +39,14 @@ export function Header() {
               <Search size={20} />
             </button>
             <button
+              onClick={toggleCart}
               className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity relative"
               aria-label="Carrinho"
             >
               <ShoppingBag size={20} />
-              {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#1a1a1a] text-[#ffffff] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
+              {totalItems > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-[#1a1a1a] text-[#ffffff] text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
+                  {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
             </button>

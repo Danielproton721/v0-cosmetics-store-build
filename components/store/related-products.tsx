@@ -24,6 +24,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
               image={product.image}
               rating={product.rating}
               reviews={product.reviews}
+              slug={product.slug}
             />
           </div>
         ))}
