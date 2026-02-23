@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { ProductPage } from "@/components/store/product-page"
+import { PageTransition } from "@/components/store/page-transition"
 import { getProductBySlug, getRelatedProducts, products } from "@/lib/products"
 import type { Metadata } from "next"
 
@@ -46,7 +47,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
       {/* Spacer for fixed header */}
       <div className="h-14" />
 
-      <ProductPage product={product} relatedProducts={relatedProducts} />
+      <PageTransition>
+        <ProductPage product={product} relatedProducts={relatedProducts} />
+      </PageTransition>
 
       <Footer />
     </main>

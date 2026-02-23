@@ -55,7 +55,7 @@ export function ProductCard({ name, price, image, rating, reviews, slug }: Produ
             }
           />
         </button>
-        <Link href={productHref} className="relative w-full h-full block">
+        <Link href={productHref} prefetch={true} className="relative w-full h-full block">
           <Image
             src={image}
             alt={name}
@@ -68,7 +68,7 @@ export function ProductCard({ name, price, image, rating, reviews, slug }: Produ
 
       {/* Info area */}
       <div className="p-3">
-        <Link href={productHref}>
+        <Link href={productHref} prefetch={true}>
           <h3 className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight min-h-[2rem] hover:text-[#d4a017] transition-colors">
             {name}
           </h3>
