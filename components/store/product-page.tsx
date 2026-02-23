@@ -40,7 +40,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   }, [addItem, product, quantity])
 
   return (
-    <div>
+    <div className="pb-20">
       {/* Gallery */}
       <ProductGallery images={product.images} name={product.name} />
 
@@ -89,8 +89,8 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {/* Reviews */}
       <ReviewsSection rating={product.rating} totalReviews={product.reviews} />
 
-      {/* Sticky Add to Cart Bar - always visible at the bottom */}
-      <div className="sticky bottom-0 left-0 right-0 z-40 bg-[#ffffff] border-t border-[#e5e5e5] px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+      {/* Fixed Add to Cart Bar - always visible at the bottom of the viewport */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#ffffff] border-t border-[#e5e5e5] px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
         <button
           onClick={handleAddToCart}
           className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${
