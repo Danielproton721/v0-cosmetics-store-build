@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, User, X, Home, Grid3X3, Tag, ChevronLeft, ChevronDown } from "lucide-react"
+import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
 export function Header() {
@@ -12,7 +12,6 @@ export function Header() {
   const [collectionsOpen, setCollectionsOpen] = useState(false)
   const { totalItems, toggleCart } = useCart()
   const pathname = usePathname()
-  const router = useRouter()
   const menuHistoryRef = useRef(false)
   const searchHistoryRef = useRef(false)
 
@@ -64,10 +63,6 @@ export function Header() {
     }
   }, [])
 
-  const handleBack = useCallback(() => {
-    router.back()
-  }, [router])
-
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#d4a017] shadow-sm">
@@ -81,13 +76,13 @@ export function Header() {
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           ) : (
-            <button
-              onClick={handleBack}
+            <Link
+              href="/"
               className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
-              aria-label="Voltar"
+              aria-label="Inicio"
             >
-              <ChevronLeft size={22} />
-            </button>
+              <Home size={22} />
+            </Link>
           )}
 
           <div className="flex-1 text-center">
