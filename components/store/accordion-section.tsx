@@ -28,6 +28,12 @@ export function AccordionSection({
 }: AccordionSectionProps) {
   return (
     <div className="px-4 bg-[#ffffff]">
+      {/* Description always visible first */}
+      <div className="border-b border-[#f0f0f0] py-4">
+        <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">Descricao do Produto</h3>
+        <p className="text-sm text-[#737373] leading-relaxed">{description}</p>
+      </div>
+
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="hair-types" className="border-b border-[#f0f0f0]">
           <AccordionTrigger className="text-sm font-medium text-[#1a1a1a] hover:no-underline py-4">
@@ -74,15 +80,6 @@ export function AccordionSection({
                 </li>
               ))}
             </ul>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="description" className="border-b border-[#f0f0f0]">
-          <AccordionTrigger className="text-sm font-medium text-[#1a1a1a] hover:no-underline py-4">
-            Descricao do Produto
-          </AccordionTrigger>
-          <AccordionContent>
-            <p className="text-sm text-[#737373] leading-relaxed">{description}</p>
           </AccordionContent>
         </AccordionItem>
 
