@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import Link from "next/link"
 import { Menu, Search, ShoppingBag, User, X, Heart, Home, Grid3X3, Tag, ChevronLeft } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
@@ -145,19 +146,23 @@ export function Header() {
           <nav className="absolute top-0 left-0 bottom-0 w-72 bg-[#ffffff] shadow-2xl pt-20 px-6 animate-in slide-in-from-left duration-200">
             <div className="flex flex-col gap-1">
               {[
-                { icon: Home, label: "Início" },
-                { icon: Grid3X3, label: "Categorias" },
-                { icon: Tag, label: "Ofertas" },
-                { icon: Heart, label: "Favoritos" },
-                { icon: User, label: "Minha Conta" },
+                { icon: Home, label: "Inicio", href: "/" },
+                { icon: Grid3X3, label: "Colecoes", href: "/colecoes" },
+                { icon: Tag, label: "Tonicos", href: "/colecoes/tonicos" },
+                { icon: Tag, label: "Fortalecimento", href: "/colecoes/fortalecimento" },
+                { icon: Tag, label: "Antiqueda", href: "/colecoes/antiqueda" },
+                { icon: Tag, label: "Desmarelador", href: "/colecoes/desmarelador" },
+                { icon: Tag, label: "Pigmentacao", href: "/colecoes/tonalidade" },
               ].map((item) => (
-                <button
+                <Link
                   key={item.label}
+                  href={item.href}
+                  onClick={closeMenu}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-sm font-medium"
                 >
                   <item.icon size={18} className="text-[#d4a017]" />
                   {item.label}
-                </button>
+                </Link>
               ))}
             </div>
           </nav>

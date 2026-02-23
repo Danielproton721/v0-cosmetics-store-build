@@ -306,3 +306,68 @@ export function getProductBySlug(slug: string): Product | undefined {
 export function getRelatedProducts(slugs: string[]): Product[] {
   return products.filter((p) => slugs.includes(p.slug))
 }
+
+// ─── Collections ─────────────────────────────────────────────
+export interface Collection {
+  slug: string
+  name: string
+  description: string
+  image: string
+  productCount: number
+}
+
+export const collections: Collection[] = [
+  {
+    slug: "tonicos",
+    name: "Tonicos",
+    description: "Tonicos capilares para nutricao, crescimento e revitalizacao dos fios.",
+    image: "/images/collection-tonicos.jpg",
+    productCount: 4,
+  },
+  {
+    slug: "fortalecimento",
+    name: "Fortalecimento",
+    description: "Linha completa para fortalecer os fios desde a raiz e combater a quebra capilar.",
+    image: "/images/collection-fortalecimento.jpg",
+    productCount: 3,
+  },
+  {
+    slug: "antiqueda",
+    name: "Antiqueda",
+    description: "Produtos especializados no combate a queda e estimulo ao crescimento capilar.",
+    image: "/images/collection-antiqueda.jpg",
+    productCount: 2,
+  },
+  {
+    slug: "desmarelador",
+    name: "Desmarelador",
+    description: "Linha Techno Hair para neutralizar tons amarelados e manter o loiro perfeito.",
+    image: "/images/collection-desmarelador.jpg",
+    productCount: 2,
+  },
+  {
+    slug: "tonalidade",
+    name: "Pigmentacao e Tonalidade",
+    description: "Produtos para pigmentacao, tonalizacao e realce de cor dos cabelos.",
+    image: "/images/collection-tonalidade.jpg",
+    productCount: 2,
+  },
+]
+
+const categoryMap: Record<string, string> = {
+  tonicos: "Tonicos",
+  fortalecimento: "Fortalecimento",
+  antiqueda: "Antiqueda",
+  desmarelador: "Desmarelador",
+  tonalidade: "Tonalidade",
+}
+
+export function getCollectionBySlug(slug: string): Collection | undefined {
+  return collections.find((c) => c.slug === slug)
+}
+
+export function getProductsByCollection(collectionSlug: string): Product[] {
+  const category = categoryMap[collectionSlug]
+  if (!category) return []
+  return products.filter((p) => p.category === category)
+}
