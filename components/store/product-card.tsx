@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Heart, Star } from "lucide-react"
 
 interface ProductCardProps {
@@ -10,10 +11,13 @@ interface ProductCardProps {
   image: string
   rating: number
   reviews: number
+  slug?: string
 }
 
-export function ProductCard({ name, price, image, rating, reviews }: ProductCardProps) {
+export function ProductCard({ name, price, image, rating, reviews, slug }: ProductCardProps) {
   const [liked, setLiked] = useState(false)
+
+  const productHref = slug ? `/product/${slug}` : "#"
 
   return (
     <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
@@ -33,7 +37,7 @@ export function ProductCard({ name, price, image, rating, reviews }: ProductCard
             }
           />
         </button>
-        <div className="relative w-full h-full">
+        <Link href={productHref} className="relative w-full h-full block">
           <Image
             src={image}
             alt={name}
@@ -41,14 +45,16 @@ export function ProductCard({ name, price, image, rating, reviews }: ProductCard
             className="object-contain group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 50vw, 25vw"
           />
-        </div>
+        </Link>
       </div>
 
       {/* Info area */}
       <div className="p-3">
-        <h3 className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight min-h-[2rem]">
-          {name}
-        </h3>
+        <Link href={productHref}>
+          <h3 className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight min-h-[2rem] hover:text-[#d4a017] transition-colors">
+            {name}
+          </h3>
+        </Link>
 
         {/* Star rating */}
         <div className="flex items-center gap-0.5 mt-1.5">

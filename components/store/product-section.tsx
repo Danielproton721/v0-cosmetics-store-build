@@ -12,6 +12,7 @@ interface Product {
   rating: number
   reviews: number
   category: string
+  slug?: string
 }
 
 interface ProductSectionProps {
@@ -62,6 +63,7 @@ export function ProductSection({
             image={product.image}
             rating={product.rating}
             reviews={product.reviews}
+            slug={product.slug}
           />
         ))}
       </div>
