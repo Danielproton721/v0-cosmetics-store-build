@@ -1,25 +1,92 @@
 "use client"
 
-import { useState } from "react"
-import { Menu, Search, ShoppingBag, User, X, Heart, Home, Grid3X3, Tag } from "lucide-react"
+import { useState, useEffect, useCallback, useRef } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { Menu, Search, ShoppingBag, User, X, Heart, Home, Grid3X3, Tag, ChevronLeft } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const { totalItems, toggleCart } = useCart()
+  const pathname = usePathname()
+  const router = useRouter()
+  const menuHistoryRef = useRef(false)
+  const searchHistoryRef = useRef(false)
+
+  const isHomePage = pathname === "/"
+
+  // Hardware back button support for menu overlay
+  useEffect(() => {
+    if (!menuOpen) return
+    window.history.pushState({ menuOpen: true }, "")
+    menuHistoryRef.current = true
+    const handlePop = () => {
+      menuHistoryRef.current = false
+      setMenuOpen(false)
+    }
+    window.addEventListener("popstate", handlePop)
+    return () => window.removeEventListener("popstate", handlePop)
+  }, [menuOpen])
+
+  // Hardware back button support for search overlay
+  useEffect(() => {
+    if (!searchOpen) return
+    window.history.pushState({ searchOpen: true }, "")
+    searchHistoryRef.current = true
+    const handlePop = () => {
+      searchHistoryRef.current = false
+      setSearchOpen(false)
+    }
+    window.addEventListener("popstate", handlePop)
+    return () => window.removeEventListener("popstate", handlePop)
+  }, [searchOpen])
+
+  // Close menu manually (pops history to keep stack clean)
+  const closeMenu = useCallback(() => {
+    if (menuHistoryRef.current) {
+      menuHistoryRef.current = false
+      window.history.back()
+    } else {
+      setMenuOpen(false)
+    }
+  }, [])
+
+  // Close search manually
+  const closeSearch = useCallback(() => {
+    if (searchHistoryRef.current) {
+      searchHistoryRef.current = false
+      window.history.back()
+    } else {
+      setSearchOpen(false)
+    }
+  }, [])
+
+  const handleBack = useCallback(() => {
+    router.back()
+  }, [router])
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#d4a017] shadow-sm">
         <div className="flex items-center justify-between px-4 py-3">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
-            aria-label="Menu"
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {isHomePage ? (
+            <button
+              onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
+              className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
+              aria-label="Menu"
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          ) : (
+            <button
+              onClick={handleBack}
+              className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
+              aria-label="Voltar"
+            >
+              <ChevronLeft size={22} />
+            </button>
+          )}
 
           <div className="flex-1 text-center">
             <h1 className="text-lg font-bold tracking-wide text-[#1a1a1a]">
@@ -32,7 +99,7 @@ export function Header() {
 
           <div className="flex items-center gap-1">
             <button
-              onClick={() => setSearchOpen(!searchOpen)}
+              onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))}
               className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
               aria-label="Buscar"
             >
@@ -73,7 +140,7 @@ export function Header() {
         <div className="fixed inset-0 z-40">
           <div
             className="absolute inset-0 bg-[#1a1a1a]/40"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
           />
           <nav className="absolute top-0 left-0 bottom-0 w-72 bg-[#ffffff] shadow-2xl pt-20 px-6 animate-in slide-in-from-left duration-200">
             <div className="flex flex-col gap-1">

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useCallback, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
@@ -8,6 +8,17 @@ import { useCart } from "@/lib/cart-context"
 
 export function CartDrawer() {
   const { items, isOpen, totalItems, totalPrice, removeItem, updateQuantity, closeCart } = useCart()
+  const historyPushedRef = useRef(false)
+
+  // Close drawer by going back in history (cleans up the pushed state)
+  const handleCloseCart = useCallback(() => {
+    if (historyPushedRef.current) {
+      historyPushedRef.current = false
+      window.history.back()
+    } else {
+      closeCart()
+    }
+  }, [closeCart])
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -21,6 +32,26 @@ export function CartDrawer() {
     }
   }, [isOpen])
 
+  // Handle hardware/software back button:
+  // Push a history entry when the drawer opens so that pressing "back"
+  // closes it instead of leaving the page.
+  useEffect(() => {
+    if (!isOpen) return
+
+    window.history.pushState({ cartOpen: true }, "")
+    historyPushedRef.current = true
+
+    const handlePopState = () => {
+      historyPushedRef.current = false
+      closeCart()
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => {
+      window.removeEventListener("popstate", handlePopState)
+    }
+  }, [isOpen, closeCart])
+
   return (
     <>
       {/* Backdrop */}
@@ -28,7 +59,7 @@ export function CartDrawer() {
         className={`fixed inset-0 z-50 bg-[#1a1a1a]/50 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        onClick={closeCart}
+        onClick={handleCloseCart}
         aria-hidden="true"
       />
 
@@ -55,7 +86,7 @@ export function CartDrawer() {
             )}
           </div>
           <button
-            onClick={closeCart}
+            onClick={handleCloseCart}
             className="p-2 rounded-full hover:bg-[#f5f5f5] transition-colors"
             aria-label="Fechar carrinho"
           >
@@ -75,7 +106,7 @@ export function CartDrawer() {
             </div>
             <Link
               href="/"
-              onClick={closeCart}
+              onClick={handleCloseCart}
               className="bg-[#1a1a1a] text-[#ffffff] text-xs font-semibold px-6 py-2.5 rounded-full hover:bg-[#1a1a1a]/85 transition-colors uppercase tracking-wider"
             >
               Ver Produtos
@@ -89,7 +120,7 @@ export function CartDrawer() {
                   {/* Product image */}
                   <Link
                     href={`/product/${item.slug}`}
-                    onClick={closeCart}
+                    onClick={handleCloseCart}
                     className="relative w-20 h-20 rounded-lg bg-[#f5f5f5] overflow-hidden shrink-0"
                   >
                     <Image
@@ -106,7 +137,7 @@ export function CartDrawer() {
                     <div>
                       <Link
                         href={`/product/${item.slug}`}
-                        onClick={closeCart}
+                        onClick={handleCloseCart}
                         className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight hover:text-[#d4a017] transition-colors"
                       >
                         {item.name}
@@ -176,7 +207,7 @@ export function CartDrawer() {
 
             {/* Continue shopping */}
             <button
-              onClick={closeCart}
+              onClick={handleCloseCart}
               className="w-full text-xs text-[#737373] font-medium py-2 hover:text-[#1a1a1a] transition-colors underline underline-offset-2"
             >
               Continuar Comprando
