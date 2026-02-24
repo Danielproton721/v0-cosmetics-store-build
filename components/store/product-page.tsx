@@ -54,6 +54,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   }, [addItem, product, quantity])
 
   return (
+    <>
     <div>
       {/* Gallery */}
       <ProductGallery images={product.images} name={product.name} />
@@ -129,39 +130,40 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
 
       {/* Reviews */}
       <ReviewsSection rating={product.rating} totalReviews={product.reviews} />
+    </div>
 
-      {/* Floating Add to Cart - appears when inline button scrolls out of view */}
-      <div
-        className={`fixed bottom-5 left-4 right-4 z-40 transition-all duration-300 ease-in-out ${
-          showFloating
-            ? "translate-y-0 opacity-100"
-            : "translate-y-8 opacity-0 pointer-events-none"
+    {/* Floating overlay Add to Cart - above everything, appears when inline button scrolls out */}
+    <div
+      className={`fixed bottom-5 left-4 right-4 z-50 transition-all duration-300 ease-in-out ${
+        showFloating
+          ? "translate-y-0 opacity-100"
+          : "translate-y-8 opacity-0 pointer-events-none"
+      }`}
+    >
+      <button
+        onClick={handleAddToCart}
+        className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.25)] ${
+          added
+            ? "bg-[#1a1a1a] text-[#ffffff]"
+            : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
         }`}
       >
-        <button
-          onClick={handleAddToCart}
-          className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.2)] ${
-            added
-              ? "bg-[#1a1a1a] text-[#ffffff]"
-              : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
-          }`}
-        >
-          {added ? (
-            <>
-              <Check size={18} />
-              <span>Adicionado ao Carrinho</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBag size={18} />
-              <span>Adicionar</span>
-              <span className="text-xs font-normal opacity-90">
-                {"- R$ " + totalPrice.toFixed(2).replace(".", ",")}
-              </span>
-            </>
-          )}
-        </button>
-      </div>
+        {added ? (
+          <>
+            <Check size={18} />
+            <span>Adicionado ao Carrinho</span>
+          </>
+        ) : (
+          <>
+            <ShoppingBag size={18} />
+            <span>Adicionar</span>
+            <span className="text-xs font-normal opacity-90">
+              {"- R$ " + totalPrice.toFixed(2).replace(".", ",")}
+            </span>
+          </>
+        )}
+      </button>
     </div>
+    </>
   )
 }
