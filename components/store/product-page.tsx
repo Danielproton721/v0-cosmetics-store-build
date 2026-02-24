@@ -40,7 +40,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   }, [addItem, product, quantity])
 
   return (
-    <div>
+    <div className="pb-24">
       {/* Gallery */}
       <ProductGallery images={product.images} name={product.name} />
 
@@ -60,31 +60,32 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {/* Quantity selector */}
       <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
 
-      {/* Add to Cart button */}
-      <div className="px-4 pb-4">
-        <button
-          onClick={handleAddToCart}
-          className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${
-            added
-              ? "bg-[#1a1a1a] text-[#ffffff]"
-              : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
-          }`}
-        >
-          {added ? (
-            <>
-              <Check size={18} />
-              <span>Adicionado ao Carrinho</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBag size={18} />
-              <span>Adicionar</span>
-              <span className="text-xs font-normal opacity-90">
-                - R$ {totalPrice.toFixed(2).replace(".", ",")}
-              </span>
-            </>
-          )}
-        </button>
+      {/* Floating bottom sheet CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
+        <div className="pointer-events-auto bg-[#ffffff] rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] px-5 pt-2.5 pb-5">
+          {/* Drag handle */}
+          <div className="flex justify-center mb-3">
+            <div className="w-10 h-1 rounded-full bg-[#d1d5db]" />
+          </div>
+          {/* Button */}
+          <button
+            onClick={handleAddToCart}
+            className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${
+              added
+                ? "bg-[#1a1a1a] text-[#ffffff]"
+                : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
+            }`}
+          >
+            {added ? (
+              <>
+                <Check size={18} />
+                <span>Adicionado ao Carrinho</span>
+              </>
+            ) : (
+              "Adicionar"
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Shipping calculator */}
