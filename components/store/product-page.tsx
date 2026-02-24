@@ -82,6 +82,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
         rating={product.rating}
         reviews={product.reviews}
         recentSales={product.recentSales}
+        isTest={product.isTest}
       />
 
       {/* Variant selector */}

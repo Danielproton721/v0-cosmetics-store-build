@@ -25,6 +25,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
               rating={product.rating}
               reviews={product.reviews}
               slug={product.slug}
+              isTest={product.isTest}
             />
           </div>
         ))}

@@ -9,6 +9,7 @@ interface ProductInfoProps {
   rating: number
   reviews: number
   recentSales: number
+  isTest?: boolean
 }
 
 export function ProductInfo({
@@ -18,6 +19,7 @@ export function ProductInfo({
   rating,
   reviews,
   recentSales,
+  isTest,
 }: ProductInfoProps) {
   const discount = compareAtPrice
     ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
@@ -25,6 +27,11 @@ export function ProductInfo({
 
   return (
     <div className="px-4 py-4 bg-[#ffffff]">
+      {isTest && (
+        <span className="inline-block mb-2 bg-[#ef4444] text-[#ffffff] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+          Produto de Teste
+        </span>
+      )}
       {/* Product name */}
       <h1 className="text-lg font-semibold text-[#1a1a1a] leading-tight text-balance">
         {name}

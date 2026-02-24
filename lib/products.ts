@@ -30,6 +30,7 @@ export interface Product {
   relatedSlugs: string[]
   variants?: ProductVariant[]
   variantLabel?: string
+  isTest?: boolean
 }
 
 export const products: Product[] = [
@@ -73,7 +74,8 @@ export const products: Product[] = [
       "Em caso de contato com os olhos, enxague com agua em abundancia.",
       "Se houver irritacao no couro cabeludo, suspenda o uso e consulte um dermatologista."
     ],
-    relatedSlugs: ["tonico-fortalecimento-tradicional", "tonico-milagroso-200ml"]
+    relatedSlugs: ["tonico-fortalecimento-tradicional", "tonico-milagroso-200ml"],
+    isTest: true,
   },
   {
     id: 2,
@@ -111,7 +113,8 @@ export const products: Product[] = [
       "Uso externo.",
       "Evitar contato com os olhos."
     ],
-    relatedSlugs: ["kit-tonico-fortalecimento-3-unidades", "tonico-biotina-100ml"]
+    relatedSlugs: ["kit-tonico-fortalecimento-3-unidades", "tonico-biotina-100ml"],
+    isTest: true,
   },
   {
     id: 3,
@@ -153,7 +156,8 @@ export const products: Product[] = [
       "Em caso de contato com os olhos, enxague com agua em abundancia.",
       "Se houver irritacao no couro cabeludo, suspenda o uso."
     ],
-    relatedSlugs: ["kit-tonico-fortalecimento-3-unidades", "tonico-antiqueda-100ml"]
+    relatedSlugs: ["kit-tonico-fortalecimento-3-unidades", "tonico-antiqueda-100ml"],
+    isTest: true,
   },
   {
     id: 5,
@@ -192,6 +196,7 @@ export const products: Product[] = [
       "Evitar contato com os olhos."
     ],
     relatedSlugs: ["tonico-fortalecimento-tradicional", "tonico-biotina-100ml"],
+    isTest: true,
     variantLabel: "Tamanho",
     variants: [
       {
@@ -256,7 +261,8 @@ export const products: Product[] = [
       "Manter fora do alcance de criancas.",
       "Uso externo."
     ],
-    relatedSlugs: ["tonico-antiqueda-100ml", "tonico-milagroso-200ml"]
+    relatedSlugs: ["tonico-antiqueda-100ml", "tonico-milagroso-200ml"],
+    isTest: true,
   },
   {
     id: 7,
@@ -300,7 +306,8 @@ export const products: Product[] = [
       "Em caso de contato com os olhos, enxague com agua em abundancia.",
       "Se houver irritacao no couro cabeludo, suspenda o uso e consulte um dermatologista."
     ],
-    relatedSlugs: ["tonico-antiqueda-100ml", "tonico-fortalecimento-tradicional"]
+    relatedSlugs: ["tonico-antiqueda-100ml", "tonico-fortalecimento-tradicional"],
+    isTest: true,
   },
   {
     id: 8,
@@ -336,7 +343,8 @@ export const products: Product[] = [
       "Manter fora do alcance de criancas.",
       "Uso externo."
     ],
-    relatedSlugs: ["tonico-biotina-100ml", "tonico-antiqueda-100ml"]
+    relatedSlugs: ["tonico-biotina-100ml", "tonico-antiqueda-100ml"],
+    isTest: true,
   }
 ]
 

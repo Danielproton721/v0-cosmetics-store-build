@@ -13,9 +13,10 @@ interface ProductCardProps {
   rating: number
   reviews: number
   slug?: string
+  isTest?: boolean
 }
 
-export function ProductCard({ name, price, image, rating, reviews, slug }: ProductCardProps) {
+export function ProductCard({ name, price, image, rating, reviews, slug, isTest }: ProductCardProps) {
   const [liked, setLiked] = useState(false)
   const [added, setAdded] = useState(false)
   const { addItem } = useCart()
@@ -41,6 +42,11 @@ export function ProductCard({ name, price, image, rating, reviews, slug }: Produ
     <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
       {/* Image area */}
       <div className="relative aspect-square bg-[#f5f5f5] p-3">
+        {isTest && (
+          <span className="absolute top-2 left-2 z-10 bg-[#ef4444] text-[#ffffff] text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+            Teste
+          </span>
+        )}
         <button
           onClick={() => setLiked(!liked)}
           className="absolute top-2 right-2 z-10 p-1.5 rounded-full hover:bg-[#1a1a1a]/5 transition-colors"

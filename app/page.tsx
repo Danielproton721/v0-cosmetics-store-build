@@ -13,6 +13,7 @@ const bestSellerProducts = [
     reviews: 69,
     category: "Fortalecimento",
     slug: "kit-tonico-fortalecimento-3-unidades",
+    isTest: true,
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const bestSellerProducts = [
     reviews: 15,
     category: "Tonicos",
     slug: "tonico-milagroso-200ml",
+    isTest: true,
   },
   {
     id: 3,
@@ -33,6 +35,7 @@ const bestSellerProducts = [
     reviews: 0,
     category: "Fortalecimento",
     slug: "tonico-fortalecimento-tradicional",
+    isTest: true,
   },
   {
     id: 4,
@@ -42,6 +45,7 @@ const bestSellerProducts = [
     rating: 0,
     reviews: 0,
     category: "Fortalecimento",
+    isTest: true,
   },
   {
     id: 5,
@@ -52,6 +56,7 @@ const bestSellerProducts = [
     reviews: 5,
     category: "Antiqueda",
     slug: "tonico-antiqueda-100ml",
+    isTest: true,
   },
   {
     id: 6,
@@ -62,6 +67,7 @@ const bestSellerProducts = [
     reviews: 2,
     category: "Tonicos",
     slug: "tonico-biotina-100ml",
+    isTest: true,
   },
   {
     id: 7,
@@ -72,6 +78,7 @@ const bestSellerProducts = [
     reviews: 3,
     category: "Antiqueda",
     slug: "tonico-extraordinario-combate-queda-100ml",
+    isTest: true,
   },
   {
     id: 8,
@@ -82,6 +89,7 @@ const bestSellerProducts = [
     reviews: 0,
     category: "Tonicos",
     slug: "tonico-ricino-100ml",
+    isTest: true,
   },
   {
     id: 9,
@@ -91,6 +99,7 @@ const bestSellerProducts = [
     rating: 0,
     reviews: 0,
     category: "Tonicos",
+    isTest: true,
   },
   {
     id: 10,
@@ -100,18 +109,20 @@ const bestSellerProducts = [
     rating: 0,
     reviews: 0,
     category: "Fortalecimento",
+    isTest: true,
   },
 ]
 
 const pigmentacaoProducts = [
   {
     id: 11,
-    name: "Máscara Techno Hair Desmarelador Gota Dourada",
+    name: "Mascara Techno Hair Desmarelador Gota Dourada",
     price: 37.90,
     image: "/images/product-9.jpg",
     rating: 0,
     reviews: 0,
     category: "Desmarelador",
+    isTest: true,
   },
   {
     id: 12,
@@ -121,24 +132,27 @@ const pigmentacaoProducts = [
     rating: 0,
     reviews: 0,
     category: "Desmarelador",
+    isTest: true,
   },
   {
     id: 13,
-    name: "Tônico Pigmentação Platinado Gota Dourada 100ml",
+    name: "Tonico Pigmentacao Platinado Gota Dourada 100ml",
     price: 22.90,
     image: "/images/product-9.jpg",
     rating: 4,
     reviews: 12,
     category: "Tonalidade",
+    isTest: true,
   },
   {
     id: 14,
-    name: "Kit Pigmentação Completo Gota Dourada",
+    name: "Kit Pigmentacao Completo Gota Dourada",
     price: 69.90,
     image: "/images/product-10.jpg",
     rating: 5,
     reviews: 8,
     category: "Tonalidade",
+    isTest: true,
   },
 ]
 

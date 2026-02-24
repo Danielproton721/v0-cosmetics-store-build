@@ -13,6 +13,7 @@ interface Product {
   reviews: number
   category: string
   slug?: string
+  isTest?: boolean
 }
 
 interface ProductSectionProps {
@@ -64,6 +65,7 @@ export function ProductSection({
             rating={product.rating}
             reviews={product.reviews}
             slug={product.slug}
+            isTest={product.isTest}
           />
         ))}
       </div>
