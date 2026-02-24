@@ -11,7 +11,8 @@ import { ShippingCalculator } from "./shipping-calculator"
 import { AccordionSection } from "./accordion-section"
 import { RelatedProducts } from "./related-products"
 import { ReviewsSection } from "./reviews-section"
-import type { Product } from "@/lib/products"
+import { VariantSelector } from "./variant-selector"
+import type { Product, ProductVariant } from "@/lib/products"
 
 interface ProductPageProps {
   product: Product
@@ -22,10 +23,19 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const [showFloating, setShowFloating] = useState(false)
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    product.variants?.[0] ?? null
+  )
   const { addItem } = useCart()
   const inlineButtonRef = useRef<HTMLDivElement>(null)
 
-  const totalPrice = product.price * quantity
+  // Derive active price, image and images from selected variant or product defaults
+  const activePrice = selectedVariant?.price ?? product.price
+  const activeCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice
+  const activeImage = selectedVariant?.image ?? product.image
+  const activeImages = selectedVariant?.images ?? product.images
+
+  const totalPrice = activePrice * quantity
 
   // Show floating button only when the inline button scrolls out of view
   useEffect(() => {
@@ -40,25 +50,26 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   }, [])
 
   const handleAddToCart = useCallback(() => {
+    const variantSuffix = selectedVariant ? ` - ${selectedVariant.label}` : ""
     addItem(
       {
-        id: product.id,
+        id: selectedVariant?.id ?? product.id,
         slug: product.slug,
-        name: product.name,
-        price: product.price,
-        image: product.image,
+        name: product.name + variantSuffix,
+        price: activePrice,
+        image: activeImage,
       },
       quantity
     )
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
-  }, [addItem, product, quantity])
+  }, [addItem, product, quantity, selectedVariant, activePrice, activeImage])
 
   return (
     <>
     <div>
       {/* Gallery */}
-      <ProductGallery images={product.images} name={product.name} />
+      <ProductGallery images={activeImages} name={product.name} />
 
       {/* Divider */}
       <div className="h-2 bg-[#f5f5f5]" />
@@ -66,12 +77,22 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {/* Product info */}
       <ProductInfo
         name={product.name}
-        price={product.price}
-        compareAtPrice={product.compareAtPrice}
+        price={activePrice}
+        compareAtPrice={activeCompareAtPrice}
         rating={product.rating}
         reviews={product.reviews}
         recentSales={product.recentSales}
       />
+
+      {/* Variant selector */}
+      {product.variants && product.variants.length > 0 && selectedVariant && (
+        <VariantSelector
+          label={product.variantLabel || "Opcao"}
+          variants={product.variants}
+          selectedId={selectedVariant.id}
+          onSelect={setSelectedVariant}
+        />
+      )}
 
       {/* Quantity selector */}
       <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />

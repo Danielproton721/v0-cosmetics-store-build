@@ -1,3 +1,13 @@
+export interface ProductVariant {
+  id: number
+  label: string
+  price: number
+  compareAtPrice?: number
+  image: string
+  images: string[]
+  available: boolean
+}
+
 export interface Product {
   id: number
   slug: string
@@ -18,6 +28,8 @@ export interface Product {
   touchTest: string[]
   precautions: string[]
   relatedSlugs: string[]
+  variants?: ProductVariant[]
+  variantLabel?: string
 }
 
 export const products: Product[] = [
@@ -179,7 +191,36 @@ export const products: Product[] = [
       "Uso externo.",
       "Evitar contato com os olhos."
     ],
-    relatedSlugs: ["tonico-fortalecimento-tradicional", "tonico-biotina-100ml"]
+    relatedSlugs: ["tonico-fortalecimento-tradicional", "tonico-biotina-100ml"],
+    variantLabel: "Tamanho",
+    variants: [
+      {
+        id: 501,
+        label: "100 ml",
+        price: 16.90,
+        image: "/images/product-5.jpg",
+        images: ["/images/product-5.jpg"],
+        available: true,
+      },
+      {
+        id: 502,
+        label: "200 ml",
+        price: 28.90,
+        compareAtPrice: 33.80,
+        image: "/images/product-5-200ml.jpg",
+        images: ["/images/product-5-200ml.jpg"],
+        available: true,
+      },
+      {
+        id: 503,
+        label: "Kit 3 Unidades",
+        price: 42.90,
+        compareAtPrice: 50.70,
+        image: "/images/product-5-kit.jpg",
+        images: ["/images/product-5-kit.jpg"],
+        available: true,
+      },
+    ],
   },
   {
     id: 6,
