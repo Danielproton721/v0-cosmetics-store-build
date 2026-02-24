@@ -40,7 +40,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   }, [addItem, product, quantity])
 
   return (
-    <div className="pb-20">
+    <div>
       {/* Gallery */}
       <ProductGallery images={product.images} name={product.name} />
 
@@ -59,6 +59,33 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
 
       {/* Quantity selector */}
       <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
+
+      {/* Add to Cart button */}
+      <div className="px-4 pb-4">
+        <button
+          onClick={handleAddToCart}
+          className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${
+            added
+              ? "bg-[#1a1a1a] text-[#ffffff]"
+              : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
+          }`}
+        >
+          {added ? (
+            <>
+              <Check size={18} />
+              <span>Adicionado ao Carrinho</span>
+            </>
+          ) : (
+            <>
+              <ShoppingBag size={18} />
+              <span>Adicionar</span>
+              <span className="text-xs font-normal opacity-90">
+                - R$ {totalPrice.toFixed(2).replace(".", ",")}
+              </span>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Shipping calculator */}
       <ShippingCalculator />
@@ -89,32 +116,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {/* Reviews */}
       <ReviewsSection rating={product.rating} totalReviews={product.reviews} />
 
-      {/* Floating Add to Cart CTA */}
-      <div className="fixed bottom-5 left-4 right-4 z-40">
-        <button
-          onClick={handleAddToCart}
-          className={`w-full text-sm font-bold py-4 rounded-2xl uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.2)] ${
-            added
-              ? "bg-[#1a1a1a] text-[#ffffff]"
-              : "bg-[#22c55e] text-[#ffffff] hover:bg-[#16a34a]"
-          }`}
-        >
-          {added ? (
-            <>
-              <Check size={18} />
-              <span>Adicionado ao Carrinho</span>
-            </>
-          ) : (
-            <>
-              <ShoppingBag size={18} />
-              <span>Adicionar</span>
-              <span className="text-xs font-normal opacity-90">
-                - R$ {totalPrice.toFixed(2).replace(".", ",")}
-              </span>
-            </>
-          )}
-        </button>
-      </div>
+
     </div>
   )
 }
