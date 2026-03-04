@@ -185,11 +185,10 @@ export function Header() {
                       Ver Todas
                     </Link>
                     {[
-                      { label: "Tonicos", href: "/colecoes/tonicos" },
-                      { label: "Fortalecimento", href: "/colecoes/fortalecimento" },
-                      { label: "Antiqueda", href: "/colecoes/antiqueda" },
-                      { label: "Desmarelador", href: "/colecoes/desmarelador" },
-                      { label: "Pigmentacao e Tonalidade", href: "/colecoes/tonalidade" },
+                      { label: "Loreal Paris", href: "/colecoes/loreal-paris" },
+                      { label: "Pantene", href: "/colecoes/pantene" },
+                      { label: "TRESemme", href: "/colecoes/tresemme" },
+                      { label: "Kerastase", href: "/colecoes/kerastase" },
                     ].map((sub) => (
                       <Link
                         key={sub.label}
