@@ -53,6 +53,7 @@ export function Hero() {
             src="/images/product-1.jpg"
             alt="Produto fortalecimento"
             fill
+            priority
             className="object-contain drop-shadow-lg"
           />
         </div>
