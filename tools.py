@@ -24,13 +24,7 @@ import os
 # ══════════════════════════════════════════════════════════════════
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TS_FILE = os.path.join(BASE_DIR, 'lib', 'products.ts')
-TRASH_DIR = r'c:\Users\Pc Bomba\Documents\projects antigravity\Clone\trash aleatorio sem importancia'
-
-CSV_SOURCES = {
-    'roupas':       (os.path.join(TRASH_DIR, 'roupass de cama 365.csv'), 'Roupas de Cama 365'),
-    'mais_vendidos': (os.path.join(TRASH_DIR, 'mais vendidos.csv'),       'Mais Vendidos'),
-    'jogos_lencol':  (os.path.join(TRASH_DIR, 'jogo de lencol.csv'),      'Jogos de Lençol'),
-}
+DATA_DIR = os.path.join(BASE_DIR, 'data')
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -49,7 +43,9 @@ def cmd_merge():
         seen_handles.add(slug)
         return slug
 
-    def process_csv(filepath, category_name):
+    def process_csv(filepath, category_name, extra_tags=None):
+        if extra_tags is None:
+            extra_tags = []
         if not os.path.exists(filepath):
             print(f"[SKIP] Arquivo não encontrado: {filepath}")
             return
@@ -62,46 +58,64 @@ def cmd_merge():
                 return
 
             header_lower = [h.lower() for h in header]
-            price_col, compare_col, img_col = 23, 24, 32
+            try: handle_col = header_lower.index('handle')
+            except ValueError: handle_col = 0
+            try: title_col = header_lower.index('title')
+            except ValueError: title_col = 1
+            try: desc_col = header_lower.index('body (html)')
+            except ValueError: desc_col = 2
+            try: type_col = header_lower.index('type')
+            except ValueError: type_col = -1
 
+            price_col, compare_col, img_col = -1, -1, -1
             for i, h in enumerate(header_lower):
                 if h == 'variant price': price_col = i
                 elif 'compare at price' in h: compare_col = i
                 elif h == 'image src': img_col = i
 
             for row in reader:
-                if not row:
+                if not row or len(row) <= handle_col:
                     continue
-                handle = row[0]
+                handle = row[handle_col]
                 if not handle:
                     continue
                 if handle not in temp_dict:
                     temp_dict[handle] = {
-                        'title': '', 'desc_html': '',
+                        'title': '', 'desc_html': '', 'type': '',
                         'price': 0.0, 'compareAtPrice': 0.0, 'image': ''
                     }
-                title = row[1] if len(row) > 1 else ''
+                
+                title = row[title_col] if len(row) > title_col else ''
                 if title and not temp_dict[handle]['title']:
                     temp_dict[handle]['title'] = title
-                desc = row[2] if len(row) > 2 else ''
+                
+                desc = row[desc_col] if len(row) > desc_col else ''
                 if desc and not temp_dict[handle]['desc_html']:
                     temp_dict[handle]['desc_html'] = desc
 
-                price_str = row[price_col] if len(row) > price_col else '0'
-                try: p = float(price_str)
-                except: p = 0.0
-                if p > temp_dict[handle]['price']:
-                    temp_dict[handle]['price'] = p
+                if type_col != -1 and len(row) > type_col:
+                    product_type = row[type_col]
+                    if product_type and not temp_dict[handle]['type']:
+                        temp_dict[handle]['type'] = product_type
 
-                compare_str = row[compare_col] if len(row) > compare_col else '0'
-                try: cp = float(compare_str)
-                except: cp = 0.0
-                if cp > temp_dict[handle]['compareAtPrice']:
-                    temp_dict[handle]['compareAtPrice'] = cp
+                if price_col != -1 and len(row) > price_col:
+                    price_str = row[price_col]
+                    try: p = float(price_str)
+                    except ValueError: p = 0.0
+                    if p > temp_dict[handle]['price']:
+                        temp_dict[handle]['price'] = p
 
-                img = row[img_col] if len(row) > img_col else ''
-                if img and not temp_dict[handle]['image']:
-                    temp_dict[handle]['image'] = img
+                if compare_col != -1 and len(row) > compare_col:
+                    compare_str = row[compare_col]
+                    try: cp = float(compare_str)
+                    except ValueError: cp = 0.0
+                    if cp > temp_dict[handle]['compareAtPrice']:
+                        temp_dict[handle]['compareAtPrice'] = cp
+
+                if img_col != -1 and len(row) > img_col:
+                    img = row[img_col]
+                    if img and not temp_dict[handle]['image']:
+                        temp_dict[handle]['image'] = img
 
         for handle, data in temp_dict.items():
             if not data['title']:
@@ -112,6 +126,16 @@ def cmd_merge():
             compare = data['compareAtPrice'] if data['compareAtPrice'] > price else round(price * 1.5, 2)
             slug = make_unique_slug(handle)
 
+            cat = category_name
+            if cat == 'AUTO':
+                tl = data['title'].lower()
+                ptype = data['type'].lower()
+                if 'toalha' in tl or 'toalha' in ptype: cat = 'Toalhas'
+                elif 'edredom' in tl or 'edredon' in tl or 'edredom' in ptype: cat = 'Edredons'
+                elif 'lençol' in tl or 'lencol' in tl or 'lençol' in ptype: cat = 'Jogos de Lençol'
+                elif 'colcha' in tl or 'colcha' in ptype or 'cobre leito' in tl: cat = 'Colchas e Cobre-Leito'
+                else: cat = 'Diversos'
+
             products.append({
                 'id': len(products) + 1,
                 'name': data['title'],
@@ -120,20 +144,38 @@ def cmd_merge():
                 'image': data['image'],
                 'rating': round(random.uniform(3.9, 5.0), 1),
                 'reviews': random.randint(12, 245),
-                'category': category_name,
+                'category': cat,
                 'slug': slug,
                 'description': desc_clean,
                 'isTest': False,
+                'tags': extra_tags
             })
 
-    for key, (path, cat) in CSV_SOURCES.items():
+    # Processa todos os CSVs na pasta data/
+    if not os.path.exists(DATA_DIR):
+        print(f"[ERRO] Pasta de dados não encontrada: {DATA_DIR}")
+        return
+
+    csv_files = [f for f in os.listdir(DATA_DIR) if f.lower().endswith('.csv')]
+    if not csv_files:
+        print(f"[AVISO] Nenhum arquivo CSV encontrado em {DATA_DIR}")
+        
+    for filename in csv_files:
+        path = os.path.join(DATA_DIR, filename)
+        # Nome da coleção baseado no nome do arquivo (ex: "novidades.csv" -> "Novidades")
+        collection_name = filename.replace('.csv', '').replace('_', ' ').replace('-', ' ').title()
+        
+        # Tags adicionais: a própria coleção sempre entra como tag
+        tags = [collection_name]
+        
         try:
-            process_csv(path, cat)
+            print(f"Processing: {filename} (Collection: {collection_name})")
+            process_csv(path, 'AUTO', tags)
         except Exception as e:
-            print(f"[ERRO] {key}: {e}")
+            print(f"[ERROR] Failed to process {filename}: {e}")
 
     _write_ts(products)
-    print(f"✅ Merge completo. Total: {len(products)} produtos → {TS_FILE}")
+    print(f"Merge complete. Total: {len(products)} products -> {TS_FILE}")
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -307,16 +349,18 @@ def _write_ts(products):
     categories = []
     seen_cats = set()
     for p in products:
-        if p['category'] not in seen_cats:
-            seen_cats.add(p['category'])
-            slug = p['category'].lower().replace(' ', '-').replace('ç', 'c').replace('ã', 'a').replace('ê', 'e')
-            categories.append({
-                'slug': slug,
-                'name': p['category'],
-                'image': p.get('image', '/images/product-1.jpg'),
-                'productCount': sum(1 for x in products if x['category'] == p['category']),
-                'description': f"Nossa coleção de {p['category']}",
-            })
+        cats_to_add = [p['category']] + p.get('tags', [])
+        for c in cats_to_add:
+            if c not in seen_cats:
+                seen_cats.add(c)
+                slug = c.lower().replace(' ', '-').replace('ç', 'c').replace('ã', 'a').replace('ê', 'e')
+                categories.append({
+                    'slug': slug,
+                    'name': c,
+                    'image': p.get('image', '/images/product-1.jpg'),
+                    'productCount': sum(1 for x in products if x['category'] == c or (x.get('tags') and c in x.get('tags', []))),
+                    'description': f"Nossa coleção de {c}",
+                })
 
     has_compare = any('compareAtPrice' in p for p in products)
     compare_field = "\n  compareAtPrice?: number;" if has_compare else ""
@@ -332,6 +376,7 @@ def _write_ts(products):
   slug: string;
   description?: string;
   isTest?: boolean;
+  tags?: string[];
 }}
 
 export interface Collection {{
@@ -351,7 +396,7 @@ export function getProductBySlug(slug: string) {{
 }}
 
 export function getProductsByCategory(category: string) {{
-  return products.filter(p => p.category === category);
+  return products.filter(p => p.category === category || (p.tags && p.tags.includes(category)));
 }}
 
 export function getCollectionBySlug(slug: string) {{
@@ -360,7 +405,7 @@ export function getCollectionBySlug(slug: string) {{
 
 export function getProductsByCollection(slug: string) {{
   const col = collections.find(c => c.slug === slug);
-  if (col) return products.filter(p => p.category === col.name);
+  if (col) return products.filter(p => p.category === col.name || (p.tags && p.tags.includes(col.name)));
   return products;
 }}
 '''
