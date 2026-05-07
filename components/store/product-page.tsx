@@ -26,6 +26,11 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants?.[0] ?? null
   )
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
   const { addItem } = useCart()
   const inlineButtonRef = useRef<HTMLDivElement>(null)
 
@@ -33,7 +38,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const activePrice = selectedVariant?.price ?? product.price
   const activeCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice
   const activeImage = selectedVariant?.image ?? product.image
-  const activeImages = selectedVariant?.images ?? product.images
+  const activeImages = selectedVariant?.images ?? product.images ?? [product.image]
 
   const totalPrice = activePrice * quantity
 
@@ -156,7 +161,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
     </div>
 
     {/* Floating overlay via Portal - renders directly to body, truly above everything */}
-    {typeof document !== "undefined" &&
+    {isMounted &&
       createPortal(
         <div
           className={`fixed bottom-5 left-4 right-4 z-[9999] transition-all duration-300 ease-in-out ${

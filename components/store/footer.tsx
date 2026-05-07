@@ -39,18 +39,18 @@ export function Footer() {
         <a href="/" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Todos os Produtos
         </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Fortalecimento
+        <a href="/colecoes/toalhas" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Toalhas
         </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Antiqueda
+        <a href="/colecoes/colchas" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Colchas
         </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Tonicos
+        <a href="/colecoes/edredons" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Edredons
         </a>
       </FooterAccordion>
 
-      <FooterAccordion title="A Gota">
+      <FooterAccordion title="A Loja">
         <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Sobre Nos
         </a>
@@ -77,57 +77,55 @@ export function Footer() {
       <FooterAccordion title="Contato">
         <div className="flex items-center gap-2 text-sm text-[#737373]">
           <Mail size={14} className="shrink-0" />
-          <a href="mailto:sac@gotadourada.com.br" className="hover:text-[#1a1a1a] transition-colors">
-            sac@gotadourada.com.br
+          <a href="mailto:contato@casahoenning.com.br" className="hover:text-[#1a1a1a] transition-colors">
+            contato@casahoenning.com.br
           </a>
         </div>
       </FooterAccordion>
 
-      {/* Copyright */}
-      <div className="px-4 pt-6 pb-4 text-center">
-        <p className="text-[11px] text-[#737373]">
-          {"2025, Gota Dourada. Todos Os Direitos Reservados."}
-        </p>
+      {/* Trust Badges & Payment Methods */}
+      <div className="flex flex-col items-center justify-center gap-5 px-4 pt-4 pb-8 border-t border-[#e5e5e5]">
+        {/* Security Seals */}
+        <div className="flex items-center justify-center gap-4 w-full">
+          <a
+            id="link-reclame-aqui"
+            href="https://www.reclameaqui.com.br/empresa/casa-hoenning/?utm_source=referral&utm_medium=embbed&utm_campaign=ra_verificada&utm_term=vertical"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+            <img src="https://i.imgur.com/AoGjyRy.png" alt="Reclame Aqui" className="max-w-[130px] object-contain" />
+          </a>
+          <a
+            id="link-google-safe"
+            href="https://transparencyreport.google.com/safe-browsing/search?url=https:%2F%2Fbellaprimavera.com.br%2F&hl=pt_BR"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+            <img src="https://i.imgur.com/Luw6YmK.jpeg" alt="Google Safe" className="max-w-[130px] object-contain" />
+          </a>
+        </div>
+
+        {/* Payment Icons */}
+        <div className="flex flex-wrap items-center justify-center gap-2 max-w-[280px]">
+          <img src="https://icons.yampi.me/svg/card-amex.svg" alt="Amex" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-visa.svg" alt="Visa" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-diners.svg" alt="Diners" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-mastercard.svg" alt="Mastercard" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-discover.svg" alt="Discover" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-aura.svg" alt="Aura" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-elo.svg" alt="Elo" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-hiper.svg" alt="Hiper" width="35" height="24" />
+          <img src="https://icons.yampi.me/svg/card-pix.svg" alt="Pix" width="35" height="24" />
+        </div>
       </div>
 
-      {/* Payment methods */}
-      <div className="flex items-center justify-center gap-3 px-4 pb-4">
-        {/* Visa */}
-        <div className="w-10 h-6 bg-[#f5f5f5] rounded flex items-center justify-center">
-          <svg viewBox="0 0 48 32" className="w-8 h-5">
-            <rect width="48" height="32" rx="4" fill="#1A1F71" />
-            <text x="24" y="20" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold" fontFamily="sans-serif">VISA</text>
-          </svg>
-        </div>
-        {/* Mastercard */}
-        <div className="w-10 h-6 bg-[#f5f5f5] rounded flex items-center justify-center">
-          <svg viewBox="0 0 48 32" className="w-8 h-5">
-            <rect width="48" height="32" rx="4" fill="#252525" />
-            <circle cx="19" cy="16" r="8" fill="#EB001B" />
-            <circle cx="29" cy="16" r="8" fill="#F79E1B" />
-          </svg>
-        </div>
-        {/* Amex */}
-        <div className="w-10 h-6 bg-[#f5f5f5] rounded flex items-center justify-center">
-          <svg viewBox="0 0 48 32" className="w-8 h-5">
-            <rect width="48" height="32" rx="4" fill="#006FCF" />
-            <text x="24" y="18" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold" fontFamily="sans-serif">AMEX</text>
-          </svg>
-        </div>
-        {/* Pix */}
-        <div className="w-10 h-6 bg-[#f5f5f5] rounded flex items-center justify-center">
-          <svg viewBox="0 0 48 32" className="w-8 h-5">
-            <rect width="48" height="32" rx="4" fill="#32BCAD" />
-            <text x="24" y="19" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="sans-serif">PIX</text>
-          </svg>
-        </div>
-        {/* Boleto */}
-        <div className="w-10 h-6 bg-[#f5f5f5] rounded flex items-center justify-center">
-          <svg viewBox="0 0 48 32" className="w-8 h-5">
-            <rect width="48" height="32" rx="4" fill="#333" />
-            <text x="24" y="19" textAnchor="middle" fill="white" fontSize="6" fontWeight="bold" fontFamily="sans-serif">BOLETO</text>
-          </svg>
-        </div>
+      {/* Copyright */}
+      <div className="px-4 pt-2 pb-6 text-center">
+        <p className="text-[11px] text-[#737373]">
+          {"2025, ConfortBem. Todos Os Direitos Reservados."}
+        </p>
       </div>
     </footer>
   )

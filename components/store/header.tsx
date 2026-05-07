@@ -1,97 +1,88 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
-import { usePathname } from "next/navigation"
+import { useState, useCallback, useRef, useEffect } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
+import { products } from "@/lib/products"
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [collectionsOpen, setCollectionsOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [collectionsOpen, setCollectionsOpen] = useState(true)
+  const [headerVisible, setHeaderVisible] = useState(true)
   const { totalItems, toggleCart } = useCart()
   const pathname = usePathname()
-  const menuHistoryRef = useRef(false)
-  const searchHistoryRef = useRef(false)
+  const router = useRouter()
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const lastScrollY = useRef(0)
 
-  const isHomePage = pathname === "/"
-
-  // Hardware back button support for menu overlay
+  // Oculta header ao scrollar para baixo, mostra ao scrollar para cima
   useEffect(() => {
-    if (!menuOpen) return
-    window.history.pushState({ menuOpen: true }, "")
-    menuHistoryRef.current = true
-    const handlePop = () => {
-      menuHistoryRef.current = false
-      setMenuOpen(false)
+    const handleScroll = () => {
+      const currentY = window.scrollY
+      if (currentY > lastScrollY.current && currentY > 80) {
+        setHeaderVisible(false)
+      } else {
+        setHeaderVisible(true)
+      }
+      lastScrollY.current = currentY
     }
-    window.addEventListener("popstate", handlePop)
-    return () => window.removeEventListener("popstate", handlePop)
-  }, [menuOpen])
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  // Hardware back button support for search overlay
-  useEffect(() => {
-    if (!searchOpen) return
-    window.history.pushState({ searchOpen: true }, "")
-    searchHistoryRef.current = true
-    const handlePop = () => {
-      searchHistoryRef.current = false
-      setSearchOpen(false)
-    }
-    window.addEventListener("popstate", handlePop)
-    return () => window.removeEventListener("popstate", handlePop)
-  }, [searchOpen])
-
-  // Close menu manually (pops history to keep stack clean)
   const closeMenu = useCallback(() => {
-    if (menuHistoryRef.current) {
-      menuHistoryRef.current = false
-      window.history.back()
-    } else {
-      setMenuOpen(false)
-    }
+    setMenuOpen(false)
   }, [])
 
-  // Close search manually
   const closeSearch = useCallback(() => {
-    if (searchHistoryRef.current) {
-      searchHistoryRef.current = false
-      window.history.back()
-    } else {
-      setSearchOpen(false)
-    }
+    setSearchOpen(false)
+    setSearchQuery("")
   }, [])
+
+  // Filtra produtos com base na busca
+  const searchResults = searchQuery.trim().length >= 2
+    ? products.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 6)
+    : []
+
+  const handleSelectProduct = (slug: string) => {
+    closeSearch()
+    router.push(`/produto/${slug}`)
+  }
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchResults.length > 0) {
+      handleSelectProduct(searchResults[0].slug)
+    }
+  }
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#d4a017] shadow-sm">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm transition-transform duration-300 ${
+          headerVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="flex items-center justify-between px-4 py-3">
-          {isHomePage ? (
-            <button
-              onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
-              className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
-              aria-label="Menu"
-            >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          ) : (
-            <Link
-              href="/"
-              className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
-              aria-label="Inicio"
-            >
-              <Home size={22} />
-            </Link>
-          )}
+          <button
+            onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
+            className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
+            aria-label="Menu"
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
 
           <div className="flex-1 text-center">
-            <h1 className="text-lg font-bold tracking-wide text-[#1a1a1a]">
-              Gota Dourada
-            </h1>
-            <p className="text-[10px] text-[#1a1a1a]/70 -mt-0.5 tracking-widest uppercase">
-              Cosméticos
-            </p>
+            <Link href="/" className="inline-block">
+              <img src="/images/logo.png" alt="ConfortBem" className="h-16 -my-3 mx-auto object-contain" />
+            </Link>
           </div>
 
           <div className="flex items-center gap-1">
@@ -109,7 +100,7 @@ export function Header() {
             >
               <ShoppingBag size={20} />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#1a1a1a] text-[#ffffff] text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
+                <span className="absolute -top-0.5 -right-0.5 bg-[#d4a017] text-white text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
@@ -118,30 +109,82 @@ export function Header() {
         </div>
 
         {searchOpen && (
-          <div className="px-4 pb-3">
-            <div className="flex items-center bg-[#1a1a1a]/10 rounded-full px-4 py-2">
-              <Search size={16} className="text-[#1a1a1a]/60 mr-2 shrink-0" />
-              <input
-                type="text"
-                placeholder="Buscar produtos..."
-                className="bg-transparent w-full text-sm text-[#1a1a1a] placeholder:text-[#1a1a1a]/50 outline-none"
-                autoFocus
-              />
-            </div>
+          <div className="px-4 pb-3 relative">
+            <form onSubmit={handleSearchSubmit}>
+              <div className="flex items-center bg-gray-100 rounded-full px-4 py-2.5">
+                <Search size={16} className="text-gray-400 mr-2 shrink-0" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar produtos..."
+                  className="bg-transparent w-full text-sm text-gray-800 placeholder:text-gray-400 outline-none"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="text-gray-400 hover:text-gray-600 ml-2"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+            </form>
+
+            {/* Resultados da busca */}
+            {searchQuery.trim().length >= 2 && (
+              <div className="absolute left-4 right-4 top-full mt-1 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60] max-h-[60vh] overflow-y-auto">
+                {searchResults.length > 0 ? (
+                  searchResults.map((product) => (
+                    <button
+                      key={product.id}
+                      onClick={() => handleSelectProduct(product.slug)}
+                      className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-50 last:border-b-0"
+                    >
+                      {product.image && (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-12 h-12 object-cover rounded-lg shrink-0 bg-gray-100"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-gray-800 truncate">{product.name}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-[#d4a017] font-bold">
+                            R$ {product.price.toFixed(2).replace('.', ',')}
+                          </span>
+                          <span className="text-[10px] text-gray-400">{product.category}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-6 text-center">
+                    <p className="text-sm text-gray-400 font-medium">Nenhum produto encontrado</p>
+                    <p className="text-xs text-gray-300 mt-1">Tente buscar por outro termo</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </header>
 
+      {/* Overlay para fechar busca ao clicar fora */}
+      {searchOpen && searchQuery.trim().length >= 2 && (
+        <div className="fixed inset-0 z-40 bg-black/20" onClick={closeSearch} />
+      )}
+
       {/* Mobile slide menu */}
       {menuOpen && (
         <div className="fixed inset-0 z-40">
-          <div
-            className="absolute inset-0 bg-[#1a1a1a]/40"
-            onClick={closeMenu}
-          />
+          <div className="absolute inset-0 bg-[#1a1a1a]/40" onClick={closeMenu} />
           <nav className="absolute top-0 left-0 bottom-0 w-72 bg-[#ffffff] shadow-2xl pt-20 px-5 animate-in slide-in-from-left duration-200 overflow-y-auto">
             <div className="flex flex-col gap-0.5">
-              {/* Inicio */}
               <Link
                 href="/"
                 onClick={closeMenu}
@@ -151,7 +194,6 @@ export function Header() {
                 Inicio
               </Link>
 
-              {/* Colecoes - mega menu */}
               <div>
                 <button
                   onClick={() => setCollectionsOpen(!collectionsOpen)}
@@ -159,7 +201,7 @@ export function Header() {
                 >
                   <span className="flex items-center gap-3">
                     <Grid3X3 size={18} className="text-[#d4a017]" />
-                    Colecoes
+                    Coleções
                   </span>
                   <ChevronDown
                     size={16}
@@ -169,7 +211,6 @@ export function Header() {
                   />
                 </button>
 
-                {/* Sub-items */}
                 <div
                   className={`overflow-hidden transition-all duration-250 ease-in-out ${
                     collectionsOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
@@ -185,10 +226,15 @@ export function Header() {
                       Ver Todas
                     </Link>
                     {[
-                      { label: "Loreal Paris", href: "/colecoes/loreal-paris" },
-                      { label: "Pantene", href: "/colecoes/pantene" },
-                      { label: "TRESemme", href: "/colecoes/tresemme" },
-                      { label: "Kerastase", href: "/colecoes/kerastase" },
+                      { label: "Mais Vendidos", href: "/colecoes/mais-vendidos" },
+                      { label: "Roupas de Cama 365", href: "/colecoes/roupas-de-cama-365" },
+                      { label: "Jogos de Lençol", href: "/colecoes/jogos-de-lencol" },
+                      { label: "Solteiro", href: "/colecoes/solteiro" },
+                      { label: "Casal, Queen e King", href: "/colecoes/casal-queen-king" },
+                      { label: "Colchas e Cobre-Leito", href: "/colecoes/colchas" },
+                      { label: "Linha Hotelaria", href: "/colecoes/hotelaria" },
+                      { label: "Bordado Inglês", href: "/colecoes/bordado-ingles" },
+                      { label: "Estampados", href: "/colecoes/estampados" },
                     ].map((sub) => (
                       <Link
                         key={sub.label}

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps) {
   const collection = getCollectionBySlug(slug)
   if (!collection) return { title: "Colecao nao encontrada" }
   return {
-    title: `${collection.name} | Gota Dourada`,
+    title: `${collection.name} | ConfortBem`,
     description: collection.description,
   }
 }
@@ -71,13 +71,10 @@ export default async function CollectionPage({ params }: PageProps) {
 
       {/* Collection hero */}
       <section className="relative h-44 overflow-hidden">
-        <Image
+        <img
           src={collection.image}
           alt={collection.name}
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
+          className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/80 via-[#1a1a1a]/30 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-4">

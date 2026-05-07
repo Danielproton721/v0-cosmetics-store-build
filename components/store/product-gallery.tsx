@@ -17,13 +17,10 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
       {/* Main image */}
       <div className="relative aspect-square bg-[#ffffff] flex items-center justify-center p-6">
         <div className="relative w-full h-full">
-          <Image
+          <img
             src={images[currentIndex]}
             alt={name}
-            fill
-            className="object-contain"
-            sizes="100vw"
-            priority
+            className="absolute inset-0 w-full h-full object-contain"
           />
         </div>
 

@@ -9,6 +9,7 @@ import { useCart } from "@/lib/cart-context"
 interface ProductCardProps {
   name: string
   price: number
+  compareAtPrice?: number
   image: string
   rating: number
   reviews: number
@@ -16,7 +17,7 @@ interface ProductCardProps {
   isTest?: boolean
 }
 
-export function ProductCard({ name, price, image, rating, reviews, slug, isTest }: ProductCardProps) {
+export function ProductCard({ name, price, compareAtPrice, image, rating, reviews, slug, isTest }: ProductCardProps) {
   const [liked, setLiked] = useState(false)
   const [added, setAdded] = useState(false)
   const { addItem } = useCart()
@@ -39,7 +40,7 @@ export function ProductCard({ name, price, image, rating, reviews, slug, isTest 
   }, [addItem, slug, name, price, image])
 
   return (
-    <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+    <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col h-full">
       {/* Image area */}
       <div className="relative aspect-square bg-[#f5f5f5] p-3">
         {isTest && (
@@ -62,18 +63,16 @@ export function ProductCard({ name, price, image, rating, reviews, slug, isTest 
           />
         </button>
         <Link href={productHref} prefetch={true} className="relative w-full h-full block">
-          <Image
+          <img
             src={image}
             alt={name}
-            fill
-            className="object-contain group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 50vw, 25vw"
+            className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </Link>
       </div>
 
       {/* Info area */}
-      <div className="p-3">
+      <div className="p-3 flex flex-col flex-grow">
         <Link href={productHref} prefetch={true}>
           <h3 className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight min-h-[2rem] hover:text-[#d4a017] transition-colors">
             {name}
@@ -81,27 +80,36 @@ export function ProductCard({ name, price, image, rating, reviews, slug, isTest 
         </Link>
 
         {/* Star rating */}
-        <div className="flex items-center gap-0.5 mt-1.5">
+        <div className="flex items-center gap-0.5 mt-1.5 mb-auto">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
               size={12}
               className={
-                i < Math.floor(rating)
+                i < Math.round(rating)
                   ? "fill-[#d4a017] text-[#d4a017]"
                   : "text-[#e5e5e5] fill-[#e5e5e5]"
               }
             />
           ))}
-          {reviews > 0 && (
-            <span className="text-[10px] text-[#737373] ml-1">{reviews}</span>
-          )}
+          <span className="text-[10px] text-[#737373] ml-1 font-medium">
+            {rating.toFixed(1)} ({reviews})
+          </span>
         </div>
 
         {/* Price */}
-        <p className="text-sm font-bold text-[#1a1a1a] mt-2">
-          R$ {price.toFixed(2).replace(".", ",")} <span className="text-[10px] font-normal text-[#737373]">BRL</span>
-        </p>
+        <div className="flex flex-col mt-2">
+          {compareAtPrice && compareAtPrice > price ? (
+            <p className="text-[11px] font-medium text-[#a3a3a3] line-through leading-none mb-0.5">
+              R$ {compareAtPrice.toFixed(2).replace(".", ",")}
+            </p>
+          ) : (
+            <div className="h-[11px] mb-0.5" />
+          )}
+          <p className="text-lg font-extrabold text-green-700 leading-none">
+            R$ {price.toFixed(2).replace(".", ",")}
+          </p>
+        </div>
 
         {/* Add button */}
         <button

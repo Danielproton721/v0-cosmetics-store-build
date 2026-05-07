@@ -3,7 +3,7 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { ProductPage } from "@/components/store/product-page"
 import { PageTransition } from "@/components/store/page-transition"
-import { getProductBySlug, getRelatedProducts, products } from "@/lib/products"
+import { getProductBySlug, getProductsByCategory, products } from "@/lib/products"
 import type { Metadata } from "next"
 
 interface PageProps {
@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = getProductBySlug(slug)
 
   if (!product) {
-    return { title: "Produto nao encontrado | Gota Dourada" }
+    return { title: "Produto nao encontrado | ConfortBem" }
   }
 
   return {
-    title: `${product.name} | Gota Dourada`,
+    title: `${product.name} | ConfortBem`,
     description: product.description,
   }
 }
@@ -38,7 +38,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  const relatedProducts = getRelatedProducts(product.relatedSlugs)
+  const relatedProducts = getProductsByCategory(product.category).filter(p => p.id !== product.id).slice(0, 4)
 
   return (
     <main className="min-h-screen bg-[#ffffff]">

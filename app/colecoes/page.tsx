@@ -1,11 +1,11 @@
-import { collections } from "@/lib/products"
+import { getCollectionsWithCovers } from "@/lib/products"
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { CollectionGrid } from "@/components/store/collection-grid"
 
 export const metadata = {
-  title: "Colecoes | Gota Dourada",
-  description: "Explore todas as colecoes de produtos capilares Gota Dourada.",
+  title: "Colecoes | ConfortBem",
+  description: "Explore todas as colecoes de produtos ConfortBem.",
 }
 
 export default function ColecoesPge() {
@@ -20,11 +20,11 @@ export default function ColecoesPge() {
           Nossas Colecoes
         </h1>
         <p className="text-xs text-[#737373] text-center mt-1.5 leading-relaxed max-w-xs mx-auto">
-          Encontre a linha ideal para o seu tipo de cabelo
+          Encontre a linha ideal para a sua casa
         </p>
       </section>
 
-      <CollectionGrid collections={collections} />
+      <CollectionGrid collections={getCollectionsWithCovers()} />
 
       <Footer />
     </main>

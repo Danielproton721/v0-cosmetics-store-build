@@ -18,13 +18,13 @@ interface AccordionSectionProps {
 }
 
 export function AccordionSection({
-  hairTypes,
-  needs,
-  benefits,
-  description,
-  howToUse,
-  touchTest,
-  precautions,
+  hairTypes = [],
+  needs = [],
+  benefits = [],
+  description = "",
+  howToUse = [],
+  touchTest = [],
+  precautions = [],
 }: AccordionSectionProps) {
   return (
     <div className="px-4 bg-[#ffffff]">

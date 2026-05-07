@@ -8,8 +8,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Gota Dourada | Cosméticos Capilares',
-  description: 'Loja de cosméticos capilares com os melhores produtos para fortalecimento, antiqueda e tratamento capilar.',
+  title: 'ConfortBem | O Conforto que Abraça Sua Casa',
+  description: 'Especialistas em enxovais para sua casa. Conforto, estilo e qualidade para o seu dia a dia.',
   generator: 'v0.app',
   icons: {
     icon: [

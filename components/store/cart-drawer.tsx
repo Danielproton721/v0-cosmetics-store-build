@@ -8,16 +8,8 @@ import { useCart } from "@/lib/cart-context"
 
 export function CartDrawer() {
   const { items, isOpen, totalItems, totalPrice, removeItem, updateQuantity, closeCart } = useCart()
-  const historyPushedRef = useRef(false)
-
-  // Close drawer by going back in history (cleans up the pushed state)
   const handleCloseCart = useCallback(() => {
-    if (historyPushedRef.current) {
-      historyPushedRef.current = false
-      window.history.back()
-    } else {
-      closeCart()
-    }
+    closeCart()
   }, [closeCart])
 
   // Prevent body scroll when drawer is open
@@ -31,26 +23,6 @@ export function CartDrawer() {
       document.body.style.overflow = ""
     }
   }, [isOpen])
-
-  // Handle hardware/software back button:
-  // Push a history entry when the drawer opens so that pressing "back"
-  // closes it instead of leaving the page.
-  useEffect(() => {
-    if (!isOpen) return
-
-    window.history.pushState({ cartOpen: true }, "")
-    historyPushedRef.current = true
-
-    const handlePopState = () => {
-      historyPushedRef.current = false
-      closeCart()
-    }
-
-    window.addEventListener("popstate", handlePopState)
-    return () => {
-      window.removeEventListener("popstate", handlePopState)
-    }
-  }, [isOpen, closeCart])
 
   return (
     <>
@@ -123,12 +95,10 @@ export function CartDrawer() {
                     onClick={handleCloseCart}
                     className="relative w-20 h-20 rounded-lg bg-[#f5f5f5] overflow-hidden shrink-0"
                   >
-                    <Image
+                    <img
                       src={item.image}
                       alt={item.name}
-                      fill
-                      className="object-contain p-1"
-                      sizes="80px"
+                      className="absolute inset-0 w-full h-full object-contain p-1"
                     />
                   </Link>
 
@@ -201,9 +171,13 @@ export function CartDrawer() {
             </p>
 
             {/* Checkout button */}
-            <button className="w-full bg-[#22c55e] text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider hover:bg-[#16a34a] active:scale-[0.98] transition-all">
+            <Link 
+              href="/checkout"
+              onClick={handleCloseCart}
+              className="w-full bg-[#22c55e] text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider hover:bg-[#16a34a] active:scale-[0.98] transition-all text-center block"
+            >
               Finalizar Compra
-            </button>
+            </Link>
 
             {/* Continue shopping */}
             <button
