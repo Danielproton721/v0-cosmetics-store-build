@@ -1,4 +1,4 @@
-import { getCollectionsWithCovers } from "@/lib/products"
+import { collections } from "@/lib/products"
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { CollectionGrid } from "@/components/store/collection-grid"
@@ -24,7 +24,7 @@ export default function ColecoesPge() {
         </p>
       </section>
 
-      <CollectionGrid collections={getCollectionsWithCovers()} />
+      <CollectionGrid collections={collections} />
 
       <Footer />
     </main>
