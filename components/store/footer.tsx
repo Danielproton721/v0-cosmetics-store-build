@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { ChevronDown, Mail } from "lucide-react"
 
 interface FooterAccordionProps {
@@ -36,49 +37,49 @@ export function Footer() {
   return (
     <footer className="bg-[#ffffff] border-t border-[#e5e5e5] pb-24">
       <FooterAccordion title="Loja">
-        <a href="/" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/produtos" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Todos os Produtos
-        </a>
-        <a href="/colecoes/toalhas" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/colecoes/toalhas" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Toalhas
-        </a>
-        <a href="/colecoes/colchas" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/colecoes/colchas-e-cobre-leito" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Colchas
-        </a>
-        <a href="/colecoes/edredons" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/colecoes/edredons" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Edredons
-        </a>
+        </Link>
       </FooterAccordion>
 
       <FooterAccordion title="A Loja">
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/sobre-nos" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Sobre Nos
-        </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/nossa-historia" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Nossa Historia
-        </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/politica-de-privacidade" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Politica de Privacidade
-        </a>
+        </Link>
       </FooterAccordion>
 
       <FooterAccordion title="Ajuda">
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/faq" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           FAQ
-        </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/trocas-e-devolucoes" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Trocas e Devolucoes
-        </a>
-        <a href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        </Link>
+        <Link href="/rastreio-de-pedido" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Rastreio de Pedido
-        </a>
+        </Link>
       </FooterAccordion>
 
       <FooterAccordion title="Contato">
         <div className="flex items-center gap-2 text-sm text-[#737373]">
           <Mail size={14} className="shrink-0" />
-          <a href="mailto:contato@casahoenning.com.br" className="hover:text-[#1a1a1a] transition-colors">
-            contato@casahoenning.com.br
+          <a href="mailto:contato@confortbem.com.br" className="hover:text-[#1a1a1a] transition-colors">
+            contato@confortbem.com.br
           </a>
         </div>
       </FooterAccordion>
@@ -94,7 +95,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity"
           >
-            <img src="https://i.imgur.com/AoGjyRy.png" alt="Reclame Aqui" className="max-w-[130px] object-contain" />
+            <img src="/images/reclame-aqui-oficial.webp" alt="Reclame Aqui" className="h-[42px] w-[150px] object-contain" />
           </a>
           <a
             id="link-google-safe"
@@ -103,7 +104,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity"
           >
-            <img src="https://i.imgur.com/Luw6YmK.jpeg" alt="Google Safe" className="max-w-[130px] object-contain" />
+            <img src="/images/google-safe-oficial.png" alt="Google Safe" className="h-[42px] w-[150px] object-contain" />
           </a>
         </div>
 

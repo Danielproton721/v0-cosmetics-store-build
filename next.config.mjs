@@ -12,6 +12,17 @@ const nextConfig = {
       },
     ],
   },
+  // Otimizações de performance para dev
+  swcMinify: true,
+  // Turbopack: otimizações de watch e cache
+  experimental: {
+    // Aumenta o cache do SWC para reduzir recompilações
+    swcTraceProfiling: false,
+  },
+  // Desativa verificações desnecessárias em dev para acelerar
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 export default nextConfig

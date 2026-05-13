@@ -11,10 +11,13 @@ Uso:
 """
 
 import csv
+import hashlib
+import html
 import re
 import json
 import random
 import sys
+import unicodedata
 import urllib.request
 import os
 
@@ -27,6 +30,160 @@ TS_FILE = os.path.join(BASE_DIR, 'lib', 'products.ts')
 TS_FILE = os.path.join(BASE_DIR, 'lib', 'products.ts')
 
 
+def _slugify(value):
+    value = unicodedata.normalize('NFD', value or '')
+    value = ''.join(ch for ch in value if unicodedata.category(ch) != 'Mn')
+    value = re.sub(r'[^a-z0-9]+', '-', value.lower()).strip('-')
+    return value or 'produto'
+
+
+def _clean_html(value):
+    text = re.sub(r'<[^>]+>', ' ', value or '')
+    text = html.unescape(text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text[:200] + '...' if len(text) > 200 else text
+
+
+def _parse_money(value):
+    raw = str(value or '').strip().replace('R$', '').replace(' ', '')
+    if ',' in raw and '.' in raw:
+        raw = raw.replace('.', '').replace(',', '.')
+    elif ',' in raw:
+        raw = raw.replace(',', '.')
+    try:
+        return float(raw)
+    except ValueError:
+        return 0.0
+
+
+def _read_existing_products():
+    if not os.path.exists(TS_FILE):
+        return []
+
+    with open(TS_FILE, 'r', encoding='utf-8-sig') as f:
+        content = f.read()
+
+    match = re.search(r'export const products: Product\[] = (\[.*?\]);', content, re.S)
+    if not match:
+        return []
+
+    try:
+        products = json.loads(match.group(1))
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f'Nao foi possivel ler produtos existentes em {TS_FILE}: {exc}')
+
+    return products if isinstance(products, list) else []
+
+
+def _make_unique_slug(slug, seen_slugs):
+    original = _slugify(slug)
+    current = original
+    counter = 1
+    while current in seen_slugs:
+        current = f'{original}-{counter}'
+        counter += 1
+    seen_slugs.add(current)
+    return current
+
+
+def _infer_category(title, product_type, filename):
+    text = f'{title} {product_type} {filename}'.lower()
+    if any(k in text for k in ('decoracoes', 'decoracao', 'decoração', 'decorações')):
+        return 'Decorações'
+    if 'cortina' in text:
+        return 'Cortinas'
+    if any(k in text for k in ('jogo de banho', 'toalha', 'tapete de banheiro', 'banheiro', 'banho')):
+        return 'Toalhas'
+    if 'cama posta' in text:
+        return 'Kit Cama Posta'
+    if 'edredom' in text or 'edredon' in text:
+        return 'Edredons'
+    if any(k in text for k in ('lençol', 'lencol', 'fronha')):
+        return 'Jogos de Lençol'
+    if 'colcha' in text or 'cobre leito' in text:
+        return 'Colchas e Cobre-Leito'
+    return 'Diversos'
+
+
+def _filename_tag(filename):
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    stem = re.sub(r'[-_\s]+products?[-_\s]+export$', '', stem, flags=re.I)
+    stem = re.sub(r'_products$', '', stem, flags=re.I)
+    stem = re.sub(r'_links$', '', stem, flags=re.I)
+    stem = re.sub(r'[-_\s]+export$', '', stem, flags=re.I)
+    stem = re.sub(r'\s+products?$', '', stem, flags=re.I)
+    stem = re.sub(r'\s+produtos?$', '', stem, flags=re.I)
+    stem = re.sub(r'[-_]+', ' ', stem).strip()
+    tag = ' '.join(part.capitalize() for part in stem.split()) if stem else ''
+    if _slugify(tag) == 'decoracoes':
+        return 'Decorações'
+    if _slugify(tag) == 'banho':
+        return 'Toalhas'
+    if _slugify(tag) == 'cortina':
+        return 'Cortinas'
+    if _slugify(tag) == 'cama':
+        return ''
+    return tag
+
+
+def _merge_product_import(existing, imported_data):
+    existing_images = existing.get('images') or ([existing.get('image')] if existing.get('image') else [])
+    merged_images = []
+    for image in existing_images + imported_data['images']:
+        if image and image not in merged_images:
+            merged_images.append(image)
+
+    if merged_images:
+        existing['image'] = merged_images[0]
+        existing['images'] = merged_images
+
+    existing['price'] = imported_data['price']
+    existing['compareAtPrice'] = imported_data['compareAtPrice']
+    if imported_data['description']:
+        existing['description'] = imported_data['description']
+
+    current_category = existing.get('category')
+    new_category = imported_data['category']
+    title_slug = _slugify(existing.get('name', ''))
+    is_bath_item = any(word in title_slug for word in ('banho', 'banheiro', 'toalha'))
+    if new_category == 'Toalhas' and is_bath_item:
+        existing['category'] = new_category
+    elif current_category != new_category:
+        tags = existing.setdefault('tags', [])
+        if new_category and new_category not in tags:
+            tags.append(new_category)
+
+    tags = existing.setdefault('tags', [])
+    for tag in imported_data['tags']:
+        if tag and tag not in tags and tag != existing.get('category'):
+            tags.append(tag)
+
+
+def _build_tags(raw_tags, filename, category):
+    tags = []
+    for tag in re.split(r'[,|;]', raw_tags or ''):
+        tag = tag.strip()
+        if tag and tag not in tags:
+            tags.append(tag)
+
+    file_tag = _filename_tag(filename)
+    if file_tag and file_tag != category and file_tag not in tags:
+        tags.append(file_tag)
+
+    lower_filename = os.path.basename(filename).lower()
+    if 'novidades' in lower_filename and 'Novidades' not in tags:
+        tags.append('Novidades')
+    if 'vendidos' in lower_filename and 'Mais Vendidos' not in tags:
+        tags.append('Mais Vendidos')
+
+    return tags
+
+
+def _rating_reviews(slug):
+    digest = int(hashlib.sha256(slug.encode('utf-8')).hexdigest()[:8], 16)
+    return round(3.9 + (digest % 12) / 10, 1), 12 + (digest % 234)
+
+
 # ══════════════════════════════════════════════════════════════════
 # IMPORT — Importa um único CSV da Shopify
 # ══════════════════════════════════════════════════════════════════
@@ -35,116 +192,105 @@ def cmd_import(csv_path):
         print(f"[ERROR] File not found: {csv_path}")
         return
 
-    products = []
-    seen_handles = set()
-
-    def make_unique_slug(slug):
-        original = slug
-        counter = 1
-        while slug in seen_handles:
-            slug = f"{original}-{counter}"
-            counter += 1
-        seen_handles.add(slug)
-        return slug
-
     temp_dict = {}
-    with open(csv_path, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        try:
-            header = next(reader)
-        except StopIteration:
-            return
-
-        header_lower = [h.lower() for h in header]
-        try: handle_col = header_lower.index('handle')
-        except ValueError: handle_col = 0
-        try: title_col = header_lower.index('title')
-        except ValueError: title_col = 1
-        try: desc_col = header_lower.index('body (html)')
-        except ValueError: desc_col = 2
-        try: type_col = header_lower.index('type')
-        except ValueError: type_col = -1
-
-        price_col, compare_col, img_col = -1, -1, -1
-        for i, h in enumerate(header_lower):
-            if h == 'variant price': price_col = i
-            elif 'compare at price' in h: compare_col = i
-            elif h == 'image src': img_col = i
-
+    with open(csv_path, 'r', encoding='utf-8-sig', newline='') as f:
+        reader = csv.DictReader(f)
         for row in reader:
-            if not row or len(row) <= handle_col: continue
-            handle = row[handle_col]
-            if not handle: continue
-            
+            handle = (row.get('Handle') or '').strip()
+            if not handle:
+                continue
+
             if handle not in temp_dict:
                 temp_dict[handle] = {
-                    'title': '', 'desc_html': '', 'type': '',
-                    'price': 0.0, 'compareAtPrice': 0.0, 'image': ''
+                    'title': '',
+                    'desc_html': '',
+                    'type': '',
+                    'raw_tags': '',
+                    'price': 0.0,
+                    'compareAtPrice': 0.0,
+                    'image': '',
+                    'images': [],
                 }
-            
-            title = row[title_col] if len(row) > title_col else ''
+
+            data = temp_dict[handle]
+            title = (row.get('Title') or '').strip()
             if title and not temp_dict[handle]['title']:
-                temp_dict[handle]['title'] = title
-            
-            desc = row[desc_col] if len(row) > desc_col else ''
+                data['title'] = title
+
+            desc = (row.get('Body (HTML)') or '').strip()
             if desc and not temp_dict[handle]['desc_html']:
-                temp_dict[handle]['desc_html'] = desc
+                data['desc_html'] = desc
 
-            if type_col != -1 and len(row) > type_col:
-                ptype = row[type_col]
-                if ptype and not temp_dict[handle]['type']:
-                    temp_dict[handle]['type'] = ptype
+            ptype = (row.get('Type') or row.get('Product Category') or '').strip()
+            if ptype and not data['type']:
+                data['type'] = ptype
 
-            if price_col != -1 and len(row) > price_col:
-                price_str = row[price_col]
-                try: p = float(price_str)
-                except ValueError: p = 0.0
-                if p > temp_dict[handle]['price']:
-                    temp_dict[handle]['price'] = p
+            raw_tags = (row.get('Tags') or '').strip()
+            if raw_tags and not data['raw_tags']:
+                data['raw_tags'] = raw_tags
 
-            if compare_col != -1 and len(row) > compare_col:
-                compare_str = row[compare_col]
-                try: cp = float(compare_str)
-                except ValueError: cp = 0.0
-                if cp > temp_dict[handle]['compareAtPrice']:
-                    temp_dict[handle]['compareAtPrice'] = cp
+            price = _parse_money(row.get('Variant Price'))
+            if price > data['price']:
+                data['price'] = price
 
-            if img_col != -1 and len(row) > img_col:
-                img = row[img_col]
-                if img and not temp_dict[handle]['image']:
-                    temp_dict[handle]['image'] = img
+            compare = _parse_money(row.get('Variant Compare At Price'))
+            if compare > data['compareAtPrice']:
+                data['compareAtPrice'] = compare
+
+            image = (row.get('Image Src') or row.get('Variant Image') or '').strip()
+            if image:
+                if not data['image']:
+                    data['image'] = image
+                if image not in data['images']:
+                    data['images'].append(image)
+
+    existing_products = _read_existing_products()
+    seen_slugs = {p.get('slug') for p in existing_products if p.get('slug')}
+    existing_by_slug = {p.get('slug'): p for p in existing_products if p.get('slug')}
+    existing_by_name = {_slugify(p.get('name', '')): p for p in existing_products if p.get('name')}
+    next_id = max((int(p.get('id', 0)) for p in existing_products), default=0) + 1
 
     filename = os.path.basename(csv_path).lower()
+    imported = []
+    skipped = 0
+    merged = 0
     for handle, data in temp_dict.items():
-        if not data['title']: continue
-        desc_clean = re.sub(r'<[^>]+>', '', data['desc_html']).replace('\n', ' ').strip()
-        desc_clean = desc_clean[:200] + '...' if len(desc_clean) > 200 else desc_clean
+        if not data['title']:
+            continue
+
+        base_slug = _slugify(handle)
+        desc_clean = _clean_html(data['desc_html'])
         price = data['price'] if data['price'] > 0 else 99.90
         compare = data['compareAtPrice'] if data['compareAtPrice'] > price else round(price * 1.5, 2)
-        slug = make_unique_slug(handle)
+        cat = _infer_category(data['title'], data['type'], filename)
+        tags = _build_tags(data['raw_tags'], filename, cat)
+        images = data['images'] or ([data['image']] if data['image'] else ['/images/product-1.jpg'])
 
-        # Lógica de categoria automática
-        tl = data['title'].lower()
-        ptype = data['type'].lower()
-        if 'toalha' in tl or 'toalha' in ptype: cat = 'Toalhas'
-        elif 'edredom' in tl or 'edredon' in tl or 'edredom' in ptype: cat = 'Edredons'
-        elif 'lençol' in tl or 'lencol' in tl or 'lençol' in ptype: cat = 'Jogos de Lençol'
-        elif 'colcha' in tl or 'colcha' in ptype or 'cobre leito' in tl: cat = 'Colchas e Cobre-Leito'
-        else: cat = 'Diversos'
+        duplicate = existing_by_slug.get(base_slug) or existing_by_name.get(_slugify(data['title']))
+        if duplicate:
+            _merge_product_import(duplicate, {
+                'price': price,
+                'compareAtPrice': compare,
+                'description': desc_clean,
+                'category': cat,
+                'tags': tags,
+                'images': images,
+            })
+            merged += 1
+            continue
 
-        # Tags baseadas no nome do arquivo
-        tags = []
-        if 'novidades' in filename: tags.append('Novidades')
-        if 'vendidos' in filename: tags.append('Mais Vendidos')
+        slug = _make_unique_slug(base_slug, seen_slugs)
+        rating, reviews = _rating_reviews(slug)
 
-        products.append({
-            'id': len(products) + 1,
+        imported.append({
+            'id': next_id + len(imported),
             'name': data['title'],
             'price': price,
             'compareAtPrice': compare,
-            'image': data['image'],
-            'rating': round(random.uniform(3.9, 5.0), 1),
-            'reviews': random.randint(12, 245),
+            'image': images[0],
+            'images': images,
+            'rating': rating,
+            'reviews': reviews,
             'category': cat,
             'slug': slug,
             'description': desc_clean,
@@ -152,54 +298,9 @@ def cmd_import(csv_path):
             'tags': tags
         })
 
+    products = existing_products + imported
     _write_ts(products)
-    print(f"Import complete. Total: {len(products)} products from {filename} -> {TS_FILE}")
-    products = []
-    seen_handles = set()
-
-    with open(csv_path, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        for row in reader:
-            if not row:
-                continue
-            handle = row[0]
-            if not handle or handle in seen_handles:
-                continue
-            title = row[1] if len(row) > 1 else ''
-            if not title:
-                continue
-            desc_html = row[2] if len(row) > 2 else ''
-            price_str = row[20] if len(row) > 20 else '0'
-            image_url = row[25] if len(row) > 25 else ''
-
-            desc_clean = re.sub(r'<[^>]+>', '', desc_html).replace('\n', ' ').strip()
-            desc_clean = desc_clean[:200] + '...' if len(desc_clean) > 200 else desc_clean
-            try: price = float(price_str)
-            except: price = 99.90
-            if price == 0: price = 99.90
-
-            cat = category
-            tl = title.lower()
-            if 'toalha' in tl: cat = 'Toalhas'
-            elif 'edredom' in tl or 'edredon' in tl: cat = 'Edredons'
-            elif 'lençol' in tl or 'lencol' in tl: cat = 'Jogos de Lençol'
-
-            products.append({
-                'id': len(products) + 1,
-                'name': title,
-                'price': price,
-                'image': image_url,
-                'rating': 5, 'reviews': 24,
-                'category': cat,
-                'slug': handle,
-                'description': desc_clean,
-                'isTest': False,
-            })
-            seen_handles.add(handle)
-
-    _write_ts(products)
-    print(f"✅ Importado {len(products)} produtos de {csv_path}")
+    print(f"Import complete. Added: {len(imported)} | Merged existing: {merged} | Skipped existing: {skipped} | Total: {len(products)} -> {TS_FILE}")
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -266,7 +367,7 @@ def cmd_extract(url=None):
 
 
 # ══════════════════════════════════════════════════════════════════
-# GET_IMAGE — Busca og:image de uma URL de produto
+# GET_IMAGE — Busca og:image de um produto
 # ══════════════════════════════════════════════════════════════════
 def cmd_get_image(url):
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -283,7 +384,7 @@ def cmd_get_image(url):
 
 
 # ══════════════════════════════════════════════════════════════════
-# REPLACE_IMAGES — Substitui imagens quebradas por Unsplash
+# REPLACE_IMAGES — Substitui imagens quebradas do Shopify por Unsplash
 # ══════════════════════════════════════════════════════════════════
 def cmd_replace_images():
     unsplash = [
@@ -313,6 +414,41 @@ def cmd_replace_images():
     print("✅ Imagens quebradas substituídas.")
 
 
+def _product_matches_collection(product, collection_name):
+    return (
+        product.get('category') == collection_name or
+        collection_name in product.get('tags', [])
+    )
+
+
+def _product_image_candidates(product):
+    images = []
+    for image in [product.get('image')] + product.get('images', []):
+        if image and image not in images:
+            images.append(image)
+    return images
+
+
+def _pick_collection_image(collection_name, products, used_images):
+    matching_products = [
+        product for product in products
+        if _product_matches_collection(product, collection_name)
+    ]
+
+    for product in matching_products:
+        for image in _product_image_candidates(product):
+            if image not in used_images:
+                used_images.add(image)
+                return image
+
+    for product in matching_products:
+        images = _product_image_candidates(product)
+        if images:
+            return images[0]
+
+    return '/images/product-1.jpg'
+
+
 # ══════════════════════════════════════════════════════════════════
 # Helper — Escreve products.ts
 # ══════════════════════════════════════════════════════════════════
@@ -320,35 +456,64 @@ def _write_ts(products):
     # Coleta categorias únicas para gerar collections dinâmicas
     categories = []
     seen_cats = set()
+    used_collection_images = set()
     for p in products:
         cats_to_add = [p['category']] + p.get('tags', [])
         for c in cats_to_add:
+            if not c:
+                continue
             if c not in seen_cats:
                 seen_cats.add(c)
-                slug = c.lower().replace(' ', '-').replace('ç', 'c').replace('ã', 'a').replace('ê', 'e')
+                slug = _slugify(c)
                 categories.append({
                     'slug': slug,
                     'name': c,
-                    'image': p.get('image', '/images/product-1.jpg'),
+                    'image': _pick_collection_image(c, products, used_collection_images),
                     'productCount': sum(1 for x in products if x['category'] == c or (x.get('tags') and c in x.get('tags', []))),
                     'description': f"Nossa coleção de {c}",
                 })
 
-    has_compare = any('compareAtPrice' in p for p in products)
-    compare_field = "\n  compareAtPrice?: number;" if has_compare else ""
-
     ts = f'''export interface Product {{
   id: number;
   name: string;
-  price: number;{compare_field}
+  price: number;
+  compareAtPrice?: number;
   image: string;
+  images?: string[];
   rating: number;
   reviews: number;
   category: string;
   slug: string;
-  description?: string;
+  description: string;
   isTest?: boolean;
   tags?: string[];
+  customerReviews?: ProductReview[];
+  variants?: ProductVariant[];
+  hairTypes?: string[];
+  needs?: string[];
+  benefits?: string[];
+  howToUse?: string[];
+  touchTest?: string[];
+  precautions?: string[];
+}}
+
+export interface ProductReview {{
+  id: string;
+  author: string;
+  comment: string;
+  rating: number;
+  photo?: string;
+  date?: string;
+}}
+
+export interface ProductVariant {{
+  id: number;
+  label: string;
+  price: number;
+  compareAtPrice?: number;
+  image?: string;
+  images?: string[];
+  available?: boolean;
 }}
 
 export interface Collection {{
@@ -367,17 +532,70 @@ export function getProductBySlug(slug: string) {{
   return products.find(p => p.slug === slug);
 }}
 
+const collectionSlugAliases: Record<string, string> = {{
+  "jogo-de-lencol": "jogos-de-lencol",
+  "cortina": "cortinas",
+  "decoracao": "decoracoes",
+}};
+
+function normalizeCollectionValue(value: string) {{
+  return value
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}}
+
+function toCollectionSlug(value: string) {{
+  return normalizeCollectionValue(value)
+    .replace(/&/g, "e")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}}
+
+function canonicalCollectionSlug(value: string) {{
+  const slug = toCollectionSlug(value);
+  return collectionSlugAliases[slug] ?? slug;
+}}
+
+function matchesCollectionValue(value: string, target: string) {{
+  return (
+    normalizeCollectionValue(value) === normalizeCollectionValue(target) ||
+    canonicalCollectionSlug(value) === canonicalCollectionSlug(target)
+  );
+}}
+
+function productMatchesCollection(product: Product, collection: Collection) {{
+  const productValues = [product.category, ...(product.tags ?? [])];
+
+  return productValues.some(
+    (value) =>
+      matchesCollectionValue(value, collection.name) ||
+      matchesCollectionValue(value, collection.slug)
+  );
+}}
+
 export function getProductsByCategory(category: string) {{
-  return products.filter(p => p.category === category || (p.tags && p.tags.includes(category)));
+  return products.filter((p) =>
+    [p.category, ...(p.tags ?? [])].some((value) =>
+      matchesCollectionValue(value, category)
+    )
+  );
 }}
 
 export function getCollectionBySlug(slug: string) {{
-  return collections.find(c => c.slug === slug);
+  const targetSlug = canonicalCollectionSlug(slug);
+
+  return collections.find(
+    (c) =>
+      canonicalCollectionSlug(c.slug) === targetSlug ||
+      canonicalCollectionSlug(c.name) === targetSlug
+  );
 }}
 
 export function getProductsByCollection(slug: string) {{
-  const col = collections.find(c => c.slug === slug);
-  if (col) return products.filter(p => p.category === col.name || (p.tags && p.tags.includes(col.name)));
+  const col = getCollectionBySlug(slug);
+  if (col) return products.filter((p) => productMatchesCollection(p, col));
   return products;
 }}
 '''

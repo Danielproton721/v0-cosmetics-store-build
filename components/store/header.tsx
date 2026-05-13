@@ -1,11 +1,59 @@
 "use client"
 
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useCallback, useRef, useEffect, useMemo } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
-import { products } from "@/lib/products"
+import { collections, products } from "@/lib/products"
+
+function normalizeSearchValue(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+}
+
+function productSearchText(product: (typeof products)[number]) {
+  return normalizeSearchValue(
+    [
+      product.name,
+      product.category,
+      product.description,
+      ...(product.tags ?? []),
+    ].join(" ")
+  )
+}
+
+const preferredCollectionOrder = [
+  "novidades",
+  "mais-vendidos",
+  "jogos-de-lencol",
+  "colchas-e-cobre-leito",
+  "toalhas",
+  "edredons",
+  "kit-cama-posta-queen",
+  "kit-cama-posta-king",
+  "roupas-de-cama-365",
+  "cortinas",
+  "decoracoes",
+  "diversos",
+]
+
+const hiddenMenuCollectionSlugs = new Set(["kit-cama-posta"])
+
+const menuCollections = collections
+  .filter((collection) => !hiddenMenuCollectionSlugs.has(collection.slug))
+  .sort((a, b) => {
+    const aIndex = preferredCollectionOrder.indexOf(a.slug)
+    const bIndex = preferredCollectionOrder.indexOf(b.slug)
+
+    if (aIndex === -1 && bIndex === -1) return a.name.localeCompare(b.name)
+    if (aIndex === -1) return 1
+    if (bIndex === -1) return -1
+    return aIndex - bIndex
+  })
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -43,17 +91,24 @@ export function Header() {
     setSearchQuery("")
   }, [])
 
-  // Filtra produtos com base na busca
-  const searchResults = searchQuery.trim().length >= 2
-    ? products.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 6)
-    : []
+  const normalizedSearchQuery = normalizeSearchValue(searchQuery)
+
+  const searchResults = useMemo(() => {
+    if (normalizedSearchQuery.length < 2) return []
+
+    const searchTerms = normalizedSearchQuery.split(/\s+/).filter(Boolean)
+
+    return products
+      .filter((product) => {
+        const indexedText = productSearchText(product)
+        return searchTerms.every((term) => indexedText.includes(term))
+      })
+      .slice(0, 8)
+  }, [normalizedSearchQuery])
 
   const handleSelectProduct = (slug: string) => {
     closeSearch()
-    router.push(`/produto/${slug}`)
+    router.push(`/product/${slug}`)
   }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -66,9 +121,8 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm transition-transform duration-300 ${
-          headerVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm transition-transform duration-300 ${headerVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
       >
         <div className="flex items-center justify-between px-4 py-3">
           <button
@@ -205,18 +259,16 @@ export function Header() {
                   </span>
                   <ChevronDown
                     size={16}
-                    className={`text-[#737373] transition-transform duration-200 ${
-                      collectionsOpen ? "rotate-180" : ""
-                    }`}
+                    className={`text-[#737373] transition-transform duration-200 ${collectionsOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
                 <div
-                  className={`overflow-hidden transition-all duration-250 ease-in-out ${
-                    collectionsOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-250 ease-in-out ${collectionsOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0"
+                    }`}
                 >
-                  <div className="ml-4 pl-4 border-l-2 border-[#d4a017]/20 flex flex-col gap-0.5 py-1">
+                  <div className="ml-4 pl-4 border-l-2 border-[#d4a017]/20 flex flex-col gap-0.5 py-1 overflow-y-auto">
                     <Link
                       href="/colecoes"
                       onClick={closeMenu}
@@ -225,25 +277,15 @@ export function Header() {
                       <Grid3X3 size={15} className="text-[#d4a017]" />
                       Ver Todas
                     </Link>
-                    {[
-                      { label: "Mais Vendidos", href: "/colecoes/mais-vendidos" },
-                      { label: "Roupas de Cama 365", href: "/colecoes/roupas-de-cama-365" },
-                      { label: "Jogos de Lençol", href: "/colecoes/jogos-de-lencol" },
-                      { label: "Solteiro", href: "/colecoes/solteiro" },
-                      { label: "Casal, Queen e King", href: "/colecoes/casal-queen-king" },
-                      { label: "Colchas e Cobre-Leito", href: "/colecoes/colchas" },
-                      { label: "Linha Hotelaria", href: "/colecoes/hotelaria" },
-                      { label: "Bordado Inglês", href: "/colecoes/bordado-ingles" },
-                      { label: "Estampados", href: "/colecoes/estampados" },
-                    ].map((sub) => (
+                    {menuCollections.map((collection) => (
                       <Link
-                        key={sub.label}
-                        href={sub.href}
+                        key={collection.slug}
+                        href={`/colecoes/${collection.slug}`}
                         onClick={closeMenu}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-[13px] font-medium"
                       >
                         <Tag size={15} className="text-[#d4a017]" />
-                        {sub.label}
+                        {collection.name}
                       </Link>
                     ))}
                   </div>

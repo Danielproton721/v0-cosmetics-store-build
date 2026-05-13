@@ -7,4 +7,15 @@ __v0_jsx-dev-runtime.ts
 node_modules/
 .next/
 .env*.local
+.env
 .DS_Store
+
+# User requested ignores
+.playwright-mcp/
+gsb-3-300x126.png
+Selo.webp
+server.err.log
+server.log
+SKILL.md
+tools.py
+scraping_v0/

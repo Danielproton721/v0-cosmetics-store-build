@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/accordion"
 
 interface AccordionSectionProps {
-  hairTypes: string[]
-  needs: string[]
-  benefits: string[]
-  description: string
-  howToUse: string[]
-  touchTest: string[]
-  precautions: string[]
+  hairTypes?: string[]
+  needs?: string[]
+  benefits?: string[]
+  description?: string
+  howToUse?: string[]
+  touchTest?: string[]
+  precautions?: string[]
 }
 
 export function AccordionSection({

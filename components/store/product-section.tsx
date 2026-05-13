@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { ProductCard } from "./product-card"
 import { CategoryFilter } from "./category-filter"
@@ -23,6 +24,7 @@ interface ProductSectionProps {
   products: Product[]
   categories?: string[]
   bgClass?: string
+  collectionHref?: string
 }
 
 const containerVariants = {
@@ -49,6 +51,7 @@ export function ProductSection({
   products,
   categories,
   bgClass = "bg-[#ffffff]",
+  collectionHref,
 }: ProductSectionProps) {
   const allCategories = categories
     ? ["Todos", ...categories]
@@ -59,7 +62,7 @@ export function ProductSection({
     activeCategory === "Todos"
       ? products
       : products.filter((p) => p.category === activeCategory)
-  ).slice(0, 6)
+  ).slice(0, 8)
 
   return (
     <section className={`py-8 overflow-hidden ${bgClass}`}>
@@ -111,6 +114,18 @@ export function ProductSection({
           </motion.div>
         ))}
       </motion.div>
+
+      {collectionHref && (
+        <div className="flex justify-center px-4 pt-7">
+          <Link
+            href={collectionHref}
+            className="inline-flex h-11 min-w-36 items-center justify-center rounded-full border border-[#1a1a1a] px-6 text-sm font-bold uppercase tracking-wide text-[#1a1a1a] transition-colors hover:bg-[#1a1a1a] hover:text-[#ffffff]"
+            aria-label={`Ver mais produtos de ${title}`}
+          >
+            Ver mais
+          </Link>
+        </div>
+      )}
     </section>
   )
 }

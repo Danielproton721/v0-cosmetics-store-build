@@ -3,102 +3,204 @@
 import { useState } from "react"
 import { Star } from "lucide-react"
 
+export interface ProductReview {
+  id: string
+  author: string
+  comment: string
+  rating: number
+  photo?: string
+  date?: string
+}
+
 interface ReviewsSectionProps {
   rating: number
   totalReviews: number
+  reviews?: ProductReview[]
 }
 
-export function ReviewsSection({ rating, totalReviews }: ReviewsSectionProps) {
-  const [showForm, setShowForm] = useState(false)
+const mockedReviews: ProductReview[] = [
+  {
+    id: "mock-1",
+    author: "Mariana Alves",
+    comment:
+      "Produto chegou bem embalado e o toque do tecido e muito macio. Ficou lindo na cama e deixou o quarto mais aconchegante.",
+    rating: 5,
+    date: "Compra verificada",
+  },
+  {
+    id: "mock-2",
+    author: "Renata Costa",
+    comment:
+      "Gostei bastante do acabamento. As cores combinam com a foto e a entrega foi tranquila. Compraria novamente.",
+    rating: 5,
+    date: "Compra verificada",
+  },
+  {
+    id: "mock-3",
+    author: "Camila Rocha",
+    comment:
+      "A peca tem boa qualidade e deixou a decoracao mais elegante. Achei o custo-beneficio muito bom.",
+    rating: 4,
+    date: "Compra verificada",
+  },
+]
 
-  const starDistribution = [
-    { stars: 5, count: 0, percentage: 0 },
-    { stars: 4, count: 0, percentage: 0 },
-    { stars: 3, count: 0, percentage: 0 },
-    { stars: 2, count: 0, percentage: 0 },
-    { stars: 1, count: 0, percentage: 0 },
-  ]
+function getAuthorInitials(author: string) {
+  return author
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("")
+}
+
+function getReviewDistribution(reviews: ProductReview[]) {
+  return [5, 4, 3, 2, 1].map((stars) => {
+    const count = reviews.filter((review) => review.rating === stars).length
+    const percentage = reviews.length > 0 ? Math.round((count / reviews.length) * 100) : 0
+
+    return { stars, count, percentage }
+  })
+}
+
+function ReviewStars({ rating, size = 14 }: { rating: number; size?: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          size={size}
+          className={
+            i < Math.round(rating)
+              ? "fill-[#d4a017] text-[#d4a017]"
+              : "fill-[#e5e5e5] text-[#e5e5e5]"
+          }
+        />
+      ))}
+    </div>
+  )
+}
+
+export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSectionProps) {
+  const [showForm, setShowForm] = useState(false)
+  const visibleReviews = reviews && reviews.length > 0 ? reviews : mockedReviews
+  const displayRating =
+    rating > 0
+      ? rating
+      : visibleReviews.reduce((total, review) => total + review.rating, 0) / visibleReviews.length
+  const displayTotalReviews = totalReviews > 0 ? totalReviews : visibleReviews.length
+  const starDistribution = getReviewDistribution(visibleReviews)
 
   return (
-    <section className="py-6 bg-[#ffffff] border-t border-[#f5f5f5]">
-      <div className="px-4">
-        {/* Average rating */}
-        <div className="flex flex-col items-center mb-6">
-          <span className="text-4xl font-bold text-[#1a1a1a]">
-            {rating > 0 ? rating.toFixed(1) : "0.0"}
-          </span>
-          <div className="flex items-center gap-0.5 mt-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={16}
-                className={
-                  i < Math.floor(rating)
-                    ? "fill-[#d4a017] text-[#d4a017]"
-                    : "text-[#e5e5e5] fill-[#e5e5e5]"
-                }
-              />
-            ))}
-          </div>
-          <span className="text-xs text-[#737373] mt-1">
-            {totalReviews} Avaliacoes
-          </span>
+    <section className="bg-[#ffffff] px-4 py-8 md:py-12 border-t border-[#f5f5f5]">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-6 md:mb-8">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+            Avaliacoes
+          </p>
+          <h2 className="mt-2 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-3xl">
+            O que os clientes dizem
+          </h2>
         </div>
 
-        {/* Star distribution bars */}
-        <div className="flex flex-col gap-2 mb-6">
-          {starDistribution.map((item) => (
-            <div key={item.stars} className="flex items-center gap-2">
-              <span className="text-xs text-[#737373] w-4 text-right">{item.stars}</span>
-              <Star size={12} className="fill-[#d4a017] text-[#d4a017] shrink-0" />
-              <div className="flex-1 h-2 bg-[#f5f5f5] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#d4a017] rounded-full transition-all"
-                  style={{ width: `${item.percentage}%` }}
-                />
+        <div className="grid gap-6 md:grid-cols-[280px_1fr] md:gap-8">
+          <div>
+            {/* Average rating */}
+            <div className="rounded-2xl border border-[#eee6d8] bg-[#fffaf0] p-5 text-center">
+              <span className="text-4xl font-bold text-[#1a1a1a]">
+                {displayRating > 0 ? displayRating.toFixed(1) : "0.0"}
+              </span>
+              <div className="mt-2 flex justify-center">
+                <ReviewStars rating={displayRating} size={17} />
               </div>
-              <span className="text-xs text-[#737373] w-8 text-right">{item.percentage}%</span>
+              <span className="mt-2 block text-xs text-[#737373]">
+                {displayTotalReviews} Avaliacoes
+              </span>
             </div>
-          ))}
-        </div>
 
-        {/* Write review button */}
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="w-full border border-[#e5e5e5] rounded-lg py-3 text-sm font-medium text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors"
-        >
-          Escreva uma avaliacao
-        </button>
-
-        {/* Review form */}
-        {showForm && (
-          <div className="mt-4 border border-[#e5e5e5] rounded-lg p-4">
-            <div className="flex items-center gap-1 mb-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <button key={i} aria-label={`${i + 1} estrelas`}>
-                  <Star
-                    size={24}
-                    className="text-[#e5e5e5] hover:fill-[#d4a017] hover:text-[#d4a017] transition-colors cursor-pointer"
-                  />
-                </button>
+            {/* Star distribution bars */}
+            <div className="mt-5 flex flex-col gap-2">
+              {starDistribution.map((item) => (
+                <div key={item.stars} className="flex items-center gap-2">
+                  <span className="w-4 text-right text-xs text-[#737373]">{item.stars}</span>
+                  <Star size={12} className="fill-[#d4a017] text-[#d4a017] shrink-0" />
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#f5f5f5]">
+                    <div
+                      className="h-full rounded-full bg-[#d4a017] transition-all"
+                      style={{ width: `${item.percentage}%` }}
+                    />
+                  </div>
+                  <span className="w-8 text-right text-xs text-[#737373]">{item.percentage}%</span>
+                </div>
               ))}
             </div>
-            <textarea
-              placeholder="Conte sobre sua experiencia com o produto..."
-              className="w-full border border-[#e5e5e5] rounded-lg p-3 text-sm text-[#1a1a1a] placeholder:text-[#737373]/50 outline-none focus:border-[#d4a017] focus:ring-1 focus:ring-[#d4a017]/30 resize-none h-24 bg-[#ffffff]"
-            />
-            <button className="mt-3 w-full bg-[#1a1a1a] text-[#ffffff] text-sm font-semibold py-2.5 rounded-lg hover:bg-[#1a1a1a]/85 transition-all">
-              Enviar avaliacao
-            </button>
-          </div>
-        )}
 
-        {/* Empty reviews state */}
-        {totalReviews === 0 && !showForm && (
-          <p className="text-center text-xs text-[#737373] mt-4">
-            Sem avaliacoes ainda. Seja o primeiro a avaliar!
-          </p>
-        )}
+            {/* Write review button */}
+            <button
+              onClick={() => setShowForm(!showForm)}
+              className="mt-5 w-full rounded-lg border border-[#e5e5e5] py-3 text-sm font-medium text-[#1a1a1a] transition-colors hover:bg-[#f5f5f5]"
+            >
+              Escreva uma avaliacao
+            </button>
+
+            {/* Review form */}
+            {showForm && (
+              <div className="mt-4 rounded-lg border border-[#e5e5e5] p-4">
+                <div className="mb-3 flex items-center gap-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <button key={i} aria-label={`${i + 1} estrelas`}>
+                      <Star
+                        size={24}
+                        className="cursor-pointer text-[#e5e5e5] transition-colors hover:fill-[#d4a017] hover:text-[#d4a017]"
+                      />
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  placeholder="Conte sobre sua experiencia com o produto..."
+                  className="h-24 w-full resize-none rounded-lg border border-[#e5e5e5] bg-[#ffffff] p-3 text-sm text-[#1a1a1a] outline-none placeholder:text-[#737373]/50 focus:border-[#d4a017] focus:ring-1 focus:ring-[#d4a017]/30"
+                />
+                <button className="mt-3 w-full rounded-lg bg-[#1a1a1a] py-2.5 text-sm font-semibold text-[#ffffff] transition-all hover:bg-[#1a1a1a]/85">
+                  Enviar avaliacao
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="grid gap-3">
+            {visibleReviews.map((review) => (
+              <article
+                key={review.id}
+                className="rounded-2xl border border-[#eeeeee] bg-[#ffffff] p-4 shadow-sm md:p-5"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#fff4d8] text-sm font-bold text-[#8a6410] ring-2 ring-[#fff9e6]">
+                    {getAuthorInitials(review.author)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <h3 className="text-sm font-bold text-[#1a1a1a]">{review.author}</h3>
+                        {review.date && (
+                          <p className="text-xs font-medium text-[#737373]">{review.date}</p>
+                        )}
+                      </div>
+                      <ReviewStars rating={review.rating} />
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-[#525252]">{review.comment}</p>
+                    {review.photo && (
+                      <img
+                        src={review.photo}
+                        alt={`Imagem enviada por ${review.author}`}
+                        className="mt-3 h-28 w-28 rounded-xl border border-[#eeeeee] object-cover md:h-32 md:w-32"
+                      />
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

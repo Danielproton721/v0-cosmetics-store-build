@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { Expand } from "lucide-react"
 
 interface ProductGalleryProps {
@@ -13,20 +12,20 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   return (
-    <div className="relative bg-[#ffffff] md:flex md:gap-4 md:flex-row-reverse">
+    <div className="relative bg-[#ffffff] md:flex md:items-start md:gap-4 md:flex-row-reverse">
       {/* Main image */}
-      <div className="relative aspect-square md:aspect-[4/5] bg-[#ffffff] md:bg-[#f5f5f5] md:rounded-2xl flex-1 flex items-center justify-center p-6 md:p-0 overflow-hidden group">
+      <div className="relative aspect-square bg-[#ffffff] md:bg-[#f5f5f5] rounded-2xl md:rounded-2xl flex-1 flex items-center justify-center p-6 md:p-0 overflow-hidden group">
         <div className="relative w-full h-full md:hidden">
           <img
             src={images[currentIndex]}
             alt={name}
-            className="absolute inset-0 w-full h-full object-contain"
+            className="absolute inset-0 w-full h-full object-contain rounded-2xl"
           />
         </div>
         <img
           src={images[currentIndex]}
           alt={name}
-          className="hidden md:block w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="hidden md:block w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 rounded-2xl"
         />
 
         {/* Expand button */}
@@ -45,7 +44,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           }}
           className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-sm text-[#1a1a1a]"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
         </button>
         <button
           onClick={(e) => {
@@ -54,7 +53,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           }}
           className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-sm text-[#1a1a1a]"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
         </button>
       </div>
 
@@ -64,11 +63,10 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           <button
             key={i}
             onClick={() => setCurrentIndex(i)}
-            className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-colors shrink-0 ${
-              i === currentIndex ? "border-[#1a1a1a]" : "border-transparent"
-            }`}
+            className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-colors shrink-0 ${i === currentIndex ? "border-[#1a1a1a]" : "border-transparent"
+              }`}
           >
-            <img src={img} alt={`Thumbnail ${i+1}`} className="w-full h-full object-cover" />
+            <img src={img} alt={`Thumbnail ${i + 1}`} className="w-full h-full object-cover" />
           </button>
         ))}
       </div>
@@ -88,9 +86,8 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
               <button
                 key={i}
                 onClick={() => setCurrentIndex(i)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  i === currentIndex ? "bg-[#1a1a1a]" : "bg-[#e5e5e5]"
-                }`}
+                className={`w-2 h-2 rounded-full transition-colors ${i === currentIndex ? "bg-[#1a1a1a]" : "bg-[#e5e5e5]"
+                  }`}
                 aria-label={`Imagem ${i + 1}`}
               />
             ))}

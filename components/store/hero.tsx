@@ -1,10 +1,12 @@
 "use client"
 
-import Image from "next/image"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { motion, type Variants } from "framer-motion"
 import { products } from "@/lib/products"
 
-const containerVariants = {
+const smoothEase = [0.16, 1, 0.3, 1] as const
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -15,48 +17,74 @@ const containerVariants = {
   },
 }
 
-const textVariants = {
+const textVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.7, ease: smoothEase }
   },
 }
 
-const imageVariants = {
+const imageVariants: Variants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
   visible: { 
     opacity: 1, 
     y: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.7, ease: smoothEase }
   },
 }
 
+const HERO_IMAGE_COUNT = 3
+const HERO_BACKGROUND_IMAGE = "/images/hero-bedroom-bg.png"
+
+const heroImagePool = Array.from(
+  new Set(
+    products
+      .flatMap((product) => [product.image, ...(product.images ?? [])])
+      .filter((image): image is string => Boolean(image))
+  )
+)
+
+const fallbackHeroImages = heroImagePool.slice(0, HERO_IMAGE_COUNT)
+
+function getRandomHeroImages() {
+  const shuffledImages = [...heroImagePool]
+
+  for (let index = shuffledImages.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const currentImage = shuffledImages[index]
+    shuffledImages[index] = shuffledImages[randomIndex]
+    shuffledImages[randomIndex] = currentImage
+  }
+
+  return shuffledImages.slice(0, HERO_IMAGE_COUNT)
+}
+
+const heroImageClasses = [
+  "relative w-24 h-32 md:w-32 md:h-40",
+  "relative w-28 h-36 md:w-36 md:h-44 -mb-1",
+  "relative w-24 h-32 md:w-32 md:h-40",
+]
+
 export function Hero() {
-  // Pegar os primeiros 4 produtos que tenham imagem
-  const heroProducts = products.filter(p => p.image).slice(0, 4)
-  const [img1, img2, img3, img4] = heroProducts.map(p => p.image)
+  const [heroImages, setHeroImages] = useState(fallbackHeroImages)
+
+  useEffect(() => {
+    setHeroImages(getRandomHeroImages())
+  }, [])
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#0891b2] via-[#06b6d4] to-[#10b981] pt-4 pb-0">
-      {/* Decorative leaves */}
-      <div className="absolute top-0 left-0 w-32 h-32 opacity-10">
-        <svg viewBox="0 0 100 100" fill="white">
-          <ellipse cx="30" cy="50" rx="25" ry="40" transform="rotate(-30 30 50)" />
-        </svg>
-      </div>
-      <div className="absolute top-4 right-0 w-24 h-24 opacity-10">
-        <svg viewBox="0 0 100 100" fill="white">
-          <ellipse cx="70" cy="50" rx="20" ry="35" transform="rotate(20 70 50)" />
-        </svg>
-      </div>
-      <div className="absolute bottom-20 left-4 w-16 h-16 opacity-10">
-        <svg viewBox="0 0 100 100" fill="white">
-          <ellipse cx="50" cy="50" rx="15" ry="30" transform="rotate(-45 50 50)" />
-        </svg>
-      </div>
+    <section className="relative overflow-hidden bg-[#8c7a68] pt-4 pb-0">
+      <img
+        src={HERO_BACKGROUND_IMAGE}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-[#1a1a1a]/35" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/25 via-transparent to-[#1a1a1a]/10" />
 
       <motion.div 
         variants={containerVariants}
@@ -96,42 +124,19 @@ export function Hero() {
         animate="visible"
         className="relative z-10 flex items-end justify-center gap-2 px-4 mt-2"
       >
-        {img1 && (
-          <motion.div variants={imageVariants} className="relative w-24 h-32 md:w-32 md:h-40">
+        {heroImages.map((image, index) => (
+          <motion.div
+            key={`${image}-${index}`}
+            variants={imageVariants}
+            className={heroImageClasses[index] ?? heroImageClasses[0]}
+          >
             <img
-              src={img1}
-              alt="Produto 1"
+              src={image}
+              alt={`Produto em destaque ${index + 1}`}
               className="absolute inset-0 w-full h-full object-cover rounded-md drop-shadow-lg"
             />
           </motion.div>
-        )}
-        {img2 && (
-          <motion.div variants={imageVariants} className="relative w-28 h-36 md:w-36 md:h-44 -mb-1">
-            <img
-              src={img2}
-              alt="Produto 2"
-              className="absolute inset-0 w-full h-full object-cover rounded-md drop-shadow-lg"
-            />
-          </motion.div>
-        )}
-        {img3 && (
-          <motion.div variants={imageVariants} className="relative w-24 h-32 md:w-32 md:h-40">
-            <img
-              src={img3}
-              alt="Produto 3"
-              className="absolute inset-0 w-full h-full object-cover rounded-md drop-shadow-lg"
-            />
-          </motion.div>
-        )}
-        {img4 && (
-          <motion.div variants={imageVariants} className="relative w-20 h-28 md:w-28 md:h-36 hidden sm:block">
-            <img
-              src={img4}
-              alt="Produto 4"
-              className="absolute inset-0 w-full h-full object-cover rounded-md drop-shadow-lg"
-            />
-          </motion.div>
-        )}
+        ))}
       </motion.div>
     </section>
   )

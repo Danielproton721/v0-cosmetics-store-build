@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation"
-import Image from "next/image"
 import {
   collections,
   getCollectionBySlug,
   getProductsByCollection,
-  products as allProducts,
 } from "@/lib/products"
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
@@ -33,26 +31,7 @@ export default async function CollectionPage({ params }: PageProps) {
   const collection = getCollectionBySlug(slug)
   if (!collection) notFound()
 
-  // Get products that belong to this collection
-  let collectionProducts = getProductsByCollection(slug)
-
-  // Also include home-page-only products that match the category
-  // (some products in page.tsx aren't in products.ts yet)
-  const categoryMap: Record<string, string> = {
-    tonicos: "Tonicos",
-    fortalecimento: "Fortalecimento",
-    antiqueda: "Antiqueda",
-    desmarelador: "Desmarelador",
-    tonalidade: "Tonalidade",
-  }
-  const category = categoryMap[slug]
-
-  // Combine all unique products
-  const allSlugs = new Set(collectionProducts.map((p) => p.slug))
-  const extraProducts = allProducts.filter(
-    (p) => p.category === category && !allSlugs.has(p.slug)
-  )
-  collectionProducts = [...collectionProducts, ...extraProducts]
+  const collectionProducts = getProductsByCollection(slug)
 
   const serializedProducts = collectionProducts.map((p) => ({
     id: p.id,
