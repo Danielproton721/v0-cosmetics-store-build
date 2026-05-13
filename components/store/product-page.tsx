@@ -113,7 +113,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   useEffect(() => {
     setIsMounted(true)
   }, [])
-  const { addItem } = useCart()
+  const { addItem, isOpen: isCartOpen } = useCart()
   const inlineButtonRef = useRef<HTMLDivElement>(null)
 
   // Derive active price, image and images from selected variant or product defaults
@@ -123,6 +123,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const activeImages = selectedVariant?.images ?? product.images ?? [product.image]
 
   const totalPrice = activePrice * quantity
+  const shouldShowFloatingCTA = showFloating && !isCartOpen
 
   // Show floating button only when the inline button scrolls out of view
   useEffect(() => {
@@ -398,7 +399,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
       {isMounted &&
         createPortal(
           <div
-            className={`fixed bottom-5 left-4 right-4 z-[9999] transition-all duration-300 ease-in-out md:hidden ${showFloating
+            className={`fixed bottom-5 left-4 right-4 z-[9999] transition-all duration-300 ease-in-out md:hidden ${shouldShowFloatingCTA
               ? "translate-y-0 opacity-100"
               : "translate-y-full opacity-0 pointer-events-none"
               }`}
