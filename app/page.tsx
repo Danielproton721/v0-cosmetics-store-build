@@ -1,15 +1,108 @@
 import Link from "next/link"
 import { Header } from "@/components/store/header"
 import { Hero } from "@/components/store/hero"
+import { CollectionBubbleMenu } from "@/components/store/collection-bubble-menu"
 import { ProductSection } from "@/components/store/product-section"
 import { Footer } from "@/components/store/footer"
 import { TrustStrip } from "@/components/store/trust-strip"
-import { getProductsByCategory } from "@/lib/products"
+import { getProductsByCategory, type Product } from "@/lib/products"
 
-const roupas365Products = getProductsByCategory("Roupas de Cama 365")
-const maisVendidosProducts = getProductsByCategory("Mais Vendidos")
-const novidadesProducts = getProductsByCategory("Novidades")
-const jogosLencolProducts = getProductsByCategory("Jogos de Lençol")
+const homeProductLimit = 8
+
+const variantWords = new Set([
+  "areia",
+  "azul",
+  "bambu",
+  "bege",
+  "beige",
+  "blush",
+  "branco",
+  "branca",
+  "brown",
+  "caqui",
+  "chumbo",
+  "cinza",
+  "claro",
+  "dublin",
+  "escuro",
+  "fendi",
+  "fend",
+  "grafite",
+  "green",
+  "grey",
+  "marfim",
+  "marinho",
+  "marsala",
+  "mostarda",
+  "neve",
+  "nevoa",
+  "nude",
+  "off",
+  "olive",
+  "palha",
+  "perola",
+  "petroleo",
+  "prata",
+  "rosa",
+  "ros",
+  "rose",
+  "rosas",
+  "sage",
+  "stone",
+  "taupe",
+  "tofu",
+  "verde",
+  "vinho",
+  "white",
+])
+
+function normalizeProductName(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&amp;/g, " e ")
+    .replace(/[™®]/g, "")
+    .replace(/\b\d+(?:[,.]\d+)?\s*x\s*\d+(?:[,.]\d+)?(?:\s*x\s*\d+(?:[,.]\d+)?)?\s*(?:cm|m)?\b/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+}
+
+function getProductFamilyKey(product: Product) {
+  const words = normalizeProductName(product.name).split(" ").filter(Boolean)
+
+  while (words.length > 0 && variantWords.has(words[words.length - 1])) {
+    words.pop()
+  }
+
+  return words.join(" ")
+}
+
+function getHomeProducts(products: Product[]) {
+  const families = new Set<string>()
+  const uniqueProducts: Product[] = []
+  const repeatedProducts: Product[] = []
+
+  for (const product of products) {
+    const familyKey = getProductFamilyKey(product)
+
+    if (!families.has(familyKey)) {
+      families.add(familyKey)
+      uniqueProducts.push(product)
+    } else {
+      repeatedProducts.push(product)
+    }
+
+    if (uniqueProducts.length >= homeProductLimit) break
+  }
+
+  return [...uniqueProducts, ...repeatedProducts].slice(0, homeProductLimit)
+}
+
+const roupas365Products = getHomeProducts(getProductsByCategory("Roupas de Cama 365"))
+const maisVendidosProducts = getHomeProducts(getProductsByCategory("Mais Vendidos"))
+const novidadesProducts = getHomeProducts(getProductsByCategory("Novidades"))
+const jogosLencolProducts = getHomeProducts(getProductsByCategory("Jogos de Lençol"))
 
 export default function Home() {
   return (
@@ -23,27 +116,30 @@ export default function Home() {
 
       <TrustStrip />
 
+      <CollectionBubbleMenu />
+
       <ProductSection
         title="Novidades"
         products={novidadesProducts}
         collectionHref="/colecoes/novidades"
       />
 
-      <ProductSection
-        title="Mais Vendidos"
-        products={maisVendidosProducts}
-        collectionHref="/colecoes/mais-vendidos"
-      />
 
-      {/* Promotional Banner — coloque a imagem em /public/images/banner-promo.jpg */}
+      {/* Promotional Banner — coloque a imagem em /public/images/banner-promo.png */}
       <Link href="/colecoes/jogos-de-lencol" className="block w-full">
         <img
-          src="/images/banner-promo.jpg"
+          src="/images/banner-promo.png"
           alt="Banner Promocional"
           className="w-full object-cover"
           style={{ maxHeight: "300px" }}
         />
       </Link>
+
+      <ProductSection
+        title="Mais Vendidos"
+        products={maisVendidosProducts}
+        collectionHref="/colecoes/mais-vendidos"
+      />
 
       <ProductSection
         title="Roupas de Cama 365"
@@ -55,7 +151,7 @@ export default function Home() {
       {/* Promotional Banner 2 — coloque a imagem em /public/images/banner-promo-2.jpg */}
       <Link href="/colecoes/roupas-de-cama-365" className="block w-full">
         <img
-          src="/images/banner-promo-2.jpg"
+          src="/images/banner-promo-2.png"
           alt="Banner Promocional 2"
           className="w-full object-cover"
           style={{ maxHeight: "300px" }}
@@ -81,15 +177,15 @@ export default function Home() {
 
           <div className="mx-auto max-w-2xl px-2 pt-7 text-center md:pt-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
-              Sobre nos
+              Sobre nós
             </p>
             <h2 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
               Conforto escolhido para a rotina da sua casa
             </h2>
             <p className="mt-4 text-sm leading-7 text-[#5f5f5f] md:text-base">
               A ConfortBem nasceu para reunir produtos de cama, banho e enxoval
-              com toque macio, bom acabamento e visual acolhedor. Cada colecao e
-              pensada para deixar sua casa mais bonita, pratica e confortavel no
+              com toque macio, bom acabamento e visual acolhedor. Cada coleção é
+              pensada para deixar sua casa mais bonita, prática e confortável no
               dia a dia.
             </p>
             <Link

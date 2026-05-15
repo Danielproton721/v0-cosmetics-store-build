@@ -10,22 +10,22 @@ const questions = [
   {
     question: "Como acompanho meu pedido?",
     answer:
-      "Apos a confirmacao do pagamento, voce recebe as atualizacoes do pedido pelo e-mail cadastrado na compra.",
+      "Após a confirmação do pagamento, você recebe as atualizações do pedido pelo e-mail cadastrado na compra.",
   },
   {
-    question: "Quais formas de pagamento sao aceitas?",
+    question: "Quais formas de pagamento são aceitas?",
     answer:
-      "Aceitamos Pix e cartoes de credito conforme as opcoes exibidas no checkout.",
+      "Aceitamos Pix e cartões de crédito conforme as opções exibidas no checkout.",
   },
   {
-    question: "Os produtos tem garantia?",
+    question: "Os produtos têm garantia?",
     answer:
-      "Sim. Em caso de defeito de fabricacao ou problema no recebimento, entre em contato com nosso atendimento para avaliacao.",
+      "Sim. Em caso de defeito de fabricação ou problema no recebimento, entre em contato com nosso atendimento para avaliação.",
   },
   {
     question: "Posso trocar um produto?",
     answer:
-      "Sim. As solicitacoes de troca seguem os prazos e condicoes informados na pagina de Trocas e Devolucoes.",
+      "Sim. As solicitações de troca seguem os prazos e condições informados na página de Trocas e Devoluções.",
   },
 ]
 

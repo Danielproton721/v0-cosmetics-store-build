@@ -30,7 +30,7 @@ export function AccordionSection({
     <div className="px-4 bg-[#ffffff]">
       {/* Description always visible first */}
       <div className="border-b border-[#f0f0f0] py-4">
-        <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">Descricao do Produto</h3>
+        <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">Descrição do Produto</h3>
         <p className="text-sm text-[#737373] leading-relaxed">{description}</p>
       </div>
 
@@ -69,7 +69,7 @@ export function AccordionSection({
 
         <AccordionItem value="benefits" className="border-b border-[#f0f0f0]">
           <AccordionTrigger className="text-sm font-medium text-[#1a1a1a] hover:no-underline py-4">
-            Beneficios
+            Benefícios
           </AccordionTrigger>
           <AccordionContent>
             <ul className="flex flex-col gap-1.5">

@@ -23,7 +23,7 @@ const mockedReviews: ProductReview[] = [
     id: "mock-1",
     author: "Mariana Alves",
     comment:
-      "Produto chegou bem embalado e o toque do tecido e muito macio. Ficou lindo na cama e deixou o quarto mais aconchegante.",
+      "Produto chegou bem embalado e o toque do tecido é muito macio. Ficou lindo na cama e deixou o quarto mais aconchegante.",
     rating: 5,
     date: "Compra verificada",
   },
@@ -39,7 +39,7 @@ const mockedReviews: ProductReview[] = [
     id: "mock-3",
     author: "Camila Rocha",
     comment:
-      "A peca tem boa qualidade e deixou a decoracao mais elegante. Achei o custo-beneficio muito bom.",
+      "A peça tem boa qualidade e deixou a decoração mais elegante. Achei o custo-benefício muito bom.",
     rating: 4,
     date: "Compra verificada",
   },
@@ -140,7 +140,7 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
               onClick={() => setShowForm(!showForm)}
               className="mt-5 w-full rounded-lg border border-[#e5e5e5] py-3 text-sm font-medium text-[#1a1a1a] transition-colors hover:bg-[#f5f5f5]"
             >
-              Escreva uma avaliacao
+              Escreva uma avaliação
             </button>
 
             {/* Review form */}
@@ -157,11 +157,11 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
                   ))}
                 </div>
                 <textarea
-                  placeholder="Conte sobre sua experiencia com o produto..."
+                  placeholder="Conte sobre sua experiência com o produto..."
                   className="h-24 w-full resize-none rounded-lg border border-[#e5e5e5] bg-[#ffffff] p-3 text-sm text-[#1a1a1a] outline-none placeholder:text-[#737373]/50 focus:border-[#d4a017] focus:ring-1 focus:ring-[#d4a017]/30"
                 />
                 <button className="mt-3 w-full rounded-lg bg-[#1a1a1a] py-2.5 text-sm font-semibold text-[#ffffff] transition-all hover:bg-[#1a1a1a]/85">
-                  Enviar avaliacao
+                  Enviar avaliação
                 </button>
               </div>
             )}

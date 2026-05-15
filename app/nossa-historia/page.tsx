@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Nossa Historia | ConfortBem",
-  description: "Conheca a historia da ConfortBem.",
+  title: "Nossa História | ConfortBem",
+  description: "Conheça a história da ConfortBem.",
 }
 
 export default function NossaHistoriaPage() {
@@ -17,21 +17,21 @@ export default function NossaHistoriaPage() {
           A Loja
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
-          Nossa Historia
+          Nossa História
         </h1>
         <div className="mt-6 space-y-4 text-sm leading-7 text-[#525252] md:text-base">
           <p>
             A ConfortBem foi criada com uma ideia simples: transformar a escolha de
-            enxovais em uma experiencia mais clara, inspiradora e confiavel.
+            enxovais em uma experiência mais clara, inspiradora e confiável.
           </p>
           <p>
-            Comecamos reunindo produtos essenciais para quartos, banheiros e areas
-            de descanso, sempre buscando pecas que entreguem conforto, beleza e boa
-            apresentacao.
+            Começamos reunindo produtos essenciais para quartos, banheiros e áreas
+            de descanso, sempre buscando peças que entreguem conforto, beleza e boa
+            apresentação.
           </p>
           <p>
-            Hoje seguimos ampliando nossas colecoes com foco em praticidade,
-            atendimento cuidadoso e produtos que deixam a casa mais agradavel em
+            Hoje seguimos ampliando nossas coleções com foco em praticidade,
+            atendimento cuidadoso e produtos que deixam a casa mais agradável em
             todos os detalhes.
           </p>
         </div>

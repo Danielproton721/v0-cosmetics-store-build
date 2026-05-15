@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
+import {
+  consumeRateLimit,
+  getCheckoutSessionToken,
+  getClientIp,
+  hashRateLimitValue,
+  validateCheckoutSession,
+} from "@/lib/checkout-security";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const ipLimit = consumeRateLimit(`pix:create:ip:${ip}`, 8, 10 * 60 * 1000);
+  if (!ipLimit.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas de pagamento. Tente novamente em instantes." },
+      { status: 429, headers: { "Retry-After": String(ipLimit.retryAfterSeconds) } }
+    );
+  }
+
   let body;
   try {
     body = await request.json();
@@ -33,6 +49,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "CPF inválido. Deve conter 11 dígitos." }, { status: 400 });
   }
 
+  const identityLimit = consumeRateLimit(
+    `pix:create:identity:${hashRateLimitValue(`${cpfDigits}|${email}|${phoneDigits}`)}`,
+    4,
+    30 * 60 * 1000
+  );
+  if (!identityLimit.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas para estes dados. Aguarde alguns minutos e tente novamente." },
+      { status: 429, headers: { "Retry-After": String(identityLimit.retryAfterSeconds) } }
+    );
+  }
+
+  const amountCents = Math.round(Number(value) * 100);
+  const checkoutSession = validateCheckoutSession(getCheckoutSessionToken(request), amountCents);
+  if (!checkoutSession.ok) {
+    return NextResponse.json(
+      { error: "Sessao de checkout expirada ou invalida. Volte ao carrinho e tente novamente." },
+      { status: 403 }
+    );
+  }
+
   const rawKey = process.env.PAGOUAI_SECRET_KEY;
   if (!rawKey) {
     console.error("[PIX API] Chave PAGOUAI_SECRET_KEY ausente no ambiente.");
@@ -42,8 +79,6 @@ export async function POST(request: Request) {
   const secretKey = rawKey.trim();
   const baseUrl = "https://api.conta.pagou.ai";
   const endpoint = `${baseUrl}/v1/transactions`;
-
-  const amountCents = Math.round(value * 100);
 
   // expirationDate v1 aceita formato AAAA-MM-DD
   const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -64,7 +99,7 @@ export async function POST(request: Request) {
     },
     items: [
       {
-        title: title || "Compra ConfortBem",
+        title: title || "Combo Enxoval",
         quantity: 1,
         unitPrice: amountCents,
         tangible: false,
@@ -120,7 +155,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Gateway não retornou QR Code PIX válido." }, { status: 502 });
     }
 
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
     return NextResponse.json({
       txid: data?.id ?? data?.transactionId ?? null,

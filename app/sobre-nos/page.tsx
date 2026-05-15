@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Sobre Nos | ConfortBem",
-  description: "Conheca a ConfortBem e o cuidado por tras dos nossos enxovais.",
+  title: "Sobre Nós | ConfortBem",
+  description: "Conheça a ConfortBem e o cuidado por trás dos nossos enxovais.",
 }
 
 export default function SobreNosPage() {
@@ -26,23 +26,23 @@ export default function SobreNosPage() {
             A Loja
           </p>
           <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
-            Sobre Nos
+            Sobre Nós
           </h1>
           <div className="mt-6 space-y-4 text-sm leading-7 text-[#525252] md:text-base">
             <p>
-              A ConfortBem nasceu para ajudar voce a montar uma casa mais
-              confortavel, bonita e acolhedora, com produtos escolhidos para o uso
+              A ConfortBem nasceu para ajudar você a montar uma casa mais
+              confortável, bonita e acolhedora, com produtos escolhidos para o uso
               real do dia a dia.
             </p>
             <p>
-              Trabalhamos com cama, banho e decoracao pensando em toque,
-              durabilidade e acabamento. Cada colecao e organizada para facilitar
-              a escolha de pecas que combinem com o seu estilo e com a rotina da
+              Trabalhamos com cama, banho e decoração pensando em toque,
+              durabilidade e acabamento. Cada coleção é organizada para facilitar
+              a escolha de peças que combinem com o seu estilo e com a rotina da
               sua casa.
             </p>
             <p>
-              Nosso compromisso e oferecer uma experiencia de compra simples,
-              segura e transparente, desde a escolha do produto ate a entrega.
+              Nosso compromisso é oferecer uma experiência de compra simples,
+              segura e transparente, desde a escolha do produto até a entrega.
             </p>
           </div>
         </div>

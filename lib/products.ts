@@ -75,14 +75,14 @@ export const collections: Collection[] = [
     "slug": "diversos",
     "name": "Diversos",
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-6981f5174203a-large_a6ec36a6-b411-4d3e-ac7b-d8a2f18d5d14.png?v=1777590268",
-    "productCount": 14,
+    "productCount": 3,
     "description": "Nossa coleção de Diversos"
   },
   {
     "slug": "toalhas",
     "name": "Toalhas",
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-toalhas-paris-banho-2-pecas-450gm2-100-algodao-bege-claro-69b2bb6abaec0-large.png?v=1777590285",
-    "productCount": 25,
+    "productCount": 18,
     "description": "Nossa coleção de Toalhas"
   },
   {
@@ -124,7 +124,7 @@ export const collections: Collection[] = [
     "slug": "decoracoes",
     "name": "Decorações",
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-azul-63a1db3b2199d-large.jpg?v=1778571844",
-    "productCount": 20,
+    "productCount": 35,
     "description": "Nossa coleção de Decorações"
   },
   {
@@ -736,7 +736,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-6981f5174203a-large_a6ec36a6-b411-4d3e-ac7b-d8a2f18d5d14.png?v=1777590268",
     "rating": 4.6,
     "reviews": 136,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-1",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -816,7 +816,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-areia-69b45c5de9f28-large.png?v=1777590296",
     "rating": 4.1,
     "reviews": 233,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-areia",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Chenille é a combinação ideal entre beleza, praticidade e aconchego. Com toque ...",
     "isTest": false,
@@ -955,8 +955,8 @@ export const products: Product[] = [
   {
     "id": 56,
     "name": "Edredom Hotelaria 300 Fios Toque de Algodão Casal Queen King Dupla Face Matelassê Super Macio 260x240cm - Bege",
-    "price": 219.0,
-    "compareAtPrice": 269.9,
+    "price": 119.9,
+    "compareAtPrice": 202.52,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/edredom-hotelaria-300-fios-toque-de-algodao-casal-queen-king-dupla-face-matelasse-super-macio-260x240cm-bege-69c56f0c5cd5e-large.png?v=1777586120",
     "rating": 4.6,
     "reviews": 71,
@@ -971,8 +971,8 @@ export const products: Product[] = [
   {
     "id": 57,
     "name": "Edredom Hotelaria 300 Fios Toque de Algodão Casal Queen King Dupla Face Matelassê Super Macio 260x240cm - Branco",
-    "price": 219.0,
-    "compareAtPrice": 269.9,
+    "price": 119.9,
+    "compareAtPrice": 202.52,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/edredom-hotelaria-300-fios-toque-de-algodao-casal-queen-king-dupla-face-matelasse-super-macio-260x240cm-branco-69c56f1714d1e-large.png?v=1777586197",
     "rating": 4.3,
     "reviews": 185,
@@ -1003,8 +1003,8 @@ export const products: Product[] = [
   {
     "id": 59,
     "name": "Edredom Hotelaria 300 Fios Toque de Algodão Casal Queen King Dupla Face Matelassê Super Macio 260x240cm- Verde",
-    "price": 219.0,
-    "compareAtPrice": 269.9,
+    "price": 119.9,
+    "compareAtPrice": 202.52,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/edredom-hotelaria-300-fios-toque-de-algodao-casal-queen-king-dupla-face-matelasse-super-macio-260x240cm-verde-69c56f0a10bea-large.png?v=1777586132",
     "rating": 4.3,
     "reviews": 106,
@@ -1100,7 +1100,7 @@ export const products: Product[] = [
     "id": 65,
     "name": "Jogo de Lençol Mona lisa 4 Pçs King 300 Fios percal Bordado - Branco",
     "price": 129.0,
-    "compareAtPrice": 169.9,
+    "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-mona-lisa-4-pcs-king-300-fios-percal-bordado-branco-693c0e5240fe5-large.png?v=1777586533",
     "rating": 4.6,
     "reviews": 80,
@@ -1168,7 +1168,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza-6995e8a7a4b10-large.png?v=1777586507",
     "rating": 4.0,
     "reviews": 55,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -1184,7 +1184,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza-escuro-6995e8a7d34eb-large.png?v=1777586464",
     "rating": 4.4,
     "reviews": 104,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza-escuro",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -1804,7 +1804,7 @@ export const products: Product[] = [
     "id": 109,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Dupla Face Matelado Pompeia Caqui",
     "price": 119.0,
-    "compareAtPrice": 139.9,
+    "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-solteiro-2-pecas-dupla-face-caqui-6984c894670c3-large.png?v=1777586335",
     "rating": 4.5,
     "reviews": 155,
@@ -1820,7 +1820,7 @@ export const products: Product[] = [
     "id": 110,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Dupla Face Matelado Pompeia Rose",
     "price": 119.0,
-    "compareAtPrice": 139.9,
+    "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-solteiro-2-pecas-dupla-face-rose-6984c89782373-large.png?v=1777586387",
     "rating": 4.4,
     "reviews": 68,
@@ -1920,7 +1920,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-rosa-69b45c6934934-large.png?v=1777586477",
     "rating": 4.8,
     "reviews": 87,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-rosa",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Chenille é a combinação ideal entre beleza, praticidade e aconchego. Com toque ...",
     "isTest": false,
@@ -1936,7 +1936,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-areia-6983552665f58-large.png?v=1777586158",
     "rating": 4.5,
     "reviews": 48,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-areia",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -1952,7 +1952,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-6981f5174203a-large.png?v=1777586358",
     "rating": 4.4,
     "reviews": 24,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -1968,7 +1968,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-cinza-698357d8723d3-large.png?v=1777586286",
     "rating": 4.3,
     "reviews": 78,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-cinza",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -1984,7 +1984,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-cinza-escuro-69835572a8ff6-large.png?v=1777586249",
     "rating": 4.1,
     "reviews": 47,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-cinza-escuro",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -2000,7 +2000,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-taupe-6983586c3c28c-large.png?v=1777586370",
     "rating": 4.1,
     "reviews": 244,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-taupe",
     "description": "Descrição do produto                           Tapete  38x58 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque maci...",
     "isTest": false,
@@ -2016,7 +2016,7 @@ export const products: Product[] = [
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-passadeira-absorvente-40x110-cm-soft-antiderrapante-toque-macio-rosa-6981f0fdd3934-large.png?v=1777586437",
     "rating": 4.8,
     "reviews": 90,
-    "category": "Diversos",
+    "category": "Decorações",
     "slug": "tapete-foam-passadeira-absorvente-40x110-cm-soft-antiderrapante-toque-macio-rosa",
     "description": "Descrição do produto                           Tapete  40x110 cm  Conforto, Cores e Versatilidade para o Seu Lar O Tapete Foam é a combinação ideal entre beleza, praticidade e aconchego. Com toque mac...",
     "isTest": false,
@@ -2027,8 +2027,8 @@ export const products: Product[] = [
   {
     "id": 123,
     "name": "Roupas de Cama Afrodite  / 3 Peças em Algodão Super Soft",
-    "price": 359.4,
-    "compareAtPrice": 539.1,
+    "price": 119.9,
+    "compareAtPrice": 179.85,
     "image": "https://cdn.shopify.com/s/files/1/0630/7040/4667/files/Sd9ffa45715d0413e850cbf2f2cfbbdb79.jpg?v=1762747754",
     "rating": 4.7,
     "reviews": 133,
@@ -2043,8 +2043,8 @@ export const products: Product[] = [
   {
     "id": 124,
     "name": "Conjunto Sleep Luxury™ /  Lençol de Seda Cetim + Fronhas",
-    "price": 359.9,
-    "compareAtPrice": 539.85,
+    "price": 119.9,
+    "compareAtPrice": 179.85,
     "image": "https://cdn.shopify.com/s/files/1/0630/7040/4667/files/product-image-1778381317.jpg?v=1762747754",
     "rating": 4.9,
     "reviews": 108,
@@ -2059,8 +2059,8 @@ export const products: Product[] = [
   {
     "id": 125,
     "name": "Conjunto Gihng Pure Luxury-  Peças em 100% Algodão Egípcio",
-    "price": 929.9,
-    "compareAtPrice": 1394.85,
+    "price": 119.9,
+    "compareAtPrice": 179.85,
     "image": "https://cdn.shopify.com/s/files/1/0630/7040/4667/files/product-image-1992823793.jpg?v=1762747754",
     "rating": 4.3,
     "reviews": 31,
@@ -2075,8 +2075,8 @@ export const products: Product[] = [
   {
     "id": 126,
     "name": "Conjunto Calme™ de Lençol + Fronhas em Veludo Super Macio",
-    "price": 345.9,
-    "compareAtPrice": 518.85,
+    "price": 119.9,
+    "compareAtPrice": 179.85,
     "image": "https://cdn.shopify.com/s/files/1/0630/7040/4667/files/He2558c5a0c7d47bdbef1fd76916c31d8Z.jpg?v=1762747754",
     "rating": 4.4,
     "reviews": 126,
@@ -2091,8 +2091,8 @@ export const products: Product[] = [
   {
     "id": 127,
     "name": "Kit Cama Posta Queen Isabelle 8 Peças Branco/Cáqui/Marfim",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-brancocaquimarfim-69971bcd0137b-large.jpg?v=1778538599",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-brancocaquimarfim-69971bcd0137b-large.jpg?v=1778538599",
@@ -2120,8 +2120,8 @@ export const products: Product[] = [
   {
     "id": 128,
     "name": "Kit Cama Posta Queen Isabelle 8 Peças Cinza/Marfim",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-cinzamarfim-69971b5ce7f57-large.jpg?v=1778538632",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-cinzamarfim-69971b5ce7f57-large.jpg?v=1778538632",
@@ -2141,8 +2141,8 @@ export const products: Product[] = [
   {
     "id": 129,
     "name": "Kit Cama Posta Queen Isabelle 8 Peças Fendi/Azul Marinho/Marfim",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-fendiazul-marinhomarfim-69971a3577152-large.jpg?v=1778538678",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-fendiazul-marinhomarfim-69971a3577152-large.jpg?v=1778538678",
@@ -2162,8 +2162,8 @@ export const products: Product[] = [
   {
     "id": 130,
     "name": "Kit Cama Posta Queen Isabelle 8 Peças Palha/Rosê/Marfim",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-palharosemarfim-699719c894712-large.jpg?v=1778538670",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-palharosemarfim-699719c894712-large.jpg?v=1778538670",
@@ -2183,8 +2183,8 @@ export const products: Product[] = [
   {
     "id": 131,
     "name": "Kit Cama Posta Queen Isabelle 8 Peças Palha/Vinho/Marfim",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-palhavinhomarfim-699718db302e5-large.jpg?v=1778538694",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-isabelle-8-pecas-palhavinhomarfim-699718db302e5-large.jpg?v=1778538694",
@@ -2212,8 +2212,8 @@ export const products: Product[] = [
   {
     "id": 132,
     "name": "Kit Cama Posta Queen Mônica 10 Peças Lótus Cinza/Branco/Prata",
-    "price": 419.0,
-    "compareAtPrice": 559.9,
+    "price": 119.9,
+    "compareAtPrice": 200.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-monica-10-pecas-percal-200-fios-estampado-matelado-lotus-cinzabrancoprata-697b6b4c593e5-large.jpg?v=1778538708",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-monica-10-pecas-percal-200-fios-estampado-matelado-lotus-cinzabrancoprata-697b6b4c593e5-large.jpg?v=1778538708",
@@ -2232,8 +2232,8 @@ export const products: Product[] = [
   {
     "id": 133,
     "name": "Kit Cama Posta Queen Sabrina 8 Peças Branco/Outono/Bege",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-brancooutonobege-69931cb34c00f-large.jpg?v=1778538648",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-brancooutonobege-69931cb34c00f-large.jpg?v=1778538648",
@@ -2253,8 +2253,8 @@ export const products: Product[] = [
   {
     "id": 134,
     "name": "Kit Cama Posta Queen Sabrina 8 Peças Cinza/Jardim Rosê/Prata",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-cinzajardim-roseprata-69931d6535a2b-large.jpg?v=1778538640",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-cinzajardim-roseprata-69931d6535a2b-large.jpg?v=1778538640",
@@ -2282,8 +2282,8 @@ export const products: Product[] = [
   {
     "id": 135,
     "name": "Kit Cama Posta Queen Sabrina 8 Peças Cinza/Xadrez Verde/Prata",
-    "price": 379.0,
-    "compareAtPrice": 499.9,
+    "price": 119.9,
+    "compareAtPrice": 202.44,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-cinzaxadrez-verdeprata-69931da773fd1-large.jpg?v=1778538613",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-sabrina-8-pecas-cinzaxadrez-verdeprata-69931da773fd1-large.jpg?v=1778538613",
@@ -2303,8 +2303,8 @@ export const products: Product[] = [
   {
     "id": 136,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Azul/Branco",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-azulbranco-696e378bb493c-large.jpg?v=1778538624",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-azulbranco-696e378bb493c-large.jpg?v=1778538624",
@@ -2347,8 +2347,8 @@ export const products: Product[] = [
   {
     "id": 137,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Azul/Prata",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-azulprata-696e385a70401-large.jpg?v=1778538722",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-azulprata-696e385a70401-large.jpg?v=1778538722",
@@ -2367,8 +2367,8 @@ export const products: Product[] = [
   {
     "id": 138,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Cinza/Azul",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaazul-6967e21065f05-large.jpg?v=1778538654",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaazul-6967e21065f05-large.jpg?v=1778538654",
@@ -2387,8 +2387,8 @@ export const products: Product[] = [
   {
     "id": 139,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Cinza/Prata",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaprata-6967e35219dd2-large.jpg?v=1778538702",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaprata-6967e35219dd2-large.jpg?v=1778538702",
@@ -2407,8 +2407,8 @@ export const products: Product[] = [
   {
     "id": 140,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Fendi/Marfim",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendimarfim-696e355b48d04-large.jpg?v=1778538562",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendimarfim-696e355b48d04-large.jpg?v=1778538562",
@@ -2427,8 +2427,8 @@ export const products: Product[] = [
   {
     "id": 141,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Fendi/Prata",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendiprata-696e35f56736c-large.jpg?v=1778538619",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendiprata-696e35f56736c-large.jpg?v=1778538619",
@@ -2447,8 +2447,8 @@ export const products: Product[] = [
   {
     "id": 142,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Marfim",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancomarfim-6967e55597b74-large.jpg?v=1778538687",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancomarfim-6967e55597b74-large.jpg?v=1778538687",
@@ -2467,8 +2467,8 @@ export const products: Product[] = [
   {
     "id": 143,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Rosê/Azul",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseazul-6967e3c2b5f16-large.jpg?v=1778538731",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseazul-6967e3c2b5f16-large.jpg?v=1778538731",
@@ -2487,8 +2487,8 @@ export const products: Product[] = [
   {
     "id": 144,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Rosê/Marfim",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-coordenado-queen-napoli-10-pecas-percal-300-fio-bordado-ingles-rosemarfim-695e3f7b48d93-large.jpg?v=1778538584",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-coordenado-queen-napoli-10-pecas-percal-300-fio-bordado-ingles-rosemarfim-695e3f7b48d93-large.jpg?v=1778538584",
@@ -2507,8 +2507,8 @@ export const products: Product[] = [
   {
     "id": 145,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Rosê/Prata",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e40240977-large.jpg?v=1778538716",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e40240977-large.jpg?v=1778538716",
@@ -2527,8 +2527,8 @@ export const products: Product[] = [
   {
     "id": 146,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Cinza/Azul",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e4eb43b04-large.jpg?v=1778538591",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e4eb43b04-large.jpg?v=1778538591",
@@ -2547,8 +2547,8 @@ export const products: Product[] = [
   {
     "id": 147,
     "name": "Kit Cama Posta Queen Serena 10 Peças Percal 300 Fios Bordado Inglês Fendi/Azul",
-    "price": 469.0,
-    "compareAtPrice": 619.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e363a6aa35-large.jpg?v=1778538662",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e363a6aa35-large.jpg?v=1778538662",
@@ -2567,8 +2567,8 @@ export const products: Product[] = [
   {
     "id": 148,
     "name": "Kit Cama Posta Queen Vitória 8 Peças Cinza/Rosê",
-    "price": 339.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 201.57,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-cinzarose-6985f0b46f52e-large.jpg?v=1778538607",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-cinzarose-6985f0b46f52e-large.jpg?v=1778538607",
@@ -2596,8 +2596,8 @@ export const products: Product[] = [
   {
     "id": 149,
     "name": "Kit Cama Posta Queen Vitória 8 Peças Dublin/Branco/Verde",
-    "price": 339.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 201.57,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-dublinbrancoverde-6985f0f0eb7fa-large.jpg?v=1778538578",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-dublinbrancoverde-6985f0f0eb7fa-large.jpg?v=1778538578",
@@ -2617,8 +2617,8 @@ export const products: Product[] = [
   {
     "id": 150,
     "name": "Kit Cama Posta Queen Vitória 8 Peças Fendi/Bege",
-    "price": 339.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 201.57,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-fendibege-6985f140726f6-large.jpg?v=1778538570",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-fendibege-6985f140726f6-large.jpg?v=1778538570",
@@ -2649,7 +2649,7 @@ export const products: Product[] = [
     ],
     "rating": 4.6,
     "reviews": 211,
-    "category": "Toalhas",
+    "category": "Decorações",
     "slug": "tapete-de-banheiro-bolinha-popcorn-antiderrapante-40x60cm-chenille-cinza",
     "description": "O Tapete de Banheiro Bolinha Popcorn é a escolha perfeita para quem busca conforto e segurança no banheiro. Feito com uma superfície de chenille extremamente macia, este tapete proporciona uma sensaçã...",
     "isTest": false,
@@ -2733,9 +2733,7 @@ export const products: Product[] = [
     "slug": "tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-azul",
     "description": "O Tapete Ultra Absorvente Soft Antiderrapante é o aliado perfeito para quem valoriza conforto e praticidade no dia a dia. Com uma superfície macia e altamente absorvente, ele é ideal para manter o amb...",
     "isTest": false,
-    "tags": [
-      "Toalhas"
-    ],
+    "tags": [],
     "customerReviews": [
       {
         "id": "rev-152-1",
@@ -2811,7 +2809,7 @@ export const products: Product[] = [
     ],
     "rating": 4.9,
     "reviews": 76,
-    "category": "Toalhas",
+    "category": "Decorações",
     "slug": "tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-azul-marinho",
     "description": "O Tapete de Banheiro Bolinha Popcorn é a escolha perfeita para quem busca conforto e segurança no banheiro. Feito com uma superfície de chenille extremamente macia, este tapete proporciona uma sensaçã...",
     "isTest": false,
@@ -2893,9 +2891,7 @@ export const products: Product[] = [
     "slug": "tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-off-white",
     "description": "O Tapete Ultra Absorvente Soft Antiderrapante é o aliado perfeito para quem valoriza conforto e praticidade no dia a dia. Com uma superfície macia e altamente absorvente, ele é ideal para manter o amb...",
     "isTest": false,
-    "tags": [
-      "Toalhas"
-    ],
+    "tags": [],
     "customerReviews": [
       {
         "id": "rev-154-1",
@@ -2969,7 +2965,7 @@ export const products: Product[] = [
     ],
     "rating": 4.9,
     "reviews": 142,
-    "category": "Toalhas",
+    "category": "Decorações",
     "slug": "tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-rosa",
     "description": "O Tapete de Banheiro Bolinha Popcorn é a escolha perfeita para quem busca conforto e segurança no banheiro. Feito com uma superfície de chenille extremamente macia, este tapete proporciona uma sensaçã...",
     "isTest": false,
@@ -3047,7 +3043,7 @@ export const products: Product[] = [
     ],
     "rating": 4.5,
     "reviews": 42,
-    "category": "Toalhas",
+    "category": "Decorações",
     "slug": "tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-azul-claro",
     "description": "O Tapete de Banheiro Bolinha Popcorn é a escolha perfeita para quem busca conforto e segurança no banheiro. Feito com uma superfície de chenille extremamente macia, este tapete proporciona uma sensaçã...",
     "isTest": false,
@@ -3167,9 +3163,7 @@ export const products: Product[] = [
     "slug": "tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-chumbo",
     "description": "O Tapete Ultra Absorvente Soft Antiderrapante é o aliado perfeito para quem valoriza conforto e praticidade no dia a dia. Com uma superfície macia e altamente absorvente, ele é ideal para manter o amb...",
     "isTest": false,
-    "tags": [
-      "Toalhas"
-    ],
+    "tags": [],
     "customerReviews": [
       {
         "id": "rev-159-1",
@@ -3870,7 +3864,7 @@ export const products: Product[] = [
     "id": 175,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Munique Cinza/Rosê",
     "price": 119.0,
-    "compareAtPrice": 159.9,
+    "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-cinzarose-641ac8de6a4f7-large.jpg?v=1778618735",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-cinzarose-641ac8de6a4f7-large.jpg?v=1778618735",
@@ -3918,7 +3912,7 @@ export const products: Product[] = [
     "id": 176,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Branco",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-branco-648c609e92d53-large.jpg?v=1778618749",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-branco-648c609e92d53-large.jpg?v=1778618749",
@@ -3966,7 +3960,7 @@ export const products: Product[] = [
     "id": 177,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Cinza",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinza-648c609f434ab-large.jpg?v=1778618766",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinza-648c609f434ab-large.jpg?v=1778618766",
@@ -4062,7 +4056,7 @@ export const products: Product[] = [
     "id": 179,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Munique Verde/Rosê",
     "price": 119.0,
-    "compareAtPrice": 159.9,
+    "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-verderose-641ac8df7478f-large.jpg?v=1778618787",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-verderose-641ac8df7478f-large.jpg?v=1778618787",
@@ -4110,7 +4104,7 @@ export const products: Product[] = [
     "id": 180,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Cinza/Rosê",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinzarose-648c60a00909d-large.jpg?v=1778618794",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinzarose-648c60a00909d-large.jpg?v=1778618794",
@@ -4254,7 +4248,7 @@ export const products: Product[] = [
     "id": 183,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Verde",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-verde-648c60a230a6a-large.jpg?v=1778618816",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-verde-648c60a230a6a-large.jpg?v=1778618816",
@@ -4350,7 +4344,7 @@ export const products: Product[] = [
     "id": 185,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Rosê/Verde",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-roseverde-648c60a16edee-large.jpg?v=1778618826",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-roseverde-648c60a16edee-large.jpg?v=1778618826",
@@ -4446,7 +4440,7 @@ export const products: Product[] = [
     "id": 187,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Marinho",
     "price": 129.0,
-    "compareAtPrice": 169.9,
+    "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-marinho-6604795c4e4dd-large.jpg?v=1778618842",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-marinho-6604795c4e4dd-large.jpg?v=1778618842",
@@ -4494,7 +4488,7 @@ export const products: Product[] = [
     "id": 188,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Rosê",
     "price": 167.0,
-    "compareAtPrice": 226.9,
+    "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-rose-648c60a0b6137-large.jpg?v=1778618850",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-rose-648c60a0b6137-large.jpg?v=1778618850",
@@ -4542,7 +4536,7 @@ export const products: Product[] = [
     "id": 189,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Pérola/Bambu",
     "price": 129.0,
-    "compareAtPrice": 169.9,
+    "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-toalhas-banhao-100-algodao-perolabambu-682b0eb8bdd03-large.jpg?v=1778618855",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-toalhas-banhao-100-algodao-perolabambu-682b0eb8bdd03-large.jpg?v=1778618855",
@@ -4590,7 +4584,7 @@ export const products: Product[] = [
     "id": 190,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Rosê",
     "price": 129.0,
-    "compareAtPrice": 169.9,
+    "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-rose-66047984bd7c3-large.jpg?v=1778618868",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-rose-66047984bd7c3-large.jpg?v=1778618868",
@@ -4638,7 +4632,7 @@ export const products: Product[] = [
     "id": 191,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Verde Água",
     "price": 129.0,
-    "compareAtPrice": 169.9,
+    "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-100-algodao-370gm2-toalhas-banhao-hortencia-verde-agua-699cb3e5e965b-large.png?v=1778618874",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-100-algodao-370gm2-toalhas-banhao-hortencia-verde-agua-699cb3e5e965b-large.png?v=1778618874",
@@ -5507,8 +5501,8 @@ export const products: Product[] = [
   {
     "id": 216,
     "name": "Cortina Blackout 100% Vedação Premium 5,90x2,60m Sala Quarto Varão 4M Cinza",
-    "price": 379.0,
-    "compareAtPrice": 579.9,
+    "price": 119.9,
+    "compareAtPrice": 183.46,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-590x260m-sala-quarto-varao-4m-cinza-60b63dcb62a3d-large.jpg?v=1778626273",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-590x260m-sala-quarto-varao-4m-cinza-60b63dcb62a3d-large.jpg?v=1778626273",
@@ -5555,8 +5549,8 @@ export const products: Product[] = [
   {
     "id": 217,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 5,90x2,60m para Varão 4M Grécia Marfim",
-    "price": 349.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 202.66,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-590x260m-para-varao-4m-gaze-de-linho-grecia-marfim-6928aa0faeb22-large.jpg?v=1778626278",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-590x260m-para-varao-4m-gaze-de-linho-grecia-marfim-6928aa0faeb22-large.jpg?v=1778626278",
@@ -5584,7 +5578,7 @@ export const products: Product[] = [
     "id": 218,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Bege",
     "price": 169.0,
-    "compareAtPrice": 209.9,
+    "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-bege-69b845a5b3910-large.jpg?v=1778626283",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-bege-69b845a5b3910-large.jpg?v=1778626283",
@@ -5746,8 +5740,8 @@ export const products: Product[] = [
   {
     "id": 222,
     "name": "Cortina Blackout 100% Vedação Premium 4,40x2,60m Sala Quarto Varão 3M Areia",
-    "price": 299.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 180.41,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-440x260m-sala-quarto-varao-3m-areia-60b63dbd4de54-large.jpg?v=1778626306",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-440x260m-sala-quarto-varao-3m-areia-60b63dbd4de54-large.jpg?v=1778626306",
@@ -5794,8 +5788,8 @@ export const products: Product[] = [
   {
     "id": 223,
     "name": "Cortina Blackout 100% Vedação Premium 5,90x2,60m Sala Quarto Varão 4M Areia",
-    "price": 379.0,
-    "compareAtPrice": 579.9,
+    "price": 119.9,
+    "compareAtPrice": 183.46,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-590x260m-sala-quarto-varao-4m-areia-60b63ddcde00d-large.jpg?v=1778626311",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-590x260m-sala-quarto-varao-4m-areia-60b63ddcde00d-large.jpg?v=1778626311",
@@ -5842,8 +5836,8 @@ export const products: Product[] = [
   {
     "id": 224,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 5,90x2,60m para Varão 4M Grécia Prata",
-    "price": 349.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 202.66,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-590x260m-para-varao-4m-grecia-prata-699f09c86bc2f-large.jpg?v=1778626318",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-590x260m-para-varao-4m-grecia-prata-699f09c86bc2f-large.jpg?v=1778626318",
@@ -5861,8 +5855,8 @@ export const products: Product[] = [
   {
     "id": 225,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 5,90x2,60m para Varão 4M Grécia Bege",
-    "price": 349.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 202.66,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-590x260m-para-varao-4m-grecia-bege-69b845c7f2132-large.jpg?v=1778626324",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-590x260m-para-varao-4m-grecia-bege-69b845c7f2132-large.jpg?v=1778626324",
@@ -5880,8 +5874,8 @@ export const products: Product[] = [
   {
     "id": 226,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 5,90x2,60m para Varão 4M Grécia Branco",
-    "price": 349.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 202.66,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-590x260m-para-varao-4m-gaze-de-linho-grecia-branco-6928a992df60e-large.jpg?v=1778626330",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-590x260m-para-varao-4m-gaze-de-linho-grecia-branco-6928a992df60e-large.jpg?v=1778626330",
@@ -5899,8 +5893,8 @@ export const products: Product[] = [
   {
     "id": 227,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 4,40x2,60m para Varão 3M Grécia Prata",
-    "price": 279.0,
-    "compareAtPrice": 354.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-440x260m-para-varao-3m-grecia-prata-699f09bfb10a4-large.jpg?v=1778626337",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-440x260m-para-varao-3m-grecia-prata-699f09bfb10a4-large.jpg?v=1778626337",
@@ -5918,8 +5912,8 @@ export const products: Product[] = [
   {
     "id": 228,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 4,40x2,60m para Varão 3M Grécia Bege",
-    "price": 279.0,
-    "compareAtPrice": 354.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-440x260m-para-varao-3m-grecia-bege-69b845b96544b-large.jpg?v=1778626343",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-440x260m-para-varao-3m-grecia-bege-69b845b96544b-large.jpg?v=1778626343",
@@ -5937,8 +5931,8 @@ export const products: Product[] = [
   {
     "id": 229,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 4,40x2,60m para Varão 3M Grécia Marfim",
-    "price": 279.0,
-    "compareAtPrice": 354.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-marfim-6928a82f9aca7-large.jpg?v=1778626348",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-marfim-6928a82f9aca7-large.jpg?v=1778626348",
@@ -5956,8 +5950,8 @@ export const products: Product[] = [
   {
     "id": 230,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 4,40x2,60m para Varão 3M Grécia Branco",
-    "price": 279.0,
-    "compareAtPrice": 354.9,
+    "price": 119.9,
+    "compareAtPrice": 201.94,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-branco-6928a81004746-large.jpg?v=1778626354",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-branco-6928a81004746-large.jpg?v=1778626354",
@@ -5976,7 +5970,7 @@ export const products: Product[] = [
     "id": 231,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Prata",
     "price": 169.0,
-    "compareAtPrice": 209.9,
+    "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-prata-69b848369a75c-large.jpg?v=1778626359",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-prata-69b848369a75c-large.jpg?v=1778626359",
@@ -5995,7 +5989,7 @@ export const products: Product[] = [
     "id": 232,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Marfim",
     "price": 169.0,
-    "compareAtPrice": 209.9,
+    "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-marfim-69b84820c4497-large.jpg?v=1778626365",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-marfim-69b84820c4497-large.jpg?v=1778626365",
@@ -6109,8 +6103,8 @@ export const products: Product[] = [
   {
     "id": 235,
     "name": "Cortina Blackout 100% Vedação Premium 4,40x2,60m Sala Quarto Varão 3M Cinza",
-    "price": 299.0,
-    "compareAtPrice": 449.9,
+    "price": 119.9,
+    "compareAtPrice": 180.41,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-440x260m-sala-quarto-varao-3m-cinza-60b63dabab2f3-large.jpg?v=1778626385",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-440x260m-sala-quarto-varao-3m-cinza-60b63dabab2f3-large.jpg?v=1778626385",
@@ -6157,8 +6151,8 @@ export const products: Product[] = [
   {
     "id": 236,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Fendi/Marfim",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendimarfim-696e38a991536-large.jpg?v=1778626571",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendimarfim-696e38a991536-large.jpg?v=1778626571",
@@ -6177,8 +6171,8 @@ export const products: Product[] = [
   {
     "id": 237,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Azul/Branco",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-azulbranco-696e3a3806b5b-large.jpg?v=1778626577",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-azulbranco-696e3a3806b5b-large.jpg?v=1778626577",
@@ -6197,8 +6191,8 @@ export const products: Product[] = [
   {
     "id": 238,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Fendi/Prata",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendiprata-696e39401d43d-large.jpg?v=1778626582",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancofendiprata-696e39401d43d-large.jpg?v=1778626582",
@@ -6217,8 +6211,8 @@ export const products: Product[] = [
   {
     "id": 239,
     "name": "Kit Cama Posta King Vitória 8 Peças Rosê/Azul Marinho",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-roseazul-marinho-6985f3f7852a2-large.jpg?v=1778626590",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-roseazul-marinho-6985f3f7852a2-large.jpg?v=1778626590",
@@ -6246,8 +6240,8 @@ export const products: Product[] = [
   {
     "id": 240,
     "name": "Kit Cama Posta King Isabelle 8 Peças Branco/Cáqui/Marfim",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-brancocaquimarfim-69971f74a987b-large.jpg?v=1778626597",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-brancocaquimarfim-69971f74a987b-large.jpg?v=1778626597",
@@ -6267,8 +6261,8 @@ export const products: Product[] = [
   {
     "id": 241,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Rosê/Prata",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e8af01ff7-large.jpg?v=1778626604",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e8af01ff7-large.jpg?v=1778626604",
@@ -6287,8 +6281,8 @@ export const products: Product[] = [
   {
     "id": 242,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Rosê/Prata",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-roseprata-6965325e4a709-large.jpg?v=1778626610",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-roseprata-6965325e4a709-large.jpg?v=1778626610",
@@ -6307,8 +6301,8 @@ export const products: Product[] = [
   {
     "id": 243,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Cinza/Prata",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaprata-6967e78dc4faf-large.jpg?v=1778626615",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzaprata-6967e78dc4faf-large.jpg?v=1778626615",
@@ -6327,8 +6321,8 @@ export const products: Product[] = [
   {
     "id": 244,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Cinza/Azul",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e8f37a292-large.jpg?v=1778626621",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e8f37a292-large.jpg?v=1778626621",
@@ -6347,8 +6341,8 @@ export const products: Product[] = [
   {
     "id": 245,
     "name": "Kit Cama Posta King Vitória 8 Peças Dublin/Branco/Verde",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-dublinbrancoverde-6985f35df27bb-large.jpg?v=1778626629",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-dublinbrancoverde-6985f35df27bb-large.jpg?v=1778626629",
@@ -6367,8 +6361,8 @@ export const products: Product[] = [
   {
     "id": 246,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Prata",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoprata-6967e990bdd47-large.jpg?v=1778626636",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoprata-6967e990bdd47-large.jpg?v=1778626636",
@@ -6387,8 +6381,8 @@ export const products: Product[] = [
   {
     "id": 247,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fio Bordado Inglês Fendi/Azul",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e39a17fe61-large.jpg?v=1778626644",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e39a17fe61-large.jpg?v=1778626644",
@@ -6416,8 +6410,8 @@ export const products: Product[] = [
   {
     "id": 248,
     "name": "Kit Cama Posta King Sabrina 8 Peças Branco/Outono/Bege",
-    "price": 419.0,
-    "compareAtPrice": 559.9,
+    "price": 119.9,
+    "compareAtPrice": 200.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancooutonobege-69931f3ad4483-large.jpg?v=1778626651",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancooutonobege-69931f3ad4483-large.jpg?v=1778626651",
@@ -6436,8 +6430,8 @@ export const products: Product[] = [
   {
     "id": 249,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Rosê/Marfim",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-coordenado-king-napoli-10-pecas-percal-300-fio-bordado-ingles-rosemarfim-695e40bb2b144-large.jpg?v=1778626659",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-coordenado-king-napoli-10-pecas-percal-300-fio-bordado-ingles-rosemarfim-695e40bb2b144-large.jpg?v=1778626659",
@@ -6456,8 +6450,8 @@ export const products: Product[] = [
   {
     "id": 250,
     "name": "Kit Cama Posta King Isabelle 8 Peças Fendi/Azul Marinho/Marfim",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-fendiazul-marinhomarfim-69971dd771e63-large.jpg?v=1778626664",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-fendiazul-marinhomarfim-69971dd771e63-large.jpg?v=1778626664",
@@ -6476,8 +6470,8 @@ export const products: Product[] = [
   {
     "id": 251,
     "name": "Kit Cama Posta King Sabrina 8 Peças Cinza/Jardim Rosê/Prata",
-    "price": 419.0,
-    "compareAtPrice": 559.9,
+    "price": 119.9,
+    "compareAtPrice": 200.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzajardim-roseprata-69931f8f30de0-large.jpg?v=1778626669",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzajardim-roseprata-69931f8f30de0-large.jpg?v=1778626669",
@@ -6496,8 +6490,8 @@ export const products: Product[] = [
   {
     "id": 252,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Marfim",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancomarfim-6967e954f2e52-large.jpg?v=1778626676",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancomarfim-6967e954f2e52-large.jpg?v=1778626676",
@@ -6516,8 +6510,8 @@ export const products: Product[] = [
   {
     "id": 253,
     "name": "Kit Cama Posta King Sabrina 8 Peças Branco/Floral Marsala/Marfim",
-    "price": 419.0,
-    "compareAtPrice": 559.9,
+    "price": 119.9,
+    "compareAtPrice": 200.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancofloral-marsalamarfim-69931eb4296ca-large.jpg?v=1778626684",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancofloral-marsalamarfim-69931eb4296ca-large.jpg?v=1778626684",
@@ -6536,8 +6530,8 @@ export const products: Product[] = [
   {
     "id": 254,
     "name": "Kit Cama Posta King Vitória 8 Peças Cinza/Rosê",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-cinzarose-6985f3201add3-large.jpg?v=1778626691",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-cinzarose-6985f3201add3-large.jpg?v=1778626691",
@@ -6556,8 +6550,8 @@ export const products: Product[] = [
   {
     "id": 255,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Azul",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoazul-6967e9c783182-large.jpg?v=1778626698",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoazul-6967e9c783182-large.jpg?v=1778626698",
@@ -6576,8 +6570,8 @@ export const products: Product[] = [
   {
     "id": 256,
     "name": "Kit Cama Posta King Isabelle 8 Peças Palha/Vinho/Marfim",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-palhavinhomarfim-69971c8ab7b3e-large.jpg?v=1778626703",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-palhavinhomarfim-69971c8ab7b3e-large.jpg?v=1778626703",
@@ -6596,8 +6590,8 @@ export const products: Product[] = [
   {
     "id": 257,
     "name": "Kit Cama Posta King Serena 10 Peças Percal 300 Fios Bordado Inglês Branco/Cinza/Marfim",
-    "price": 489.0,
-    "compareAtPrice": 649.9,
+    "price": 119.9,
+    "compareAtPrice": 201.03,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzamarfim-6967e74c5f1fa-large.jpg?v=1778626710",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancocinzamarfim-6967e74c5f1fa-large.jpg?v=1778626710",
@@ -6616,8 +6610,8 @@ export const products: Product[] = [
   {
     "id": 258,
     "name": "Kit Cama Posta King Sabrina 8 Peças Cinza/Xadrez Verde/Prata",
-    "price": 419.0,
-    "compareAtPrice": 559.9,
+    "price": 119.9,
+    "compareAtPrice": 200.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzaxadrez-verdeprata-6993201beef0f-large.jpg?v=1778626718",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzaxadrez-verdeprata-6993201beef0f-large.jpg?v=1778626718",
@@ -6636,8 +6630,8 @@ export const products: Product[] = [
   {
     "id": 259,
     "name": "Kit Cama Posta King Isabelle 8 Peças Cinza/Marfim",
-    "price": 399.0,
-    "compareAtPrice": 529.9,
+    "price": 119.9,
+    "compareAtPrice": 201.31,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-cinzamarfim-69971f1a89fa5-large.jpg?v=1778626725",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-cinzamarfim-69971f1a89fa5-large.jpg?v=1778626725",

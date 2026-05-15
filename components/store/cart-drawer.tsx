@@ -1,16 +1,50 @@
 "use client"
 
-import { useEffect, useCallback, useRef } from "react"
-import Image from "next/image"
+import { useEffect, useCallback, useState } from "react"
 import Link from "next/link"
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
 export function CartDrawer() {
   const { items, isOpen, totalItems, totalPrice, removeItem, updateQuantity, closeCart } = useCart()
+  const [isStartingCheckout, setIsStartingCheckout] = useState(false)
+  const [checkoutError, setCheckoutError] = useState("")
   const handleCloseCart = useCallback(() => {
     closeCart()
   }, [closeCart])
+
+  const handleStartCheckout = useCallback(async () => {
+    if (isStartingCheckout) return
+
+    setIsStartingCheckout(true)
+    setCheckoutError("")
+
+    try {
+      const response = await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((item) => ({
+            id: item.id,
+            slug: item.slug,
+            quantity: item.quantity,
+          })),
+        }),
+      })
+      const data = await response.json().catch(() => null)
+
+      if (!response.ok) {
+        throw new Error(data?.error || "Nao foi possivel iniciar o checkout.")
+      }
+
+      handleCloseCart()
+      window.location.assign("/checkout")
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "Nao foi possivel iniciar o checkout.")
+    } finally {
+      setIsStartingCheckout(false)
+    }
+  }, [handleCloseCart, isStartingCheckout, items])
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -73,7 +107,7 @@ export function CartDrawer() {
               <ShoppingBag size={32} className="text-[#737373]" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1a1a1a]">Seu carrinho esta vazio</p>
+              <p className="text-sm font-semibold text-[#1a1a1a]">Seu carrinho está vazio</p>
               <p className="text-xs text-[#737373] mt-1">Adicione produtos para continuar</p>
             </div>
             <Link
@@ -171,13 +205,19 @@ export function CartDrawer() {
             </p>
 
             {/* Checkout button */}
-            <Link 
-              href="/checkout"
-              onClick={handleCloseCart}
-              className="w-full bg-[#22c55e] text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider hover:bg-[#16a34a] active:scale-[0.98] transition-all text-center block"
+            <button
+              type="button"
+              onClick={handleStartCheckout}
+              disabled={isStartingCheckout}
+              className="w-full bg-[#22c55e] disabled:bg-[#86efac] text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider hover:bg-[#16a34a] active:scale-[0.98] transition-all text-center block"
             >
-              Finalizar Compra
-            </Link>
+              {isStartingCheckout ? "Iniciando..." : "Finalizar Compra"}
+            </button>
+            {checkoutError && (
+              <p className="text-[11px] text-red-600 text-center font-semibold">
+                {checkoutError}
+              </p>
+            )}
 
             {/* Continue shopping */}
             <button

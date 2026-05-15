@@ -3,7 +3,7 @@ import { Footer } from "@/components/store/footer"
 
 export const metadata = {
   title: "Rastreio de Pedido | ConfortBem",
-  description: "Acompanhe as informacoes de envio do seu pedido ConfortBem.",
+  description: "Acompanhe as informações de envio do seu pedido ConfortBem.",
 }
 
 export default function RastreioDePedidoPage() {
@@ -22,12 +22,12 @@ export default function RastreioDePedidoPage() {
 
         <div className="mt-6 rounded-2xl bg-[#f9f9f9] p-5 md:p-6">
           <p className="text-sm leading-7 text-[#525252] md:text-base">
-            As atualizacoes de envio sao encaminhadas para o e-mail informado no
-            checkout assim que o pedido e preparado e postado.
+            As atualizações de envio são encaminhadas para o e-mail informado no
+            checkout assim que o pedido é preparado e postado.
           </p>
           <p className="mt-4 text-sm leading-7 text-[#525252] md:text-base">
-            Se voce ja recebeu um codigo de rastreio e precisa de ajuda, envie o
-            numero do pedido para contato@confortbem.com.br.
+            Se você já recebeu um código de rastreio e precisa de ajuda, envie o
+            número do pedido para contato@confortbem.com.br.
           </p>
         </div>
 

@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Trocas e Devolucoes | ConfortBem",
-  description: "Informacoes sobre trocas, devolucoes e prazos da ConfortBem.",
+  title: "Trocas e Devoluções | ConfortBem",
+  description: "Informações sobre trocas, devoluções e prazos da ConfortBem.",
 }
 
 export default function TrocasEDevolucoesPage() {
@@ -17,12 +17,12 @@ export default function TrocasEDevolucoesPage() {
           Ajuda
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
-          Trocas e Devolucoes
+          Trocas e Devoluções
         </h1>
 
         <div className="mt-6 space-y-5 text-sm leading-7 text-[#525252] md:text-base">
           <p>
-            Voce pode solicitar troca ou devolucao dentro do prazo informado no
+            Você pode solicitar troca ou devolução dentro do prazo informado no
             momento da compra, desde que o produto esteja sem sinais de uso, com
             embalagem preservada e acompanhado dos itens recebidos.
           </p>
@@ -32,8 +32,8 @@ export default function TrocasEDevolucoesPage() {
               Como solicitar
             </h2>
             <p className="mt-2">
-              Envie uma mensagem para contato@confortbem.com.br com o numero do
-              pedido, nome completo, motivo da solicitacao e fotos do produto, se
+              Envie uma mensagem para contato@confortbem.com.br com o número do
+              pedido, nome completo, motivo da solicitação e fotos do produto, se
               houver defeito ou avaria.
             </p>
           </div>
@@ -54,7 +54,7 @@ export default function TrocasEDevolucoesPage() {
               Reembolso
             </h2>
             <p className="mt-2">
-              Apos o recebimento e analise do item devolvido, o reembolso e
+              Após o recebimento e análise do item devolvido, o reembolso é
               processado conforme o meio de pagamento utilizado na compra.
             </p>
           </div>

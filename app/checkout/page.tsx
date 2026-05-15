@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense, useCallback } from 'react';
 import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
@@ -59,7 +58,7 @@ function CheckoutContent() {
 
   // PIX State
   const [isGeneratingPix, setIsGeneratingPix] = useState(false);
-  const [pixData, setPixData] = useState<{ qrCode: string, qrCodeImage: string | null } | null>(null);
+  const [pixData, setPixData] = useState<{ qrCode: string, qrCodeImage: string | null, expiresAt?: string } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
 
   // Card State
@@ -102,6 +101,25 @@ function CheckoutContent() {
     const base = "w-full px-4 py-3 border rounded-xl bg-gray-50 focus:bg-white focus:outline-none transition-all ";
     return base + (errors[field] ? "border-red-500 focus:ring-2 focus:ring-red-500/30" : "border-gray-200 focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017]");
   };
+
+  const createCheckoutSession = useCallback(async () => {
+    const res = await fetch('/api/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: items.map((item) => ({
+          id: item.id,
+          slug: item.slug,
+          quantity: item.quantity,
+        })),
+      }),
+    });
+
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      throw new Error(data?.error || 'Nao foi possivel validar o checkout.');
+    }
+  }, [items]);
 
   const triggerError = (newErrors: Record<string, boolean>) => {
     setErrors(newErrors);
@@ -170,6 +188,8 @@ function CheckoutContent() {
     setIsGeneratingPix(true);
     
     try {
+      await createCheckoutSession();
+
       const res = await fetch('/api/pix/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -179,7 +199,7 @@ function CheckoutContent() {
           cpf,
           name,
           email,
-          title: "Pedido ConfortBem"
+          title: "Combo Enxoval"
         })
       });
       
@@ -191,7 +211,8 @@ function CheckoutContent() {
       
       setPixData({
         qrCode: data.qrCode,
-        qrCodeImage: data.qrCodeImage
+        qrCodeImage: data.qrCodeImage,
+        expiresAt: data.expiresAt
       });
 
       setTimeout(() => {
@@ -232,6 +253,8 @@ function CheckoutContent() {
 
     try {
       // Pega o IP real do cliente (tenta dois serviços)
+      await createCheckoutSession();
+
       let clientIp = '0.0.0.0';
       try {
         const ipRes = await Promise.any([
@@ -250,7 +273,7 @@ function CheckoutContent() {
           value: totalPrice,
           name, email, cpf, phone,
           installments: cardInstallments,
-          title: 'Pedido ConfortBem',
+          title: 'Combo Enxoval',
           clientIp,
           card: {
             number: rawNum,
@@ -720,6 +743,9 @@ function CheckoutContent() {
                     ) : (
                       <>
                         <h3 className="font-bold text-emerald-600 mb-2">PIX Gerado com Sucesso!</h3>
+                        <div className="mb-3 w-full max-w-sm rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-bold text-amber-800">
+                          Este QR Code expira em 10 minutos. Pague antes desse prazo para evitar gerar um novo PIX.
+                        </div>
                         <div className="w-44 h-44 bg-white border-2 border-emerald-100 rounded-2xl p-3 mx-auto mb-4 shadow-sm relative">
                           <img 
                             src={pixData.qrCodeImage || `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=0&data=${encodeURIComponent(pixData.qrCode)}`} 

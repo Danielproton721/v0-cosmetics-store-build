@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Politica de Privacidade | ConfortBem",
-  description: "Entenda como a ConfortBem trata informacoes e dados pessoais.",
+  title: "Política de Privacidade | ConfortBem",
+  description: "Entenda como a ConfortBem trata informações e dados pessoais.",
 }
 
 export default function PoliticaDePrivacidadePage() {
@@ -17,34 +17,34 @@ export default function PoliticaDePrivacidadePage() {
           A Loja
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
-          Politica de Privacidade
+          Política de Privacidade
         </h1>
         <div className="mt-6 space-y-5 text-sm leading-7 text-[#525252] md:text-base">
           <p>
-            A ConfortBem respeita a sua privacidade e utiliza informacoes pessoais
+            A ConfortBem respeita a sua privacidade e utiliza informações pessoais
             apenas para processar pedidos, prestar atendimento, melhorar a
-            experiencia de compra e cumprir obrigacoes legais.
+            experiência de compra e cumprir obrigações legais.
           </p>
 
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">
-              Informacoes coletadas
+              Informações coletadas
             </h2>
             <p className="mt-2">
-              Podemos coletar dados como nome, e-mail, telefone, endereco de
+              Podemos coletar dados como nome, e-mail, telefone, endereço de
               entrega, dados de pagamento processados por parceiros seguros e
-              informacoes de navegacao no site.
+              informações de navegação no site.
             </p>
           </div>
 
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">
-              Uso das informacoes
+              Uso das informações
             </h2>
             <p className="mt-2">
-              Os dados sao usados para confirmar compras, enviar atualizacoes de
-              pedido, responder solicitacoes, prevenir fraudes e melhorar nossos
-              servicos.
+              Os dados são usados para confirmar compras, enviar atualizações de
+              pedido, responder solicitações, prevenir fraudes e melhorar nossos
+              serviços.
             </p>
           </div>
 
@@ -53,9 +53,9 @@ export default function PoliticaDePrivacidadePage() {
               Compartilhamento
             </h2>
             <p className="mt-2">
-              Compartilhamos informacoes somente quando necessario com parceiros de
+              Compartilhamos informações somente quando necessário com parceiros de
               pagamento, entrega, tecnologia e atendimento, sempre dentro da
-              finalidade da operacao.
+              finalidade da operação.
             </p>
           </div>
 
@@ -64,8 +64,8 @@ export default function PoliticaDePrivacidadePage() {
               Seus direitos
             </h2>
             <p className="mt-2">
-              Voce pode solicitar acesso, correcao ou exclusao de dados pessoais
-              entrando em contato pelo e-mail informado no rodape da loja.
+              Você pode solicitar acesso, correção ou exclusão de dados pessoais
+              entrando em contato pelo e-mail informado no rodapé da loja.
             </p>
           </div>
         </div>

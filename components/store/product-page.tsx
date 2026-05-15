@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { createPortal } from "react-dom"
-import { Check } from "lucide-react"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { Check, X } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { ProductGallery } from "./product-gallery"
 import { ShippingCalculator } from "./shipping-calculator"
@@ -49,6 +50,24 @@ const colorKeywords = [
   "Mostarda",
   "Grafite",
 ]
+
+const cardInstallmentRates = [
+  { installments: 2, rate: 11.89 },
+  { installments: 3, rate: 13.29 },
+  { installments: 4, rate: 14.74 },
+  { installments: 5, rate: 15.97 },
+  { installments: 6, rate: 16.65 },
+  { installments: 7, rate: 16.99 },
+  { installments: 8, rate: 17.01 },
+  { installments: 9, rate: 17.99 },
+  { installments: 10, rate: 18.01 },
+  { installments: 11, rate: 18.99 },
+  { installments: 12, rate: 23.99 },
+]
+
+function formatCurrency(value: number) {
+  return `R$ ${value.toFixed(2).replace(".", ",")}`
+}
 
 function extractSizeFromName(name: string): string | null {
   const lower = name.toLowerCase()
@@ -102,6 +121,7 @@ interface ProductPageProps {
 }
 
 export function ProductPage({ product, relatedProducts }: ProductPageProps) {
+  const shouldReduceMotion = useReducedMotion()
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const [showFloating, setShowFloating] = useState(false)
@@ -109,6 +129,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
     product.variants?.[0] ?? null
   )
   const [isMounted, setIsMounted] = useState(false)
+  const [installmentsOpen, setInstallmentsOpen] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
@@ -124,6 +145,30 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
 
   const totalPrice = activePrice * quantity
   const shouldShowFloatingCTA = showFloating && !isCartOpen
+  const installmentOptions = useMemo(
+    () =>
+      cardInstallmentRates.map((option) => {
+        const totalWithRate = activePrice * (1 + option.rate / 100)
+
+        return {
+          ...option,
+          totalWithRate,
+          installmentValue: totalWithRate / option.installments,
+        }
+      }),
+    [activePrice]
+  )
+
+  useEffect(() => {
+    if (!installmentsOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setInstallmentsOpen(false)
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [installmentsOpen])
 
   // Show floating button only when the inline button scrolls out of view
   useEffect(() => {
@@ -189,7 +234,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   <span className="text-[#d4a017] font-bold text-sm">★ 5</span>
                   <span className="text-xs text-[#737373]">(3)</span>
                 </div>
-                <a href="#descricao" className="text-xs text-[#1a1a1a] underline underline-offset-2">Ver descricao do produto</a>
+                <a href="#descricao" className="text-xs text-[#1a1a1a] underline underline-offset-2">Ver descrição do produto</a>
               </div>
             </div>
 
@@ -213,9 +258,15 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   (5% de desconto)
                 </div>
                 <div className="text-sm text-[#1a1a1a] font-medium">
-                  ou 6x de R$ {(activePrice / 6).toFixed(2).replace(".", ",")} sem juros
+                  ou veja as opções no cartão
                 </div>
-                <a href="#" className="text-xs text-[#1a1a1a] underline mt-1 block">Ver parcelamento</a>
+                <button
+                  type="button"
+                  onClick={() => setInstallmentsOpen(true)}
+                  className="mt-1 block text-left text-xs font-semibold text-[#1a1a1a] underline underline-offset-2 transition-colors hover:text-[#d4a017]"
+                >
+                  Ver parcelamento
+                </button>
               </div>
 
               {/* Variant selector */}
@@ -244,7 +295,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                               ? "bg-[#1a1a1a] text-white"
                               : "bg-white border border-[#e5e5e5] text-[#b3b3b3] cursor-not-allowed opacity-60"
                             }`}
-                          title={!isAvailable ? "Nao disponivel para este produto" : ""}
+                          title={!isAvailable ? "Não disponível para este produto" : ""}
                         >
                           {size}
                         </button>
@@ -262,7 +313,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
               ) : null}
 
               {/* Actions */}
-              <div ref={inlineButtonRef} className="flex gap-3 mb-6">
+              <div id="comprar-agora" ref={inlineButtonRef} className="flex gap-3 mb-6">
                 <div className="flex border border-[#e5e5e5] rounded-md items-center bg-white h-12">
                   <button
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
@@ -306,7 +357,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#ef4444]"><rect width="16" height="16" x="4" y="4" rx="2" /><rect width="6" height="6" x="9" y="9" rx="1" /><path d="M15 2v2" /><path d="M15 20v2" /><path d="M2 15h2" /><path d="M2 9h2" /><path d="M20 15h2" /><path d="M20 9h2" /><path d="M9 2v2" /><path d="M9 20v2" /></svg>
-                  <span className="text-[#737373]">Frete <span className="font-semibold text-[#ef4444]">rapido e seguro</span> para todo o Brasil</span>
+                  <span className="text-[#737373]">Frete <span className="font-semibold text-[#ef4444]">rápido e seguro</span> para todo o Brasil</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#a855f7]"><circle cx="12" cy="12" r="10" /><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" /><path d="M12 18V6" /></svg>
@@ -318,11 +369,11 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
             <div className="hidden md:block px-4 md:px-0">
               {shouldShowBedDetails && (
                 <div className="mb-8">
-                <h3 className="text-lg font-bold text-[#1a1a1a] mb-4">Caracteristicas</h3>
+                <h3 className="text-lg font-bold text-[#1a1a1a] mb-4">Características</h3>
                 <div className="grid grid-cols-3 gap-3 mb-8">
                   <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Quantidade de Pecas</span>
-                    <span className="text-sm font-medium text-[#737373]">1 Peca</span>
+                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Quantidade de Peças</span>
+                    <span className="text-sm font-medium text-[#737373]">1 Peça</span>
                   </div>
                   <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
                     <span className="text-xs text-[#1a1a1a] font-medium mb-1">Cor</span>
@@ -334,7 +385,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   </div>
                   <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
                     <span className="text-xs text-[#1a1a1a] font-medium mb-1">Material</span>
-                    <span className="text-sm font-medium text-[#737373]">100% Poliester</span>
+                    <span className="text-sm font-medium text-[#737373]">100% Poliéster</span>
                   </div>
                   <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
                     <span className="text-xs text-[#1a1a1a] font-medium mb-1">Gramatura</span>
@@ -345,7 +396,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                 {/* Description Desktop */}
                 <div id="descricao" className="border-t border-[#e5e5e5] pt-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descricao</h3>
+                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descrição</h3>
                     <span className="text-2xl font-light text-[#737373]">−</span>
                   </div>
                   <div className="text-sm text-[#737373] leading-relaxed">
@@ -357,8 +408,8 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
               {!shouldShowBedDetails && (
                 <div id="descricao" className="border-t border-[#e5e5e5] pt-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descricao</h3>
-                    <span className="text-2xl font-light text-[#737373]">âˆ’</span>
+                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descrição</h3>
+                    <span className="text-2xl font-light text-[#737373]">−</span>
                   </div>
                   <div className="text-sm text-[#737373] leading-relaxed">
                     <p>{product.description}</p>
@@ -394,6 +445,100 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
           />
         </div>
       </div>
+
+      {isMounted &&
+        createPortal(
+          <AnimatePresence>
+            {installmentsOpen && (
+              <motion.div
+                className="fixed inset-0 z-[10000] flex items-end justify-center bg-[#1a1a1a]/55 px-3 pb-3 pt-12 backdrop-blur-[2px] md:items-center md:p-6"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="installments-title"
+                onClick={() => setInstallmentsOpen(false)}
+                initial={shouldReduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.18, ease: [0.25, 1, 0.5, 1] }}
+              >
+                <motion.div
+                  className="w-full max-w-[520px] overflow-hidden rounded-2xl bg-[#ffffff] shadow-[0_24px_80px_rgba(0,0,0,0.28)] will-change-transform"
+                  onClick={(event) => event.stopPropagation()}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 26, scale: 0.98 }}
+                  animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                  exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.985 }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="flex items-start justify-between border-b border-[#eee7dc] bg-[#fffaf0] px-5 py-4">
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d4a017]">
+                        Cartão de crédito
+                      </p>
+                      <h2 id="installments-title" className="mt-1 text-lg font-extrabold text-[#1a1a1a]">
+                        Parcelamento
+                      </h2>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setInstallmentsOpen(false)}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#737373] shadow-sm transition-colors hover:text-[#1a1a1a] active:scale-95"
+                      aria-label="Fechar parcelamento"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+
+                  <div className="max-h-[72vh] overflow-y-auto px-5 py-5">
+                    <div className="mb-4 rounded-xl border border-[#eee7dc] bg-[#fdfbf7] px-4 py-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-xs font-semibold text-[#737373]">Valor base</span>
+                        <strong className="text-sm font-extrabold text-[#1a1a1a]">
+                          {formatCurrency(activePrice)}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+                      {installmentOptions.map((option, index) => (
+                        <motion.div
+                          key={option.installments}
+                          className="rounded-xl border border-[#eee7dc] bg-[#ffffff] p-3 shadow-[0_6px_18px_rgba(26,26,26,0.05)]"
+                          initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: shouldReduceMotion ? 0 : 0.22,
+                            delay: shouldReduceMotion ? 0 : 0.04 + index * 0.015,
+                            ease: [0.25, 1, 0.5, 1],
+                          }}
+                        >
+                          <div className="flex items-baseline justify-between gap-2">
+                            <strong className="text-sm font-extrabold text-[#1a1a1a]">
+                              {option.installments}x
+                            </strong>
+                            <span className="rounded-full bg-[#fff3d2] px-2 py-0.5 text-[10px] font-bold text-[#9b7410]">
+                              {option.rate.toFixed(2).replace(".", ",")}%
+                            </span>
+                          </div>
+                          <p className="mt-2 text-sm font-bold text-[#d4a017]">
+                            {formatCurrency(option.installmentValue)}
+                          </p>
+                          <p className="mt-1 text-[11px] font-medium text-[#737373]">
+                            Total {formatCurrency(option.totalWithRate)}
+                          </p>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <p className="mt-4 text-xs leading-5 text-[#737373]">
+                      Os valores consideram as taxas do cartão informadas para cada quantidade de parcelas.
+                    </p>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
 
       {/* Floating overlay via Portal */}
       {isMounted &&

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = getProductBySlug(slug)
 
   if (!product) {
-    return { title: "Produto nao encontrado | ConfortBem" }
+    return { title: "Produto não encontrado | ConfortBem" }
   }
 
   return {

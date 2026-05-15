@@ -21,6 +21,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
             <ProductCard
               name={product.name}
               price={product.price}
+              compareAtPrice={product.compareAtPrice}
               image={product.image}
               rating={product.rating}
               reviews={product.reviews}

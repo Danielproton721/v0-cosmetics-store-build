@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/lib/cart-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
+import { CookieConsent } from '@/components/store/cookie-consent'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -47,6 +48,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
           <CartDrawer />
+          <CookieConsent />
         </CartProvider>
         <Analytics />
       </body>

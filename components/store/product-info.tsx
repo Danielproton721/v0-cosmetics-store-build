@@ -42,7 +42,7 @@ export function ProductInfo({
         <div className="flex items-center gap-1.5 mt-2">
           <Zap size={14} className="text-[#d4a017] fill-[#d4a017]" />
           <span className="text-xs text-[#d4a017] font-medium">
-            {recentSales} vendidos nas ultimas 21 horas
+            {recentSales} vendidos nas últimas 21 horas
           </span>
         </div>
       )}
@@ -89,7 +89,7 @@ export function ProductInfo({
       {/* Viewing count */}
       <div className="flex items-center gap-1.5 mt-3 text-xs text-[#737373]">
         <Eye size={14} />
-        <span>18 clientes estao visualizando este produto</span>
+        <span>18 clientes estão visualizando este produto</span>
       </div>
     </div>
   )

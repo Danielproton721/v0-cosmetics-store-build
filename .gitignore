@@ -9,6 +9,9 @@ node_modules/
 .env*.local
 .env
 .DS_Store
+__pycache__/
+*.py[cod]
+tsconfig.tsbuildinfo
 
 # User requested ignores
 .playwright-mcp/
@@ -18,4 +21,4 @@ server.err.log
 server.log
 SKILL.md
 tools.py
-scraping_v0/
+scraping_v0/

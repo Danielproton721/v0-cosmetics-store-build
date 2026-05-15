@@ -14,10 +14,10 @@ export default function ProductNotFound() {
           <PackageX size={28} className="text-[#737373]" />
         </div>
         <h1 className="text-xl font-bold text-[#1a1a1a] mb-2">
-          Produto nao encontrado
+          Produto não encontrado
         </h1>
         <p className="text-sm text-[#737373] mb-6 max-w-xs">
-          O produto que voce esta procurando nao existe ou foi removido.
+          O produto que você está procurando não existe ou foi removido.
         </p>
         <Link
           href="/"

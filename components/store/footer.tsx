@@ -53,13 +53,13 @@ export function Footer() {
 
       <FooterAccordion title="A Loja">
         <Link href="/sobre-nos" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Sobre Nos
+          Sobre Nós
         </Link>
         <Link href="/nossa-historia" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Nossa Historia
+          Nossa História
         </Link>
         <Link href="/politica-de-privacidade" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Politica de Privacidade
+          Política de Privacidade
         </Link>
       </FooterAccordion>
 
@@ -68,7 +68,7 @@ export function Footer() {
           FAQ
         </Link>
         <Link href="/trocas-e-devolucoes" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
-          Trocas e Devolucoes
+          Trocas e Devoluções
         </Link>
         <Link href="/rastreio-de-pedido" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Rastreio de Pedido

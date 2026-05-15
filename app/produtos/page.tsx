@@ -5,7 +5,7 @@ import { products } from "@/lib/products"
 
 export const metadata = {
   title: "Todos os Produtos | ConfortBem",
-  description: "Veja todos os produtos disponiveis na ConfortBem.",
+  description: "Veja todos os produtos disponíveis na ConfortBem.",
 }
 
 export default function ProdutosPage() {
@@ -13,6 +13,7 @@ export default function ProdutosPage() {
     id: product.id,
     name: product.name,
     price: product.price,
+    compareAtPrice: product.compareAtPrice,
     image: product.image,
     rating: product.rating,
     reviews: product.reviews,
@@ -32,7 +33,7 @@ export default function ProdutosPage() {
           Todos os Produtos
         </h1>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#737373]">
-          Explore a selecao completa de cama, banho e decoracao da ConfortBem.
+          Explore a seleção completa de cama, banho e decoração da ConfortBem.
         </p>
       </section>
 

@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
+import {
+  consumeRateLimit,
+  getCheckoutSessionToken,
+  getClientIp,
+  hashRateLimitValue,
+  validateCheckoutSession,
+} from "@/lib/checkout-security";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const ipLimit = consumeRateLimit(`card:create:ip:${ip}`, 5, 10 * 60 * 1000);
+  if (!ipLimit.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas de pagamento. Tente novamente em instantes." },
+      { status: 429, headers: { "Retry-After": String(ipLimit.retryAfterSeconds) } }
+    );
+  }
+
   let body;
   try {
     body = await request.json();
@@ -30,6 +46,27 @@ export async function POST(request: Request) {
   if (cpfDigits.length !== 11)
     return NextResponse.json({ error: "CPF inválido." }, { status: 400 });
 
+  const identityLimit = consumeRateLimit(
+    `card:create:identity:${hashRateLimitValue(`${cpfDigits}|${email}|${phoneDigits}`)}`,
+    3,
+    30 * 60 * 1000
+  );
+  if (!identityLimit.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas para estes dados. Aguarde alguns minutos e tente novamente." },
+      { status: 429, headers: { "Retry-After": String(identityLimit.retryAfterSeconds) } }
+    );
+  }
+
+  const amountCents = Math.round(Number(value) * 100);
+  const checkoutSession = validateCheckoutSession(getCheckoutSessionToken(request), amountCents);
+  if (!checkoutSession.ok) {
+    return NextResponse.json(
+      { error: "Sessao de checkout expirada ou invalida. Volte ao carrinho e tente novamente." },
+      { status: 403 }
+    );
+  }
+
   const rawKey = process.env.PAGOUAI_SECRET_KEY;
   if (!rawKey) {
     console.error("[CARD API] Chave PAGOUAI_SECRET_KEY ausente.");
@@ -37,7 +74,6 @@ export async function POST(request: Request) {
   }
 
   const secretKey = rawKey.trim();
-  const amountCents = Math.round(value * 100);
   const installmentCount = Math.max(1, Math.min(12, parseInt(installments) || 1));
 
   // Trata o IP para nunca ser local ou zero
@@ -78,7 +114,7 @@ export async function POST(request: Request) {
     },
     items: [
       {
-        title: title || "Compra ConfortBem",
+        title: title || "Combo Enxoval",
         quantity: 1,
         unitPrice: amountCents,
         tangible: true,
@@ -88,8 +124,6 @@ export async function POST(request: Request) {
   };
 
   const basicAuth = Buffer.from(`${secretKey}:x`).toString("base64");
-
-  console.log("[CARD API] Payload enviado:", JSON.stringify(payload, null, 2));
 
   try {
     const upstream = await fetch("https://api.conta.pagou.ai/v1/transactions", {
@@ -104,7 +138,7 @@ export async function POST(request: Request) {
     });
 
     const raw = await upstream.text();
-    console.log(`[CARD API] Status: ${upstream.status} | Resposta:`, raw);
+    console.log(`[CARD API] Status: ${upstream.status}`);
 
     let data: any = null;
     try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }

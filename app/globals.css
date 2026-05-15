@@ -132,3 +132,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+.collection-bubble-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.collection-bubble-scroll::-webkit-scrollbar {
+  display: none;
+}

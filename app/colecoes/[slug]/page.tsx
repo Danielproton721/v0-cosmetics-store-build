@@ -19,7 +19,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
   const collection = getCollectionBySlug(slug)
-  if (!collection) return { title: "Colecao nao encontrada" }
+  if (!collection) return { title: "Coleção não encontrada" }
   return {
     title: `${collection.name} | ConfortBem`,
     description: collection.description,
@@ -37,6 +37,7 @@ export default async function CollectionPage({ params }: PageProps) {
     id: p.id,
     name: p.name,
     price: p.price,
+    compareAtPrice: p.compareAtPrice,
     image: p.image,
     rating: p.rating,
     reviews: p.reviews,

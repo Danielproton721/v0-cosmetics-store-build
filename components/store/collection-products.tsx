@@ -6,6 +6,7 @@ interface SimpleProduct {
   id: number
   name: string
   price: number
+  compareAtPrice?: number
   image: string
   rating: number
   reviews: number
@@ -25,6 +26,7 @@ export function CollectionProducts({ products }: CollectionProductsProps) {
             key={product.id}
             name={product.name}
             price={product.price}
+            compareAtPrice={product.compareAtPrice}
             image={product.image}
             rating={product.rating}
             reviews={product.reviews}
@@ -35,7 +37,7 @@ export function CollectionProducts({ products }: CollectionProductsProps) {
 
       {products.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-sm text-[#737373]">Nenhum produto encontrado nesta colecao.</p>
+          <p className="text-sm text-[#737373]">Nenhum produto encontrado nesta coleção.</p>
         </div>
       )}
     </section>
