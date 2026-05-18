@@ -115,6 +115,90 @@ function extractColorFromName(name: string): string | null {
   return null
 }
 
+type ProductCharacteristic = {
+  label: string
+  value: string
+}
+
+function compactText(value: string) {
+  return value.replace(/\s+/g, " ").trim()
+}
+
+function formatPieceCount(value: string) {
+  const amount = Number(value)
+  if (!Number.isFinite(amount)) return null
+
+  return `${amount} ${amount === 1 ? "Peça" : "Peças"}`
+}
+
+function extractPieceCount(text: string): string | null {
+  const match = text.match(/\b(\d{1,2})\s*(?:p(?:e[cç]as?|çs?|cs?)|pe[cç]a?s?)\b/i)
+  if (!match) return null
+
+  return formatPieceCount(match[1])
+}
+
+function extractDimensions(text: string): string | null {
+  const match = text.match(/\b(\d+(?:[,.]\d+)?)\s*x\s*(\d+(?:[,.]\d+)?)\s*(cm|m)\b/i)
+  if (!match) return null
+
+  return `${match[1]}x${match[2]}${match[3].toLowerCase()}`
+}
+
+function extractMaterial(text: string): string | null {
+  const materialPatterns = [
+    /\b100%\s*algod[aã]o\b/i,
+    /\b100%\s*poli[eé]ster\b/i,
+    /\b100%\s*microfibra\b/i,
+    /\bgaze de linho\b/i,
+    /\bchenille\b/i,
+    /\bpercal\b/i,
+    /\blinho\b/i,
+    /\bflannel\b/i,
+  ]
+
+  for (const pattern of materialPatterns) {
+    const match = text.match(pattern)
+    if (match) return compactText(match[0])
+  }
+
+  return null
+}
+
+function extractGrammage(text: string): string | null {
+  const match = text.match(/\b(\d{2,4})\s*g\s*\/?\s*m(?:²|2)?\b/i)
+  if (!match) return null
+
+  return `${match[1]}g/m²`
+}
+
+function extractThreadCount(text: string): string | null {
+  const match = text.match(/\b(\d{2,4})\s*fios?\b/i)
+  if (!match) return null
+
+  return `${match[1]} Fios`
+}
+
+function buildProductCharacteristics(
+  product: Product,
+  productSize: string | null,
+  productColor: string | null
+): ProductCharacteristic[] {
+  const sourceText = compactText(
+    [product.name, product.description, ...(product.tags ?? [])].filter(Boolean).join(" ")
+  )
+
+  return [
+    { label: "Quantidade de Peças", value: extractPieceCount(sourceText) },
+    { label: "Cor", value: productColor },
+    { label: "Tamanho", value: productSize },
+    { label: "Medidas", value: extractDimensions(sourceText) },
+    { label: "Material", value: extractMaterial(sourceText) },
+    { label: "Gramatura", value: extractGrammage(sourceText) },
+    { label: "Fios", value: extractThreadCount(sourceText) },
+  ].filter((item): item is ProductCharacteristic => Boolean(item.value))
+}
+
 interface ProductPageProps {
   product: Product
   relatedProducts: Product[]
@@ -188,6 +272,10 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const productColor = useMemo(
     () => selectedVariant?.label ?? extractColorFromName(product.name),
     [product.name, selectedVariant]
+  )
+  const productCharacteristics = useMemo(
+    () => buildProductCharacteristics(product, productSize, productColor),
+    [product, productSize, productColor]
   )
 
   const handleAddToCart = useCallback(() => {
@@ -367,55 +455,28 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
             </div>
 
             <div className="hidden md:block px-4 md:px-0">
-              {shouldShowBedDetails && (
+              {productCharacteristics.length > 0 && (
                 <div className="mb-8">
-                <h3 className="text-lg font-bold text-[#1a1a1a] mb-4">Características</h3>
-                <div className="grid grid-cols-3 gap-3 mb-8">
-                  <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Quantidade de Peças</span>
-                    <span className="text-sm font-medium text-[#737373]">1 Peça</span>
-                  </div>
-                  <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Cor</span>
-                    <span className="text-sm font-medium text-[#737373]">{productColor ?? "Prata"}</span>
-                  </div>
-                  <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Tamanho</span>
-                    <span className="text-sm font-medium text-[#737373]">Casal</span>
-                  </div>
-                  <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Material</span>
-                    <span className="text-sm font-medium text-[#737373]">100% Poliéster</span>
-                  </div>
-                  <div className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
-                    <span className="text-xs text-[#1a1a1a] font-medium mb-1">Gramatura</span>
-                    <span className="text-sm font-medium text-[#737373]">240g/m²</span>
+                  <h3 className="text-lg font-bold text-[#1a1a1a] mb-4">Características</h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {productCharacteristics.map((item) => (
+                      <div key={item.label} className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
+                        <span className="text-xs text-[#1a1a1a] font-medium mb-1">{item.label}</span>
+                        <span className="text-sm font-medium text-[#737373]">{item.value}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {/* Description Desktop */}
-                <div id="descricao" className="border-t border-[#e5e5e5] pt-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descrição</h3>
-                    <span className="text-2xl font-light text-[#737373]">−</span>
-                  </div>
-                  <div className="text-sm text-[#737373] leading-relaxed">
-                    <p>{product.description}</p>
-                  </div>
+              )}
+              <div id="descricao" className="border-t border-[#e5e5e5] pt-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-bold text-[#1a1a1a]">Descrição</h3>
+                  <span className="text-2xl font-light text-[#737373]">−</span>
+                </div>
+                <div className="text-sm text-[#737373] leading-relaxed">
+                  <p>{product.description}</p>
                 </div>
               </div>
-              )}
-              {!shouldShowBedDetails && (
-                <div id="descricao" className="border-t border-[#e5e5e5] pt-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-bold text-[#1a1a1a]">Descrição</h3>
-                    <span className="text-2xl font-light text-[#737373]">−</span>
-                  </div>
-                  <div className="text-sm text-[#737373] leading-relaxed">
-                    <p>{product.description}</p>
-                  </div>
-                </div>
-              )}
             </div>
 
             <div className="md:hidden">
