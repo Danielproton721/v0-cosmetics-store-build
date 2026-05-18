@@ -36,6 +36,41 @@ function FooterAccordion({ title, children }: FooterAccordionProps) {
 export function Footer() {
   return (
     <footer className="bg-[#ffffff] border-t border-[#e5e5e5] pb-24">
+
+      {/* Sessão 1 — Sobre a Empresa */}
+      <FooterAccordion title="Confortebem">
+        <p className="text-sm text-[#737373] leading-relaxed">
+          Enxovais, conforto e bem-estar para o lar. Curadoria premium em cortinas, jogos de cama,
+          tapetes e almofadas com foco em qualidade e requinte.
+        </p>
+      </FooterAccordion>
+
+      {/* Sessão 2 — Dados Fiscais (Compliance Google Ads) */}
+      <FooterAccordion title="Empresa">
+        <p className="text-sm text-[#737373] leading-relaxed">
+          Marca operada por Voil Atelie Comercio de Enxovais e Decoracao LTDA
+        </p>
+        <p className="text-sm text-[#737373]">
+          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 64.980.979/0001-94
+        </p>
+        <p className="text-sm text-[#737373]">
+          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Garça — São Paulo — Brasil
+        </p>
+      </FooterAccordion>
+
+      {/* Sessão 3 — Institucional */}
+      <FooterAccordion title="Institucional">
+        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Política de Privacidade
+        </Link>
+        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Termos de Uso
+        </Link>
+        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Contato e Catálogo
+        </Link>
+      </FooterAccordion>
+
       <FooterAccordion title="Loja">
         <Link href="/produtos" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Todos os Produtos
@@ -122,10 +157,13 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="px-4 pt-2 pb-6 text-center">
-        <p className="text-[11px] text-[#737373]">
-          {"2025, ConfortBem. Todos Os Direitos Reservados."}
+      {/* Copyright — Bottom bar */}
+      <div className="px-4 pt-2 pb-6 border-t border-[#e5e5e5] flex flex-col items-center gap-1 text-center">
+        <p className="text-[11px] text-[#737373] uppercase tracking-wide">
+          © 2026 CONFORTEBEM. TODOS OS DIREITOS RESERVADOS.
+        </p>
+        <p className="text-[11px] text-[#b0b0b0] uppercase tracking-wide">
+          DESIGN DE INTERIORES &amp; BEM-ESTAR
         </p>
       </div>
     </footer>
