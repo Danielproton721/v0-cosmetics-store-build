@@ -10,7 +10,7 @@ interface FooterAccordionProps {
 }
 
 function FooterAccordion({ title, children }: FooterAccordionProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <div className="border-b border-[#e5e5e5]">
