@@ -65,6 +65,16 @@ export default function RootLayout({
             gtag('config', 'AW-18150095369');
           `}
         </Script>
+        {/* Event: Visualização de página (conversion) */}
+        <Script id="google-ads-pageview-conversion" strategy="afterInteractive">
+          {`
+            gtag('event', 'conversion', {
+              'send_to': 'AW-18150095369/987OCO-u4K4cEIn00c5D',
+              'value': 1.0,
+              'currency': 'BRL'
+            });
+          `}
+        </Script>
       </body>
     </html>
   )
