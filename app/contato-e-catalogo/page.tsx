@@ -1,6 +1,6 @@
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
-import { Mail, Instagram, MessageCircle } from "lucide-react"
+import { Mail, Instagram } from "lucide-react"
 
 export const metadata = {
   title: "Contato e Catálogo | Confortebem",
@@ -48,27 +48,6 @@ export default function ContatoECatalogoPage() {
             </div>
           </div>
 
-          {/* WhatsApp */}
-          <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#d4a017] transition-colors">
-            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fdf6e3]">
-              <MessageCircle size={18} className="text-[#d4a017]" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-[#1a1a1a]">WhatsApp</p>
-              <p className="mt-1 text-sm text-[#737373]">
-                Atendimento rápido para rastreio de pedidos e dúvidas sobre produtos.
-              </p>
-              <a
-                href="https://wa.me/5514999999999"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
-              >
-                Iniciar conversa no WhatsApp
-              </a>
-              <p className="mt-1 text-xs text-[#b0b0b0]">Seg–Sex, 9h às 18h</p>
-            </div>
-          </div>
 
           {/* Instagram */}
           <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#d4a017] transition-colors">
