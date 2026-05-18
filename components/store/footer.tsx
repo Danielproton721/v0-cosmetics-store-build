@@ -60,13 +60,13 @@ export function Footer() {
 
       {/* Sessão 3 — Institucional */}
       <FooterAccordion title="Institucional">
-        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/politica-de-privacidade" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Política de Privacidade
         </Link>
-        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/termos-de-uso" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Termos de Uso
         </Link>
-        <Link href="#" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+        <Link href="/contato-e-catalogo" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Contato e Catálogo
         </Link>
       </FooterAccordion>
