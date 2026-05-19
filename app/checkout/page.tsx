@@ -1,10 +1,28 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, useCallback } from 'react';
-import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X } from 'lucide-react';
+import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { useCart } from '@/lib/cart-context';
+
+function buildOrderCode(source: string) {
+  let hash = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    hash = Math.imul(31, hash) + source.charCodeAt(index);
+    hash |= 0;
+  }
+
+  const now = new Date();
+  const stamp = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, '0'),
+    String(now.getDate()).padStart(2, '0'),
+  ].join('');
+  const suffix = String(Math.abs(hash) % 1000000).padStart(6, '0');
+
+  return `CB-${stamp}-${suffix}`;
+}
 
 function CheckoutContent() {
   const { items, totalPrice, removeItem, updateQuantity } = useCart();
@@ -73,6 +91,7 @@ function CheckoutContent() {
 
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [orderCode, setOrderCode] = useState('');
 
   // Load Pagou.ai tokenization script
   useEffect(() => {
@@ -290,6 +309,7 @@ function CheckoutContent() {
 
       setCardResult({ approved: data.approved, message: data.message });
       if (data.approved) {
+        setOrderCode(buildOrderCode(data.txid || `${email}|${cpf}|${Date.now()}`));
         setTimeout(() => setPaymentConfirmed(true), 1500);
       }
     } catch (err: any) {
@@ -414,6 +434,34 @@ function CheckoutContent() {
             Obrigado pela sua compra, <span className="text-gray-800 font-bold">{name.split(' ')[0]}</span>! 🎉
           </motion.p>
 
+          {orderCode && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.72 }}
+              className="bg-[#1a1a1a] rounded-2xl p-5 mb-6 text-left shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <PackageCheck className="w-5 h-5 text-[#d4a017] shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-black">Código do pedido</p>
+                  <p className="mt-2 text-2xl font-black tracking-wide text-white break-words">{orderCode}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-white/70">
+                    Use este código para acompanhar o andamento do pedido depois da compra.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigator.clipboard.writeText(orderCode)}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-xs font-black uppercase tracking-wide text-[#1a1a1a] transition hover:bg-[#f3ead8]"
+              >
+                <Copy className="w-4 h-4" />
+                Copiar código
+              </button>
+            </motion.div>
+          )}
+
           {/* Detalhes do pedido */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -465,7 +513,7 @@ function CheckoutContent() {
           >
             <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <p className="text-xs text-emerald-800 font-medium text-left leading-relaxed">
-              Enviamos a confirmação para <strong>{email}</strong>. Você receberá o código de rastreio assim que seu pedido for despachado.
+              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na ConfortBem; o rastreio da transportadora será enviado quando o pedido for despachado.
             </p>
           </motion.div>
 
@@ -481,11 +529,23 @@ function CheckoutContent() {
           </motion.div>
 
           {/* Botão voltar para loja */}
+          {orderCode && (
+            <motion.a
+              href={`/rastreio-de-pedido?codigo=${encodeURIComponent(orderCode)}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.12 }}
+              className="mb-3 inline-block w-full py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
+            >
+              Acompanhar Pedido
+            </motion.a>
+          )}
+
           <motion.a
             href="/"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.15 }}
+            transition={{ delay: 1.2 }}
             className="inline-block w-full py-4 bg-[#d4a017] hover:bg-[#b8891a] text-[#1a1a1a] rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
           >
             Continuar Comprando
