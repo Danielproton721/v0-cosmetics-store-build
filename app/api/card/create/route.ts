@@ -93,7 +93,6 @@ export async function POST(request: Request) {
     /^172\.(1[6-9]|2\d|3[01])\./.test(value);
   const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
 
-  // Endereço normalizado (3DS exige). Se não vier, mandamos vazio em string.
   const billingAddress = address
     ? {
         zip_code: String(address.zip_code || "").replace(/\D/g, ""),
@@ -107,7 +106,7 @@ export async function POST(request: Request) {
       }
     : undefined;
 
-  // Browser fingerprint (3DS Browser Info — protocolo EMV 3DS 2.x).
+  // Browser fingerprint EMV 3DS 2.x.
   const browserInfo = browser
     ? {
         accept_header: "application/json",
@@ -130,18 +129,16 @@ export async function POST(request: Request) {
     token,
     installments: installmentCount,
     ip: buyerIp,
-    ip_address: buyerIp,
     buyer: {
       name: name.trim(),
       email: email.trim(),
       phone: phoneDigits,
       ip: buyerIp,
-      ip_address: buyerIp,
       document: {
         type: "CPF",
         number: cpfDigits,
       },
-      ...(billingAddress ? { address: billingAddress, billing_address: billingAddress } : {}),
+      ...(billingAddress ? { address: billingAddress } : {}),
     },
     products: [
       {
@@ -152,13 +149,8 @@ export async function POST(request: Request) {
     ],
   };
 
-  if (billingAddress) {
-    payload.billing_address = billingAddress;
-  }
   if (browserInfo) {
     payload.browser = browserInfo;
-    payload.browser_info = browserInfo;
-    payload.three_ds = { browser: browserInfo, browser_info: browserInfo };
   }
 
   try {
@@ -180,20 +172,40 @@ export async function POST(request: Request) {
     try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }
 
     if (!upstream.ok) {
-      const detail =
-        data?.detail ||
-        data?.message ||
-        data?.error ||
-        (Array.isArray(data?.errors) ? data.errors.map((e: any) => e.message || e).join(", ") : null) ||
-        raw ||
-        "Erro desconhecido no gateway";
+      // Tenta extrair lista de erros específicos da Pagou em qualquer formato.
+      const collectErrors = (input: any): string[] => {
+        if (!input) return [];
+        if (typeof input === "string") return [input];
+        if (Array.isArray(input)) return input.flatMap(collectErrors);
+        if (typeof input === "object") {
+          const parts: string[] = [];
+          if (input.message) parts.push(String(input.message));
+          if (input.detail) parts.push(String(input.detail));
+          if (input.error && typeof input.error === "string") parts.push(input.error);
+          if (input.field && input.message) parts.push(`${input.field}: ${input.message}`);
+          if (input.path) parts.push(`${Array.isArray(input.path) ? input.path.join(".") : input.path}: ${input.message || ""}`);
+          return parts.length ? parts : [JSON.stringify(input)];
+        }
+        return [String(input)];
+      };
 
-      console.error(`[CARD API] Erro (${upstream.status}):`, detail);
+      const errorParts = [
+        ...collectErrors(data?.errors),
+        ...collectErrors(data?.error),
+        ...collectErrors(data?.detail),
+        ...collectErrors(data?.message),
+      ].filter(Boolean);
+
+      const detail = errorParts.length
+        ? errorParts.join(" | ")
+        : raw || "Erro desconhecido no gateway";
+
+      console.error(`[CARD API] Erro (${upstream.status}):`, raw);
 
       if (upstream.status === 401)
         return NextResponse.json({ error: "Chave de autenticação inválida." }, { status: 401 });
 
-      return NextResponse.json({ error: detail }, { status: 502 });
+      return NextResponse.json({ error: detail, gateway: data ?? raw }, { status: 502 });
     }
 
     const transaction = data?.data ?? data ?? {};

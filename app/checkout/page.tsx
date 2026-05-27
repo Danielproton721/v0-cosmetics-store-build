@@ -592,7 +592,13 @@ function CheckoutContent() {
             }),
           });
           const data = await res.json();
-          if (!res.ok) throw new Error(data.error || data.detail || 'Erro ao processar cartão');
+          if (!res.ok) {
+            const gatewayHint = data?.gateway
+              ? ` | gateway: ${typeof data.gateway === 'string' ? data.gateway : JSON.stringify(data.gateway)}`
+              : '';
+            console.error('[CARD][gateway response]', data);
+            throw new Error((data?.error || data?.detail || 'Erro ao processar cartão') + gatewayHint);
+          }
           return data;
         },
       });
