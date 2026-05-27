@@ -197,15 +197,14 @@ function CheckoutContent() {
   const [pixProof, setPixProof] = useState<PixProof | null>(null);
   const [pixProofError, setPixProofError] = useState<string | null>(null);
 
-  // Card State
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardHolder, setCardHolder] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvv, setCardCvv] = useState('');
+  // Card State (Payment Element SDK v3 — tokenização no browser)
   const [cardInstallments, setCardInstallments] = useState('1');
   const [isProcessingCard, setIsProcessingCard] = useState(false);
   const [cardResult, setCardResult] = useState<{ approved: boolean; message: string } | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
+  const [pagouElements, setPagouElements] = useState<any>(null);
+  const [cardSdkReady, setCardSdkReady] = useState(false);
+  const [cardSdkError, setCardSdkError] = useState<string | null>(null);
 
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -215,14 +214,65 @@ function CheckoutContent() {
   const shippingPrice = selectedShipping.price;
   const checkoutTotal = totalPrice + shippingPrice;
 
-  // Load Pagou.ai tokenization script
+  // Pagou.ai Payment Element SDK v3 — carrega script e monta o card element
+  // quando o usuário escolhe pagamento por cartão.
   useEffect(() => {
-    if (document.querySelector('script[src="https://api.conta.pagou.ai/v1/js"]')) return;
-    const script = document.createElement('script');
-    script.src = 'https://api.conta.pagou.ai/v1/js';
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
+    if (payMethod !== 'card') return;
+    if (cardSdkReady) return;
+
+    const PAGOU_SCRIPT = 'https://js.pagou.ai/payments/v3.js';
+    let cancelled = false;
+
+    const init = () => {
+      if (cancelled) return;
+      const PagouSDK = (window as any).Pagou;
+      if (!PagouSDK) {
+        setCardSdkError('SDK Pagou.ai não carregou.');
+        return;
+      }
+      const publicKey = process.env.NEXT_PUBLIC_PAGOUAI_PUBLIC_KEY;
+      if (!publicKey) {
+        setCardSdkError('Chave pública da Pagou.ai não configurada.');
+        return;
+      }
+      try {
+        if (typeof PagouSDK.setEnvironment === 'function') {
+          PagouSDK.setEnvironment(publicKey.startsWith('pk_test_') ? 'sandbox' : 'production');
+        }
+        const elements = PagouSDK.elements({
+          publicKey,
+          locale: 'pt',
+          origin: window.location.origin,
+        });
+        const card = elements.create('card', { theme: 'default' });
+        card.mount('#pagou-card-element');
+        setPagouElements(elements);
+        setCardSdkReady(true);
+        setCardSdkError(null);
+      } catch (err: any) {
+        console.error('[Pagou SDK]', err);
+        setCardSdkError(err?.message || 'Falha ao iniciar formulário de cartão.');
+      }
+    };
+
+    const existing = document.querySelector(`script[src="${PAGOU_SCRIPT}"]`) as HTMLScriptElement | null;
+    if (existing && (window as any).Pagou) {
+      init();
+    } else if (existing) {
+      existing.addEventListener('load', init, { once: true });
+    } else {
+      const script = document.createElement('script');
+      script.src = PAGOU_SCRIPT;
+      script.async = true;
+      script.onload = init;
+      script.onerror = () => setCardSdkError('Falha ao carregar SDK de pagamento.');
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [payMethod, cardSdkReady]);
 
   // Address State
   const [cep, setCep] = useState('');
@@ -474,66 +524,64 @@ function CheckoutContent() {
     setCardError(null);
     setCardResult(null);
 
-    // ── Validação dos campos ──────────────────────────────────────
-    const rawNum = cardNumber.replace(/\s/g, '');
-    if (rawNum.length < 13 || rawNum.length > 19)
-      return setCardError('Número do cartão inválido.');
-    if (!cardHolder.trim())
-      return setCardError('Informe o nome impresso no cartão.');
-    const [expM, expY] = cardExpiry.split('/');
-    if (!expM || !expY || expM.length !== 2 || expY.length !== 2)
-      return setCardError('Validade inválida. Use MM/AA.');
-    if (!cardCvv || cardCvv.length < 3)
-      return setCardError('CVV inválido.');
-    // ─────────────────────────────────────────────────────────────
+    if (cardSdkError) {
+      setCardError(cardSdkError);
+      return;
+    }
+    if (!pagouElements || !cardSdkReady) {
+      setCardError('Formulário de cartão ainda não carregou. Aguarde alguns segundos e tente novamente.');
+      return;
+    }
 
     setIsProcessingCard(true);
-
     try {
-      // Pega o IP real do cliente (tenta dois serviços)
       await createCheckoutSession();
 
-      let clientIp = '0.0.0.0';
-      try {
-        const ipRes = await Promise.any([
-          fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip),
-          fetch('https://icanhazip.com').then(r => r.text()).then(t => t.trim())
-        ]);
-        clientIp = ipRes || '0.0.0.0';
-      } catch {
-        // fallback silencioso
-      }
-
-      const res = await fetch('/api/card/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          value: checkoutTotal,
-          name, email, cpf, phone,
-          installments: cardInstallments,
-          title: 'Combo Enxoval',
-          clientIp,
-          card: {
-            number: rawNum,
-            holderName: cardHolder.trim(),
-            expirationMonth: parseInt(expM),
-            expirationYear: parseInt('20' + expY),
-            cvv: cardCvv.trim(),
-          },
-        }),
+      const submitResult = await pagouElements.submit({
+        createTransaction: async (tokenData: any) => {
+          const res = await fetch('/api/card/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              value: checkoutTotal,
+              name,
+              email,
+              cpf,
+              phone,
+              installments: parseInt(cardInstallments) || 1,
+              title: 'Combo Enxoval',
+              token: tokenData?.token,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || data.detail || 'Erro ao processar cartão');
+          return data;
+        },
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.detail || 'Erro ao processar cartão');
+      const status = submitResult?.status ?? submitResult?.transaction?.status ?? 'unknown';
 
-      setCardResult({ approved: data.approved, message: data.message });
-      if (data.approved) {
-        issueOrderCode(data.txid || `${email}|${cpf}|card|paid|${Date.now()}`);
-        setTimeout(() => setPaymentConfirmed(true), 1500);
+      if (status === 'error') {
+        setCardError(submitResult?.error || 'Falha ao processar pagamento.');
+      } else {
+        const approved = ['paid', 'captured', 'succeeded', 'completed', 'authorized', 'approved'].includes(status);
+        const message = approved
+          ? 'Pagamento aprovado! ✅'
+          : status === 'requires_action' || status === 'three_ds_required'
+          ? 'Autenticação adicional solicitada pelo banco emissor.'
+          : status === 'failed' || status === 'refused' || status === 'canceled'
+          ? 'Cartão recusado. Verifique os dados ou tente outro cartão.'
+          : 'Pagamento em análise.';
+        setCardResult({ approved, message });
+        if (approved) {
+          const tx = submitResult?.transaction ?? submitResult;
+          issueOrderCode(tx?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
+          setTimeout(() => setPaymentConfirmed(true), 1500);
+        }
       }
     } catch (err: any) {
       console.error('[CARD]', err);
-      setCardError(err.message || 'Erro inesperado. Tente novamente.');
+      setCardError(err?.message || 'Erro inesperado. Tente novamente.');
     } finally {
       setIsProcessingCard(false);
     }
@@ -1139,53 +1187,26 @@ function CheckoutContent() {
                     ) : (
                       <>
                         <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Número do cartão</label>
-                          <input
-                            type="text"
-                            value={cardNumber}
-                            onChange={e => {
-                              const v = e.target.value.replace(/\D/g, '').slice(0, 16);
-                              setCardNumber(v.replace(/(\d{4})/g, '$1 ').trim());
-                            }}
-                            placeholder="0000 0000 0000 0000"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
+                            Dados do cartão
+                          </label>
+                          <div
+                            id="pagou-card-element"
+                            className="w-full min-h-[120px] px-3 py-3 border border-gray-200 rounded-xl bg-gray-50 transition-all"
                           />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Nome no cartão</label>
-                          <input
-                            type="text"
-                            value={cardHolder}
-                            onChange={e => setCardHolder(e.target.value.toUpperCase())}
-                            placeholder="COMO IMPRESSO NO CARTÃO"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Validade</label>
-                            <input
-                              type="text"
-                              value={cardExpiry}
-                              onChange={e => {
-                                let v = e.target.value.replace(/\D/g, '').slice(0, 4);
-                                if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
-                                setCardExpiry(v);
-                              }}
-                              placeholder="MM/AA"
-                              className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">CVV</label>
-                            <input
-                              type="text"
-                              value={cardCvv}
-                              onChange={e => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                              placeholder="000"
-                              className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
-                            />
-                          </div>
+                          {!cardSdkReady && !cardSdkError && (
+                            <p className="mt-2 text-xs text-gray-500 flex items-center gap-1.5">
+                              <span className="inline-block h-2 w-2 rounded-full bg-[#d4a017] animate-pulse" />
+                              Carregando formulário seguro…
+                            </p>
+                          )}
+                          {cardSdkError && (
+                            <p className="mt-2 text-xs text-red-600 font-medium">{cardSdkError}</p>
+                          )}
+                          <p className="mt-2 text-[11px] text-gray-400 flex items-center gap-1">
+                            <Lock className="w-3 h-3" />
+                            Dados do cartão criptografados pela Pagou.ai
+                          </p>
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Parcelas</label>

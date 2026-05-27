@@ -20,24 +20,26 @@ export async function POST(request: Request) {
     );
   }
 
-  let body;
+  let body: any;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { value, name, email, cpf, phone, card, installments, title, clientIp } = body ?? {};
+  const { value, name, email, cpf, phone, token, installments, title } = body ?? {};
 
-  // Validações básicas
   if (!value || value <= 0)
     return NextResponse.json({ error: "Valor da transação inválido." }, { status: 400 });
   if (!name?.trim())
     return NextResponse.json({ error: "Nome é obrigatório." }, { status: 400 });
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return NextResponse.json({ error: "E-mail inválido." }, { status: 400 });
-  if (!card?.number)
-    return NextResponse.json({ error: "Dados do cartão não fornecidos." }, { status: 400 });
+  if (!token || typeof token !== "string" || !token.startsWith("pgct_"))
+    return NextResponse.json(
+      { error: "Token de cartão ausente ou inválido. Atualize a página e tente novamente." },
+      { status: 400 }
+    );
 
   const phoneDigits = (phone || "").replace(/\D/g, "");
   if (phoneDigits.length < 10 || phoneDigits.length > 11)
@@ -74,63 +76,39 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Gateway não configurado." }, { status: 500 });
   }
 
-  const secretKey = rawKey.trim();
+  const secretKey = rawKey.trim().replace(/^Bearer\s+/i, "");
   const installmentCount = Math.max(1, Math.min(12, parseInt(installments) || 1));
-
-  // Trata o IP para nunca ser local ou zero
-  const getCleanIp = () => {
-    const rawIp = clientIp ||
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      request.headers.get("x-real-ip");
-    
-    if (!rawIp || rawIp === "127.0.0.1" || rawIp === "::1" || rawIp === "0.0.0.0") {
-      // Se estiver em localhost, usa um IP público brasileiro fixo para passar no antifraude
-      return "177.71.248.55"; 
-    }
-    return rawIp;
-  };
-
-  const finalIp = getCleanIp();
+  const externalRef = `order_${Date.now()}_${hashRateLimitValue(`${cpfDigits}|${amountCents}|${email}`).slice(0, 8)}`;
 
   const payload = {
+    external_ref: externalRef,
     amount: amountCents,
-    paymentMethod: "credit_card",
+    currency: "BRL",
+    method: "credit_card",
+    token,
     installments: installmentCount,
-    card: {
-      number: String(card.number).replace(/\s/g, ""),
-      holderName: String(card.holderName || "").trim(),
-      expirationMonth: Number(card.expirationMonth),
-      expirationYear: Number(card.expirationYear),
-      cvv: String(card.cvv || "").trim(),
-    },
-    customer: {
+    buyer: {
       name: name.trim(),
       email: email.trim(),
-      phone: phoneDigits,
-      ip: finalIp, // Adicionado aqui também
       document: {
+        type: "CPF",
         number: cpfDigits,
-        type: "cpf",
       },
     },
-    items: [
+    products: [
       {
-        title: title || "Combo Enxoval",
+        name: title || "Combo Enxoval",
+        price: amountCents,
         quantity: 1,
-        unitPrice: amountCents,
-        tangible: true,
       },
     ],
-    ip: finalIp,
   };
 
-  const basicAuth = Buffer.from(`${secretKey}:x`).toString("base64");
-
   try {
-    const upstream = await fetch("https://api.conta.pagou.ai/v1/transactions", {
+    const upstream = await fetch("https://api.pagou.ai/v2/transactions", {
       method: "POST",
       headers: {
-        authorization: `Basic ${basicAuth}`,
+        authorization: `Bearer ${secretKey}`,
         "content-type": "application/json",
         accept: "application/json",
       },
@@ -146,6 +124,7 @@ export async function POST(request: Request) {
 
     if (!upstream.ok) {
       const detail =
+        data?.detail ||
         data?.message ||
         data?.error ||
         (Array.isArray(data?.errors) ? data.errors.map((e: any) => e.message || e).join(", ") : null) ||
@@ -160,18 +139,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: detail }, { status: 502 });
     }
 
-    const status = data?.status ?? "unknown";
-    const transactionId = data?.id ?? data?.transactionId ?? null;
+    const transaction = data?.data ?? data ?? {};
+    const status = transaction?.status ?? "unknown";
+    const transactionId = transaction?.id ?? transaction?.transactionId ?? null;
     const approved = isGatewayPaidStatus(status);
+    const nextAction = transaction?.next_action ?? null;
 
     return NextResponse.json({
       txid: transactionId,
       status,
       approved,
+      nextAction,
       message:
         approved
           ? "Pagamento aprovado! ✅"
-          : status === "refused"
+          : nextAction
+          ? "Autenticação 3D Secure necessária."
+          : status === "refused" || status === "failed"
           ? "Cartão recusado. Verifique os dados ou tente outro cartão."
           : "Pagamento em análise.",
     });
