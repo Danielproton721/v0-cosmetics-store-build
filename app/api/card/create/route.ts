@@ -80,6 +80,19 @@ export async function POST(request: Request) {
   const installmentCount = Math.max(1, Math.min(12, parseInt(installments) || 1));
   const externalRef = `order_${Date.now()}_${hashRateLimitValue(`${cpfDigits}|${amountCents}|${email}`).slice(0, 8)}`;
 
+  // Pagou.ai v2 exige IP do comprador em credit_card. Caímos em IP brasileiro
+  // público quando estamos em local/dev pra não quebrar antifraude.
+  const isPrivateIp = (value: string) =>
+    !value ||
+    value === "unknown" ||
+    value === "127.0.0.1" ||
+    value === "::1" ||
+    value === "0.0.0.0" ||
+    value.startsWith("192.168.") ||
+    value.startsWith("10.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(value);
+  const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
+
   const payload = {
     external_ref: externalRef,
     amount: amountCents,
@@ -87,9 +100,13 @@ export async function POST(request: Request) {
     method: "credit_card",
     token,
     installments: installmentCount,
+    ip: buyerIp,
+    ip_address: buyerIp,
     buyer: {
       name: name.trim(),
       email: email.trim(),
+      ip: buyerIp,
+      ip_address: buyerIp,
       document: {
         type: "CPF",
         number: cpfDigits,
