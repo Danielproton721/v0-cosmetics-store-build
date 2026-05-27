@@ -128,12 +128,12 @@ export async function POST(request: Request) {
     method: "credit_card",
     token,
     installments: installmentCount,
-    ip: buyerIp,
+    ip_address: buyerIp,
     buyer: {
       name: name.trim(),
       email: email.trim(),
       phone: phoneDigits,
-      ip: buyerIp,
+      ip_address: buyerIp,
       document: {
         type: "CPF",
         number: cpfDigits,
