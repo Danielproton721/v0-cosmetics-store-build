@@ -214,16 +214,21 @@ export async function POST(request: Request) {
     const approved = isGatewayPaidStatus(status);
     const nextAction = transaction?.next_action ?? null;
 
+    // O Payment Element SDK abre o modal 3DS automaticamente quando o
+    // callback createTransaction devolve { transaction: { status,
+    // next_action } } no formato Pagou. Mantemos os campos auxiliares
+    // (txid, approved, message) para a UI consumir após o desafio.
     return NextResponse.json({
-      txid: transactionId,
+      transaction,
       status,
+      next_action: nextAction,
+      txid: transactionId,
       approved,
-      nextAction,
       message:
         approved
           ? "Pagamento aprovado! ✅"
           : nextAction
-          ? "Autenticação 3D Secure necessária."
+          ? "Autenticação adicional do banco em andamento…"
           : status === "refused" || status === "failed"
           ? "Cartão recusado. Verifique os dados ou tente outro cartão."
           : "Pagamento em análise.",

@@ -535,6 +535,22 @@ function CheckoutContent() {
     if (orderCode) savePixProofLookup(orderCode, proof);
   };
 
+  const handleFinalCardStatus = (status: string, transaction?: any) => {
+    const approved = ['paid', 'captured', 'succeeded', 'completed', 'authorized', 'approved'].includes(status);
+    const message = approved
+      ? 'Pagamento aprovado! ✅'
+      : status === 'requires_action' || status === 'three_ds_required'
+      ? 'Autenticação 3D Secure necessária — siga as instruções do seu banco.'
+      : status === 'failed' || status === 'refused' || status === 'canceled'
+      ? 'Cartão recusado. Verifique os dados ou tente outro cartão.'
+      : 'Pagamento em análise.';
+    setCardResult({ approved, message });
+    if (approved) {
+      issueOrderCode(transaction?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
+      setTimeout(() => setPaymentConfirmed(true), 1500);
+    }
+  };
+
   const handleCardSubmit = async () => {
     setCardError(null);
     setCardResult(null);
@@ -573,6 +589,8 @@ function CheckoutContent() {
         country: 'BR',
       };
 
+      let backendResponse: any = null;
+
       const submitResult = await pagouElements.submit({
         createTransaction: async (tokenData: any) => {
           const res = await fetch('/api/card/create', {
@@ -599,29 +617,51 @@ function CheckoutContent() {
             console.error('[CARD][gateway response]', data);
             throw new Error((data?.error || data?.detail || 'Erro ao processar cartão') + gatewayHint);
           }
-          return data;
+          backendResponse = data;
+          // Devolve o objeto da transaction (com next_action) pro SDK
+          // disparar o modal 3DS automaticamente quando aplicável.
+          return data?.transaction ?? data;
         },
       });
 
-      const status = submitResult?.status ?? submitResult?.transaction?.status ?? 'unknown';
+      console.log('[CARD][submitResult]', submitResult);
 
-      if (status === 'error') {
+      // Após o submit (incluindo eventual 3DS resolvido pelo SDK), o status
+      // final pode vir em submitResult.transaction.status, submitResult.status
+      // ou no que o backend devolveu inicialmente.
+      const finalStatus =
+        submitResult?.transaction?.status ??
+        submitResult?.status ??
+        backendResponse?.status ??
+        'unknown';
+
+      // Quando o SDK precisa de ação adicional manual, tentamos handleNextAction
+      // como fallback (alguns fluxos não disparam o modal sozinhos).
+      if ((finalStatus === 'requires_action' || finalStatus === 'three_ds_required') &&
+          (window as any).Pagou?.handleNextAction &&
+          (submitResult?.next_action || submitResult?.transaction?.next_action || backendResponse?.next_action)) {
+        try {
+          const nextAction =
+            submitResult?.transaction?.next_action ??
+            submitResult?.next_action ??
+            backendResponse?.next_action;
+          const afterAction = await (window as any).Pagou.handleNextAction(nextAction);
+          console.log('[CARD][handleNextAction result]', afterAction);
+          const postStatus =
+            afterAction?.transaction?.status ?? afterAction?.status ?? finalStatus;
+          handleFinalCardStatus(postStatus, afterAction?.transaction ?? backendResponse?.transaction);
+          return;
+        } catch (err: any) {
+          console.error('[CARD][handleNextAction error]', err);
+          setCardError(err?.message || 'Autenticação 3D Secure falhou.');
+          return;
+        }
+      }
+
+      if (finalStatus === 'error') {
         setCardError(submitResult?.error || 'Falha ao processar pagamento.');
       } else {
-        const approved = ['paid', 'captured', 'succeeded', 'completed', 'authorized', 'approved'].includes(status);
-        const message = approved
-          ? 'Pagamento aprovado! ✅'
-          : status === 'requires_action' || status === 'three_ds_required'
-          ? 'Autenticação adicional solicitada pelo banco emissor.'
-          : status === 'failed' || status === 'refused' || status === 'canceled'
-          ? 'Cartão recusado. Verifique os dados ou tente outro cartão.'
-          : 'Pagamento em análise.';
-        setCardResult({ approved, message });
-        if (approved) {
-          const tx = submitResult?.transaction ?? submitResult;
-          issueOrderCode(tx?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
-          setTimeout(() => setPaymentConfirmed(true), 1500);
-        }
+        handleFinalCardStatus(finalStatus, submitResult?.transaction ?? backendResponse?.transaction);
       }
     } catch (err: any) {
       console.error('[CARD]', err);
