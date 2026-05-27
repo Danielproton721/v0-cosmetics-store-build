@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { value, name, email, cpf, phone, token, installments, title } = body ?? {};
+  const { value, name, email, cpf, phone, token, installments, title, address, browser } = body ?? {};
 
   if (!value || value <= 0)
     return NextResponse.json({ error: "Valor da transação inválido." }, { status: 400 });
@@ -93,7 +93,36 @@ export async function POST(request: Request) {
     /^172\.(1[6-9]|2\d|3[01])\./.test(value);
   const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
 
-  const payload = {
+  // Endereço normalizado (3DS exige). Se não vier, mandamos vazio em string.
+  const billingAddress = address
+    ? {
+        zip_code: String(address.zip_code || "").replace(/\D/g, ""),
+        street: String(address.street || "").trim(),
+        number: String(address.number || "").trim(),
+        complement: address.complement ? String(address.complement).trim() : undefined,
+        neighborhood: String(address.neighborhood || "").trim(),
+        city: String(address.city || "").trim(),
+        state: String(address.state || "").trim().toUpperCase(),
+        country: (address.country || "BR").toUpperCase(),
+      }
+    : undefined;
+
+  // Browser fingerprint (3DS Browser Info — protocolo EMV 3DS 2.x).
+  const browserInfo = browser
+    ? {
+        accept_header: "application/json",
+        user_agent: String(browser.userAgent || ""),
+        language: String(browser.language || "pt-BR"),
+        color_depth: Number(browser.colorDepth) || 24,
+        screen_width: Number(browser.screenWidth) || 1920,
+        screen_height: Number(browser.screenHeight) || 1080,
+        timezone_offset: Number(browser.timezoneOffset) || 0,
+        java_enabled: Boolean(browser.javaEnabled),
+        javascript_enabled: browser.javascriptEnabled !== false,
+      }
+    : undefined;
+
+  const payload: Record<string, any> = {
     external_ref: externalRef,
     amount: amountCents,
     currency: "BRL",
@@ -105,12 +134,14 @@ export async function POST(request: Request) {
     buyer: {
       name: name.trim(),
       email: email.trim(),
+      phone: phoneDigits,
       ip: buyerIp,
       ip_address: buyerIp,
       document: {
         type: "CPF",
         number: cpfDigits,
       },
+      ...(billingAddress ? { address: billingAddress, billing_address: billingAddress } : {}),
     },
     products: [
       {
@@ -120,6 +151,15 @@ export async function POST(request: Request) {
       },
     ],
   };
+
+  if (billingAddress) {
+    payload.billing_address = billingAddress;
+  }
+  if (browserInfo) {
+    payload.browser = browserInfo;
+    payload.browser_info = browserInfo;
+    payload.three_ds = { browser: browserInfo, browser_info: browserInfo };
+  }
 
   try {
     const upstream = await fetch("https://api.pagou.ai/v2/transactions", {

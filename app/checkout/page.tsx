@@ -552,6 +552,27 @@ function CheckoutContent() {
     try {
       await createCheckoutSession();
 
+      const browserInfo = {
+        userAgent: navigator.userAgent,
+        language: navigator.language || 'pt-BR',
+        colorDepth: window.screen.colorDepth,
+        screenWidth: window.screen.width,
+        screenHeight: window.screen.height,
+        timezoneOffset: new Date().getTimezoneOffset(),
+        javaEnabled: false,
+        javascriptEnabled: true,
+      };
+      const address = {
+        zip_code: cep.replace(/\D/g, ''),
+        street: street.trim(),
+        number: number.trim(),
+        complement: complement.trim() || undefined,
+        neighborhood: neighborhood.trim(),
+        city: city.trim(),
+        state: stateUF.trim().toUpperCase(),
+        country: 'BR',
+      };
+
       const submitResult = await pagouElements.submit({
         createTransaction: async (tokenData: any) => {
           const res = await fetch('/api/card/create', {
@@ -566,6 +587,8 @@ function CheckoutContent() {
               installments: parseInt(cardInstallments) || 1,
               title: 'Combo Enxoval',
               token: tokenData?.token,
+              address,
+              browser: browserInfo,
             }),
           });
           const data = await res.json();
