@@ -95,7 +95,7 @@ export async function POST(request: Request) {
 
   const billingAddress = address
     ? {
-        zip_code: String(address.zip_code || "").replace(/\D/g, ""),
+        zipCode: String(address.zip_code || "").replace(/\D/g, ""),
         street: String(address.street || "").trim(),
         number: String(address.number || "").trim(),
         complement: address.complement ? String(address.complement).trim() : undefined,
