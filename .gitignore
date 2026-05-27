@@ -22,3 +22,8 @@ server.log
 SKILL.md
 tools.py
 scraping_v0/
+.vscode/
+.claude/
+codex-next-dev.out.log
+codex-next-dev.err.log
+scripts/

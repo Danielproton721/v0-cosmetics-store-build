@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Check, X } from "lucide-react"
+import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { ProductGallery } from "./product-gallery"
 import { ShippingCalculator } from "./shipping-calculator"
@@ -11,6 +12,7 @@ import { AccordionSection } from "./accordion-section"
 import { RelatedProducts } from "./related-products"
 import { ReviewsSection } from "./reviews-section"
 import { VariantSelector } from "./variant-selector"
+import { getVariantSiblings, getSizeSiblings } from "@/lib/products"
 import type { Product, ProductVariant } from "@/lib/products"
 
 // Lista de tamanhos que conhecemos
@@ -79,7 +81,7 @@ function extractSizeFromName(name: string): string | null {
   return null
 }
 
-const availableSizes = ["Casal", "King", "Queen"]
+const availableSizes = ["Solteiro", "Casal", "King", "Queen"]
 
 function normalizeValue(value: string) {
   return value
@@ -224,6 +226,11 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   // Derive active price, image and images from selected variant or product defaults
   const activePrice = selectedVariant?.price ?? product.price
   const activeCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice
+  const hasActiveDiscount = Boolean(activeCompareAtPrice && activeCompareAtPrice > activePrice)
+  const activeDiscountPercentage =
+    hasActiveDiscount && activeCompareAtPrice
+      ? Math.round(((activeCompareAtPrice - activePrice) / activeCompareAtPrice) * 100)
+      : 0
   const activeImage = selectedVariant?.image ?? product.image
   const activeImages = selectedVariant?.images ?? product.images ?? [product.image]
 
@@ -277,6 +284,8 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
     () => buildProductCharacteristics(product, productSize, productColor),
     [product, productSize, productColor]
   )
+  const variantSiblings = useMemo(() => getVariantSiblings(product.slug), [product.slug])
+  const sizeSiblings = useMemo(() => getSizeSiblings(product.slug), [product.slug])
 
   const handleAddToCart = useCallback(() => {
 
@@ -287,13 +296,14 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
         slug: product.slug,
         name: product.name + variantSuffix,
         price: activePrice,
+        compareAtPrice: hasActiveDiscount ? activeCompareAtPrice : undefined,
         image: activeImage,
       },
       quantity
     )
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
-  }, [addItem, product, quantity, selectedVariant, activePrice, activeImage])
+  }, [addItem, product, quantity, selectedVariant, activePrice, activeCompareAtPrice, activeImage, hasActiveDiscount])
 
   return (
     <>
@@ -329,21 +339,20 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
             <div className="bg-[#f9f9f9] rounded-2xl p-4 md:p-6 mb-8 mx-4 md:mx-0">
               {/* Price section */}
               <div className="mb-6">
-                {activeCompareAtPrice && (
+                {hasActiveDiscount && activeCompareAtPrice && (
                   <div className="text-sm text-[#737373] line-through mb-1">
                     R$ {activeCompareAtPrice.toFixed(2).replace(".", ",")}
                   </div>
                 )}
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl font-bold text-[#ef4444]">
+                  <span className="text-3xl font-bold text-[#15803d]">
                     R$ {activePrice.toFixed(2).replace(".", ",")} <span className="text-lg font-bold">no Pix</span>
                   </span>
-                  <span className="bg-[#00c9a7] text-white text-xs font-bold px-2 py-1 rounded-full">
-                    -21%
-                  </span>
-                </div>
-                <div className="text-[#00c9a7] font-bold text-sm mb-2">
-                  (5% de desconto)
+                  {activeDiscountPercentage > 0 && (
+                    <span className="bg-[#00c9a7] text-white text-xs font-bold px-2 py-1 rounded-full">
+                      -{activeDiscountPercentage}%
+                    </span>
+                  )}
                 </div>
                 <div className="text-sm text-[#1a1a1a] font-medium">
                   ou veja as opções no cartão
@@ -373,25 +382,44 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                 <div className="mb-6">
                   <span className="text-sm text-[#1a1a1a] font-medium block mb-2">Tamanho:</span>
                   <div className="flex gap-2">
-                    {availableSizes.map((size) => {
-                      const isAvailable = productSize ? size.toLowerCase() === productSize.toLowerCase() : false
+                    {sizeSiblings.map((sib) => {
+                      if (sib.isCurrent) {
+                        return (
+                          <button
+                            key={sib.size}
+                            type="button"
+                            aria-current="true"
+                            className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-[#1a1a1a] text-white"
+                          >
+                            {sib.size}
+                          </button>
+                        )
+                      }
+                      if (sib.slug) {
+                        return (
+                          <Link
+                            key={sib.size}
+                            href={`/product/${sib.slug}`}
+                            className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-white border border-[#e5e5e5] text-[#1a1a1a] hover:border-[#1a1a1a]"
+                          >
+                            {sib.size}
+                          </Link>
+                        )
+                      }
                       return (
                         <button
-                          key={size}
-                          disabled={!isAvailable}
-                          className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${isAvailable
-                              ? "bg-[#1a1a1a] text-white"
-                              : "bg-white border border-[#e5e5e5] text-[#b3b3b3] cursor-not-allowed opacity-60"
-                            }`}
-                          title={!isAvailable ? "Não disponível para este produto" : ""}
+                          key={sib.size}
+                          disabled
+                          className="px-4 py-2 text-sm font-medium rounded-md bg-white border border-[#e5e5e5] text-[#b3b3b3] cursor-not-allowed opacity-60"
+                          title="Não disponível para este produto"
                         >
-                          {size}
+                          {sib.size}
                         </button>
                       )
                     })}
                   </div>
                 </div>
-              ) : productColor ? (
+              ) : productColor && variantSiblings.length === 0 ? (
                 <div className="mb-6">
                   <span className="text-sm text-[#1a1a1a] font-medium block mb-2">Cor:</span>
                   <div className="inline-flex min-h-10 items-center rounded-md border border-[#e5e5e5] bg-white px-4 text-sm font-medium text-[#737373]">
@@ -399,6 +427,34 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   </div>
                 </div>
               ) : null}
+
+              {variantSiblings.length > 0 && (
+                <div className="mb-6">
+                  <span className="text-sm text-[#1a1a1a] font-medium block mb-2">Cor/Estampa:</span>
+                  <div className="flex flex-wrap gap-2">
+                    {variantSiblings.map((sibling) =>
+                      sibling.isCurrent ? (
+                        <button
+                          key={sibling.slug}
+                          type="button"
+                          aria-current="true"
+                          className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-[#1a1a1a] text-white"
+                        >
+                          {sibling.label}
+                        </button>
+                      ) : (
+                        <Link
+                          key={sibling.slug}
+                          href={`/product/${sibling.slug}`}
+                          className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-white border border-[#e5e5e5] text-[#1a1a1a] hover:border-[#1a1a1a]"
+                        >
+                          {sibling.label}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Actions */}
               <div id="comprar-agora" ref={inlineButtonRef} className="flex gap-3 mb-6">
@@ -421,7 +477,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   onClick={handleAddToCart}
                   className={`flex-1 text-sm font-bold h-12 rounded-md uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${added
                     ? "bg-[#1a1a1a] text-[#ffffff]"
-                    : "bg-[#00c9a7] text-[#ffffff] hover:bg-[#00b396]"
+                    : "bg-[#15803d] text-[#ffffff] hover:bg-[#166534]"
                     }`}
                 >
                   {added ? (
@@ -614,8 +670,8 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
               onClick={handleAddToCart}
               className={`w-full text-sm font-bold py-3.5 rounded-full uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-[0_4px_24px_rgba(0,0,0,0.3)] ${added
                 ? "bg-[#1a1a1a] text-[#ffffff]"
-                : "bg-[#00c9a7] text-[#ffffff] hover:bg-[#00b396]"
-                }`}
+                : "bg-[#15803d] text-[#ffffff] hover:bg-[#166534]"
+              }`}
             >
               {added ? (
                 <>

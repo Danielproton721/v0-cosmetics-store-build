@@ -20,6 +20,8 @@ export interface Product {
   howToUse?: string[];
   touchTest?: string[];
   precautions?: string[];
+  variantLabel?: string;
+  variantGroup?: string;
 }
 
 export interface ProductReview {
@@ -150,18 +152,20 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-ros-68a5ddf0b0435-large.png?v=1777595622",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 240,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-ros",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rós",
+    "variantGroup": "roma-solteiro-2p-300f"
   },
   {
     "id": 2,
     "name": "Jogo de Lençol Casal Roma 3 Pçs Percal 300 Fios Estampado - Rosas",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-rosas-68a5db2e4ee3e-large.png?v=1777595630",
     "rating": 4.2,
@@ -170,7 +174,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-rosas",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rosas",
+    "variantGroup": "roma-casal-3p-300f"
   },
   {
     "id": 3,
@@ -184,12 +190,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-valencia-percal-300-fios-hotelaria-grey",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Grey",
+    "variantGroup": "valencia-solteiro-2p-300f"
   },
   {
     "id": 4,
     "name": "Jogo de Lençol Solteiro 2 Peças Percal 300 Fios Bordado Inglês Veneza Fend Stone",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-fend-stone-693ad80d36641-large.jpg?v=1777595642",
     "rating": 4.3,
@@ -198,7 +206,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-fend-stone",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Fend Stone",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 5,
@@ -206,27 +216,31 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-solteiro-roma-3-pc-percal-300-fios-estampado-rosas-68a5dceeb2344-large.png?v=1777595649",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 120,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-roma-3-pc-percal-300-fios-estampado-rosas",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rosas",
+    "variantGroup": "roma-solteiro-3p-300f"
   },
   {
     "id": 6,
     "name": "Jogo de Lençol Solteiro 2 Peças Percal 300 Fios Bordado Inglês Veneza Azul",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-azul-693ad808d560e-large.jpg?v=1777595655",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 125,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-azul",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Azul",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 7,
@@ -240,7 +254,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-blush",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Blush",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 8,
@@ -254,7 +270,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-rose",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rose",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 9,
@@ -262,18 +280,20 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-neve-693ad8073ba78-large.jpg?v=1777595672",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 58,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-neve",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Neve",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 10,
     "name": "Jogo de Lençol Casal 3 Peças Valencia Percal 300 Fios Hotelaria - Green",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-green-68a4b39e386eb-large.png?v=1777595679",
     "rating": 4.9,
@@ -282,7 +302,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-green",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Green",
+    "variantGroup": "valencia-casal-3p-300f"
   },
   {
     "id": 11,
@@ -296,7 +318,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-arabesco",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Arabesco",
+    "variantGroup": "roma-casal-3p-300f"
   },
   {
     "id": 12,
@@ -310,7 +334,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-valencia-percal-300-fios-hotelaria-green",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Green",
+    "variantGroup": "valencia-solteiro-2p-300f"
   },
   {
     "id": 13,
@@ -324,12 +350,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-valencia-percal-300-fios-hotelaria-white",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "White",
+    "variantGroup": "valencia-solteiro-2p-300f"
   },
   {
     "id": 14,
     "name": "Jogo de Lençol Casal 3 Peças Valencia Percal 300 Fios Hotelaria - White",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-white-68a4b39e164e2-large.png?v=1777595706",
     "rating": 4.1,
@@ -338,15 +366,17 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-white",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "White",
+    "variantGroup": "valencia-casal-3p-300f"
   },
   {
     "id": 15,
     "name": "Jogo de Lençol Queen Poá 3 Pçs Percal 300 Fios Estampado - Poá Rose",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-queen-poa-3-pcs-percal-300-fios-estampado-poa-rose-689e17fd82169-large.png?v=1777595712",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 179,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-poa-3-pcs-percal-300-fios-estampado-poa-rose",
@@ -360,13 +390,15 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-poa-3-pcs-percal-300-fios-estampado-poa-fend-689e18081a465-large.png?v=1777595719",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 20,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-casal-poa-3-pcs-percal-300-fios-estampado-poa-fend",
     "description": "Descrição do produto                           Jogo de Cama Roma em 3 Cores Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 3 lindas cores, oferecendo praticidade e um to...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Poá Fend",
+    "variantGroup": "jogo-de-lencol-casal-3p-300f"
   },
   {
     "id": 17,
@@ -374,18 +406,20 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-nevoa-693ad802b4eae-large.jpg?v=1777595725",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 49,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-nevoa",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Névoa",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 18,
     "name": "Jogo de Lençol Casal Roma 3 Pçs Percal 300 Fios Estampado - Vintage",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-vintage-68a5db4688190-large.png?v=1777595732",
     "rating": 4.4,
@@ -394,7 +428,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-vintage",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Vintage",
+    "variantGroup": "roma-casal-3p-300f"
   },
   {
     "id": 19,
@@ -408,7 +444,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-arabesco",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Arabesco",
+    "variantGroup": "roma-solteiro-2p-300f"
   },
   {
     "id": 20,
@@ -436,7 +474,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-valencia-percal-300-fios-hotelaria-nude",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Nude",
+    "variantGroup": "valencia-solteiro-2p-300f"
   },
   {
     "id": 22,
@@ -450,12 +490,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-beige",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Beige",
+    "variantGroup": "valencia-casal-3p-300f"
   },
   {
     "id": 23,
     "name": "Jogo de Lençol Solteiro Roma 2 Pç Percal 300 Fios Estampado - Rosas",
-    "price": 39.0,
+    "price": 39,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-rosas-68a5ddb517f29-large.png?v=1777595765",
     "rating": 4.1,
@@ -464,7 +506,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-rosas",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rosas",
+    "variantGroup": "roma-solteiro-2p-300f"
   },
   {
     "id": 24,
@@ -478,7 +522,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-poa-3-pcs-percal-300-fios-estampado-poa-rose",
     "description": "Descrição do produto                           Jogo de Cama Roma em 3 Cores Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 3 lindas cores, oferecendo praticidade e um to...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Poá Rose",
+    "variantGroup": "jogo-de-lencol-casal-3p-300f"
   },
   {
     "id": 25,
@@ -492,7 +538,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-ros",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Rós",
+    "variantGroup": "roma-casal-3p-300f"
   },
   {
     "id": 26,
@@ -506,7 +554,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-roma-3-pcs-percal-300-fios-estampado-olive",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Olive",
+    "variantGroup": "roma-casal-3p-300f"
   },
   {
     "id": 27,
@@ -514,13 +564,15 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-verde-693ad80bd9cab-large.jpg?v=1777595793",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 69,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-verde",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Verde",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 28,
@@ -528,13 +580,15 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-veneza-2-pcs-solteiro-300-fios-percal-bordado-ingles-tofu-693ad805928f0-large.jpg?v=1777595799",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 64,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-300-fios-bordado-ingles-veneza-tofu",
     "description": "Descrição do produto                           Como é versátil, o estilo básico possibilita muitas decorações. Pode casar com qualquer outro estilo, pois as peças lisas e neutras são coringas. Aposte ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Tofu",
+    "variantGroup": "veneza-solteiro-2p-300f"
   },
   {
     "id": 29,
@@ -548,12 +602,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-vintage",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Vintage",
+    "variantGroup": "roma-solteiro-2p-300f"
   },
   {
     "id": 30,
     "name": "Jogo de Lençol Casal Poá 3 Pçs Percal 300 Fios Estampado - Poá Sage",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-poa-3-pcs-percal-300-fios-estampado-poa-sage-689e1801192ab-large.png?v=1777595811",
     "rating": 4.3,
@@ -562,12 +618,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-poa-3-pcs-percal-300-fios-estampado-poa-sage",
     "description": "Descrição do produto                           Jogo de Cama Roma em 3 Cores Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 3 lindas cores, oferecendo praticidade e um to...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Poá Sage",
+    "variantGroup": "jogo-de-lencol-casal-3p-300f"
   },
   {
     "id": 31,
     "name": "Jogo de Lençol Solteiro Roma 3 Pç Percal 300 Fios Estampado - Vintage",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 139.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-solteiro-roma-3-pc-percal-300-fios-estampado-vintage-69e9235b58993-large.png?v=1777595817",
     "rating": 4.8,
@@ -576,7 +634,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-roma-3-pc-percal-300-fios-estampado-vintage",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Vintage",
+    "variantGroup": "roma-solteiro-3p-300f"
   },
   {
     "id": 32,
@@ -584,13 +644,15 @@ export const products: Product[] = [
     "price": 99.9,
     "compareAtPrice": 149.85,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-solteiro-3-pecas-percal-300-fios-roma-estampado-roses-67aa2cd301726-large.png?v=1777595823",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 72,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-estampado-3-pecas-percal-300-fios-roma-roses",
     "description": "Descrição do produto                           O Jogo de Cama 300 fios Percal Roma traz estampas em tons claros e neutros, clássico e elegante com qualidade impecável.  Além de beleza o toque em 300 f...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Roses",
+    "variantGroup": "roma-solteiro-3p-300f"
   },
   {
     "id": 33,
@@ -604,7 +666,9 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-valencia-percal-300-fios-hotelaria-beige",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Beige",
+    "variantGroup": "valencia-solteiro-2p-300f"
   },
   {
     "id": 34,
@@ -618,12 +682,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-roma-2-pc-percal-300-fios-estampado-olive",
     "description": "Descrição do produto                           Jogo de Cama Roma em 5 Estampas  Renove seu quarto com conforto e estilo! Este jogo de cama está disponível em 5 lindas estampas, oferecendo praticidade ...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Olive",
+    "variantGroup": "roma-solteiro-2p-300f"
   },
   {
     "id": 35,
     "name": "Jogo de Lençol Casal 3 Peças Valencia Percal 300 Fios Hotelaria - Nude",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-nude-68a4b3982c265-large.png?v=1777595843",
     "rating": 4.2,
@@ -632,12 +698,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-nude",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Nude",
+    "variantGroup": "valencia-casal-3p-300f"
   },
   {
     "id": 36,
     "name": "Jogo de Lençol Casal 3 Peças Valencia Percal 300 Fios Hotelaria - Grey",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-grey-68a4b399c862c-large.png?v=1777595849",
     "rating": 4.5,
@@ -646,12 +714,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-valencia-percal-300-fios-hotelaria-grey",
     "description": "Descrição do produto                           Bem-vindo ao inigualável conforto excepcional da nossa linha Hotelaria Valencia. Experimente a suavidade sublime dos nossos produtos da linha hotelaria c...",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Grey",
+    "variantGroup": "valencia-casal-3p-300f"
   },
   {
     "id": 37,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Itália 150 Fios Grid Dupla Face Grafite 210x230 cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-italia-150-fios-grid-dupla-face-grafite-210x230-cm-69ebc8316663f-large_65a1059b-46b9-46d1-9ea1-b163cd9a8a4e.png?v=1777590239",
     "rating": 4.6,
@@ -667,7 +737,7 @@ export const products: Product[] = [
   {
     "id": 38,
     "name": "Jogo de Lençol Queen 3 Peças Valencia Percal 300 Fios Hotelaria - Nude",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-queen-3-pecas-valencia-percal-300-fios-hotelaria-nude-68a4b38b54e7e-large.png?v=1777590244",
     "rating": 4.7,
@@ -683,7 +753,7 @@ export const products: Product[] = [
   {
     "id": 39,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Verde",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-italia-150-fios-poa-dupla-face-verde-160x220-cm-69ebb489d6592-large_392aac2a-6767-4854-a0f9-e958129d49fb.png?v=1777590250",
     "rating": 4.4,
@@ -699,10 +769,10 @@ export const products: Product[] = [
   {
     "id": 40,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Rosa",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-3-pecas-italia-150-fios-poa-dupla-face-rosa-682771b693cb0-large.png?v=1777590256",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 178,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-rosa",
@@ -710,15 +780,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Rosa",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 41,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Fendi",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-italia-150-fios-poa-dupla-face-fendi-160x220-cm-69ebc6f68f0ae-large_981e7e7a-ce2c-4a76-94fd-b762bd84cd12.png?v=1777590262",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 42,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-fendi-1",
@@ -731,7 +803,7 @@ export const products: Product[] = [
   {
     "id": 42,
     "name": "Tapete Foam Absorvente 38x58 cm Soft Antiderrapante Toque Macio - Azul",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-6981f5174203a-large_a6ec36a6-b411-4d3e-ac7b-d8a2f18d5d14.png?v=1777590268",
     "rating": 4.6,
@@ -747,7 +819,7 @@ export const products: Product[] = [
   {
     "id": 43,
     "name": "Kit Colcha Cobre Leito Solteiro 2Pç Estampada Itália 150 Fios Dupla Face Flora 220x160cm",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2pc-estampada-italia-150-fios-dupla-face-flora-220x160cm-69eba66aa2127-large_55fba4c5-30cf-4811-bfd8-62b058440079.png?v=1777590273",
     "rating": 4.5,
@@ -763,10 +835,10 @@ export const products: Product[] = [
   {
     "id": 44,
     "name": "Kit Colcha Cobre Leito King 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Rosa",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-poa-dupla-face-rosa-250x270-cm-69ebc78324408-large_0dc1b544-ca39-4b58-9151-ff3119a03484.png?v=1777590280",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 194,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-king-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-rosa-1",
@@ -779,7 +851,7 @@ export const products: Product[] = [
   {
     "id": 45,
     "name": "Kit Toalhas Paris Banho 2 Peças 450g/m² 100% Algodão Bege Claro",
-    "price": 54.0,
+    "price": 54,
     "compareAtPrice": 129.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-toalhas-paris-banho-2-pecas-450gm2-100-algodao-bege-claro-69b2bb6abaec0-large.png?v=1777590285",
     "rating": 4.9,
@@ -795,10 +867,10 @@ export const products: Product[] = [
   {
     "id": 46,
     "name": "Kit Colcha Cobre Leito Solteiro 2Pç Estampada Itália 150 Fios Dupla Face Rami 220x160cm",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2pc-estampada-italia-150-fios-dupla-face-rami-220x160cm-69eba548b1adf-large.png?v=1777590291",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 167,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2pc-estampada-italia-150-fios-dupla-face-rami-220x160cm",
@@ -806,12 +878,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Rami",
+    "variantGroup": "italia-solteiro-2p-150f-220x160"
   },
   {
     "id": 47,
     "name": "Tapete Chenille Bolinha Popcorn  38x58 cm Toque Macio e Design Moderno - Areia",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-areia-69b45c5de9f28-large.png?v=1777590296",
     "rating": 4.1,
@@ -827,7 +901,7 @@ export const products: Product[] = [
   {
     "id": 48,
     "name": "Kit Colcha Cobre Leito King 3 Peças Itália 150 Fios Grid Dupla Face Grafite 250x270 cm",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-grid-dupla-face-grafite-250x270-cm-69ebc815ed27f-large_212b4578-f418-4197-9a52-4ea73b3551fc.png?v=1777590302",
     "rating": 4.4,
@@ -843,7 +917,7 @@ export const products: Product[] = [
   {
     "id": 49,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Brown",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-brown-69f25d56f2be7-large.png?v=1777590308",
     "rating": 4.8,
@@ -854,12 +928,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Brown",
+    "variantGroup": "italia-queen-3p-150f"
   },
   {
     "id": 50,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Azul",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-azul-69f25ce6c40c3-large.png?v=1777590313",
     "rating": 4.7,
@@ -870,12 +946,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Azul",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 51,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Brown",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-brown-69f25d2d2cdf5-large.png?v=1777590319",
     "rating": 4.5,
@@ -886,12 +964,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Brown",
+    "variantGroup": "italia-casal-3p-150f"
   },
   {
     "id": 52,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Grey",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-grey-69f25e1d9be60-large.png?v=1777590324",
     "rating": 4.8,
@@ -902,12 +982,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Grey",
+    "variantGroup": "italia-casal-3p-150f"
   },
   {
     "id": 53,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Brown",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-brown-69f25cbaf1e48-large.png?v=1777590330",
     "rating": 4.2,
@@ -918,12 +1000,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Brown",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 54,
     "name": "Kit Colcha Cobre Leito King 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Grey",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-grey-69f25e9c462c5-large.png?v=1777590335",
     "rating": 4.9,
@@ -934,12 +1018,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Grey",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 55,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Grey",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-grey-69f25eab5c208-large.png?v=1777590341",
     "rating": 4.5,
@@ -950,7 +1036,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Mais Vendidos"
-    ]
+    ],
+    "variantLabel": "Poá Grey",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 56,
@@ -966,7 +1054,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Bege",
+    "variantGroup": "edredom-hotelaria-casal-300f-260x240"
   },
   {
     "id": 57,
@@ -982,7 +1072,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Branco",
+    "variantGroup": "edredom-hotelaria-casal-300f-260x240"
   },
   {
     "id": 58,
@@ -998,7 +1090,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "edredom-hotelaria-casal-300f-260x240"
   },
   {
     "id": 59,
@@ -1014,12 +1108,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "edredom-hotelaria-casal-300f-260x240"
   },
   {
     "id": 60,
     "name": "Jogo de Lençol Mona lisa 3 Pçs Casal 300 Fios percal Bordado - Bege",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 149.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-mona-lisa-3-pcs-casal-300-fios-percal-bordado-bege-693c0e80a2732-large.png?v=1777586458",
     "rating": 4.5,
@@ -1035,7 +1131,7 @@ export const products: Product[] = [
   {
     "id": 61,
     "name": "Jogo de Lençol Mona lisa 3 Pçs King 300 Fios percal Bordado - Rose",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-mona-lisa-3-pcs-king-300-fios-percal-bordado-rose-693c0e7560b0f-large.png?v=1777586514",
     "rating": 4.3,
@@ -1062,12 +1158,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "mona-queen-3p-300f"
   },
   {
     "id": 63,
     "name": "Jogo de Lençol Mona lisa 3 Pçs Queen 300 Fios percal Bordado - Rose",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-mona-lisa-3-pcs-queen-300-fios-percal-bordado-rose-693c0e7e79ada-large.png?v=1777586502",
     "rating": 4.1,
@@ -1078,7 +1176,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rose",
+    "variantGroup": "mona-queen-3p-300f"
   },
   {
     "id": 64,
@@ -1094,12 +1194,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "mona-queen-3p-300f"
   },
   {
     "id": 65,
     "name": "Jogo de Lençol Mona lisa 4 Pçs King 300 Fios percal Bordado - Branco",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/jogo-de-lencol-mona-lisa-4-pcs-king-300-fios-percal-bordado-branco-693c0e5240fe5-large.png?v=1777586533",
     "rating": 4.6,
@@ -1110,7 +1212,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Branco",
+    "variantGroup": "mona-king-4p-300f"
   },
   {
     "id": 66,
@@ -1126,7 +1230,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rose",
+    "variantGroup": "mona-king-4p-300f"
   },
   {
     "id": 67,
@@ -1142,7 +1248,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "mona-queen-4p-300f"
   },
   {
     "id": 68,
@@ -1158,15 +1266,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "mona-queen-4p-300f"
   },
   {
     "id": 69,
     "name": "Kit 3 Tapetes Foam Absorvente 38x58 cm Soft Antiderrapante - Cinza",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza-6995e8a7a4b10-large.png?v=1777586507",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 55,
     "category": "Decorações",
     "slug": "kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza",
@@ -1174,12 +1284,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "kit-38x58"
   },
   {
     "id": 70,
     "name": "Kit 3 Tapetes Foam Absorvente 38x58 cm Soft Antiderrapante - Cinza Escuro",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-3-tapetes-foam-absorvente-38x58-cm-soft-antiderrapante-cinza-escuro-6995e8a7d34eb-large.png?v=1777586464",
     "rating": 4.4,
@@ -1190,12 +1302,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza Escuro",
+    "variantGroup": "kit-38x58"
   },
   {
     "id": 71,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Fendi",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-italia-150-fios-poa-dupla-face-fendi-210x230-cm-69ebc6ebe0da1-large.png?v=1777586231",
     "rating": 4.3,
@@ -1206,12 +1320,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Fendi",
+    "variantGroup": "italia-casal-3p-150f"
   },
   {
     "id": 72,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Rosa",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-italia-150-fios-poa-dupla-face-rosa-210x230-cm-69ebc79e7cf95-large.png?v=1777586217",
     "rating": 4.4,
@@ -1222,12 +1338,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Rosa",
+    "variantGroup": "italia-casal-3p-150f"
   },
   {
     "id": 73,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Dupla Face Estampado 150 Fios Itália Rós",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-cobre-leito-colcha-casal-3pc-dupla-face-150-fios-italia-ros-210x230cm-69efbaae6ba3a-large.png?v=1777586255",
     "rating": 4.5,
@@ -1238,12 +1356,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rós",
+    "variantGroup": "italia-casal-3p-150f"
   },
   {
     "id": 74,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Dupla Face Matelado Pompeia Cinza",
-    "price": 139.0,
+    "price": 139,
     "compareAtPrice": 229.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-casal-3-pecas-dupla-face-cinza-6984c891adfde-large.png?v=1777586413",
     "rating": 4.3,
@@ -1254,12 +1374,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "pompeia-casal-3p"
   },
   {
     "id": 75,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Dupla Face Matelado Pompeia Rose",
-    "price": 139.0,
+    "price": 139,
     "compareAtPrice": 229.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-casal-3-pecas-dupla-face-rose-6984c88eb6956-large.png?v=1777586425",
     "rating": 4.4,
@@ -1270,12 +1392,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rose",
+    "variantGroup": "pompeia-casal-3p"
   },
   {
     "id": 76,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Itália 150 Fios Grid Dupla Face Cinza 210x230 cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-italia-150-fios-grid-dupla-face-cinza-210x230-cm-69ebc64d8320a-large.png?v=1777586145",
     "rating": 4.5,
@@ -1286,12 +1410,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "italia-casal-3p-150f-210x230"
   },
   {
     "id": 77,
     "name": "Kit Colcha Cobre Leito Casal 3 Peças Itália 150 Fios Grid Dupla Face Grafite 210x230 cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3-pecas-italia-150-fios-grid-dupla-face-grafite-210x230-cm-69ebc8316663f-large.png?v=1777586236",
     "rating": 4.5,
@@ -1302,7 +1428,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Grafite",
+    "variantGroup": "italia-casal-3p-150f-210x230"
   },
   {
     "id": 78,
@@ -1318,12 +1446,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "italia-casal-3p-150f-210x230"
   },
   {
     "id": 79,
     "name": "Kit Colcha Cobre Leito Casal 3Pç Estampada Itália 150 Fios Dupla Face Alora 230x210cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-alora-230x210cm-69ebaba35adb0-large.png?v=1777586279",
     "rating": 4.8,
@@ -1334,12 +1464,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Alora",
+    "variantGroup": "italia-casal-3p-150f-230x210"
   },
   {
     "id": 80,
     "name": "Kit Colcha Cobre Leito Casal 3Pç Estampada Itália 150 Fios Dupla Face Fiori 230x210cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-fiori-230x210cm-69eba8d312309-large.png?v=1777586292",
     "rating": 4.6,
@@ -1350,12 +1482,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Fiori",
+    "variantGroup": "italia-casal-3p-150f-230x210"
   },
   {
     "id": 81,
     "name": "Kit Colcha Cobre Leito Casal 3Pç Estampada Itália 150 Fios Dupla Face Flora 230x210cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-flora-230x210cm-69eba6610c2b2-large.png?v=1777586224",
     "rating": 4.5,
@@ -1366,12 +1500,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Flora",
+    "variantGroup": "italia-casal-3p-150f-230x210"
   },
   {
     "id": 82,
     "name": "Kit Colcha Cobre Leito Casal 3Pç Estampada Itália 150 Fios Dupla Face Genevieve 230x210cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-genevieve-230x210cm-69eba7920d2ab-large.png?v=1777586381",
     "rating": 4.3,
@@ -1382,15 +1518,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Genevieve",
+    "variantGroup": "italia-casal-3p-150f-230x210"
   },
   {
     "id": 83,
     "name": "Kit Colcha Cobre Leito Casal 3Pç Estampada Itália 150 Fios Dupla Face Rami 230x210cm",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 159.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-rami-230x210cm-69eba53ed0148-large.png?v=1777586164",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 146,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-casal-3pc-estampada-italia-150-fios-dupla-face-rami-230x210cm",
@@ -1398,7 +1536,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rami",
+    "variantGroup": "italia-casal-3p-150f-230x210"
   },
   {
     "id": 84,
@@ -1435,7 +1575,7 @@ export const products: Product[] = [
   {
     "id": 86,
     "name": "Kit Colcha Cobre Leito King 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Fendi",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-poa-dupla-face-fendi-250x270-cm-69ebc6d4a9f35-large.png?v=1777586262",
     "rating": 4.5,
@@ -1446,12 +1586,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Fendi",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 87,
     "name": "Kit Colcha Cobre Leito King 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Rosa",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-poa-dupla-face-rosa-250x270-cm-69ebc78324408-large.png?v=1777586352",
     "rating": 4.6,
@@ -1462,12 +1604,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Rosa",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 88,
     "name": "Kit Colcha Cobre Leito King 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Verde",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-poa-dupla-face-verde-250x270-cm-69ebb460b70b1-large.png?v=1777586267",
     "rating": 4.3,
@@ -1478,12 +1622,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Verde",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 89,
     "name": "Kit Colcha Cobre Leito King 3 Peças Dupla Face Estampado 150 Fios Itália Arabesco",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-cobre-leito-colcha-king-3pc-dupla-face-150-fios-italia-arabesco-250x270cm-69eb957547540-large.png?v=1777586317",
     "rating": 4.1,
@@ -1494,15 +1640,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Arabesco",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 90,
     "name": "Kit Colcha Cobre Leito King 3 Peças Itália 150 Fios Grid Dupla Face Grafite 250x270 cm",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-grid-dupla-face-grafite-250x270-cm-69ebc815ed27f-large.png?v=1777586399",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 112,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-grid-dupla-face-grafite-250x270-cm",
@@ -1510,12 +1658,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Grafite",
+    "variantGroup": "italia-king-3p-150f-250x270"
   },
   {
     "id": 91,
     "name": "Kit Colcha Cobre Leito King 3 Peças Itália 150 Fios Grid Dupla Face Verde 250x270 cm",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3-pecas-italia-150-fios-grid-dupla-face-verde-250x270-cm-69ebb5f9e0dbb-large.png?v=1777586406",
     "rating": 3.9,
@@ -1526,12 +1676,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "italia-king-3p-150f-250x270"
   },
   {
     "id": 92,
     "name": "Kit Colcha Cobre Leito King 3Pç Estampada Itália 150 Fios Dupla Face Flora 270x250cm",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-king-3pc-estampada-italia-150-fios-dupla-face-flora-270x250cm-69eba64e4afb0-large.png?v=1777586341",
     "rating": 4.9,
@@ -1542,7 +1694,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Flora",
+    "variantGroup": "italia-king-3p-150f-270x250"
   },
   {
     "id": 93,
@@ -1558,7 +1712,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Natura",
+    "variantGroup": "italia-king-3p-150f"
   },
   {
     "id": 94,
@@ -1574,15 +1730,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rami",
+    "variantGroup": "italia-king-3p-150f-270x250"
   },
   {
     "id": 95,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Fendi",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-poa-dupla-face-fendi-230x250-cm-69ebc6e162977-large.png?v=1777586323",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 172,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-queen-3-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-fendi",
@@ -1590,12 +1748,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Fendi",
+    "variantGroup": "italia-queen-3p-150f"
   },
   {
     "id": 96,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Verde",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-poa-dupla-face-verde-230x250-cm-69ebb46a0f955-large.png?v=1777586205",
     "rating": 4.8,
@@ -1606,7 +1766,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Verde",
+    "variantGroup": "italia-queen-3p-150f"
   },
   {
     "id": 97,
@@ -1622,12 +1784,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Arabesco",
+    "variantGroup": "italia-queen-3p-150f"
   },
   {
     "id": 98,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças Dupla Face Matelado Pompeia Off White",
-    "price": 149.0,
+    "price": 149,
     "compareAtPrice": 239.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-queen-3-pecas-dupla-face-off-white-6984c88116531-large.png?v=1777586151",
     "rating": 4.2,
@@ -1643,7 +1807,7 @@ export const products: Product[] = [
   {
     "id": 99,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças Itália 150 Fios Grid Dupla Face Cinza 230x250 cm",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-grid-dupla-face-cinza-230x250-cm-69ebc64484a43-large.png?v=1777586171",
     "rating": 4.4,
@@ -1654,15 +1818,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "italia-queen-3p-150f-230x250"
   },
   {
     "id": 100,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças Itália 150 Fios Grid Dupla Face Grafite 230x250 cm",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-grid-dupla-face-grafite-230x250-cm-69ebc82676006-large.png?v=1777586305",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 241,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-grid-dupla-face-grafite-230x250-cm",
@@ -1670,12 +1836,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Grafite",
+    "variantGroup": "italia-queen-3p-150f-230x250"
   },
   {
     "id": 101,
     "name": "Kit Colcha Cobre Leito Queen 3 Peças Itália 150 Fios Grid Dupla Face Verde 230x250 cm",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3-pecas-italia-150-fios-grid-dupla-face-verde-230x250-cm-69ebb60321731-large.png?v=1777586192",
     "rating": 4.6,
@@ -1686,12 +1854,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "italia-queen-3p-150f-230x250"
   },
   {
     "id": 102,
     "name": "Kit Colcha Cobre Leito Queen 3Pç Estampada Itália 150 Fios Dupla Face Fiori 250x230cm",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3pc-estampada-italia-150-fios-dupla-face-fiori-250x230cm-69eba8ca0d66d-large.png?v=1777586419",
     "rating": 4.9,
@@ -1702,7 +1872,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Fiori",
+    "variantGroup": "italia-queen-3p-150f-250x230"
   },
   {
     "id": 103,
@@ -1718,15 +1890,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Genevieve",
+    "variantGroup": "italia-queen-3p-150f-250x230"
   },
   {
     "id": 104,
     "name": "Kit Colcha Cobre Leito Queen 3Pç Estampada Itália 150 Fios Dupla Face Natura 250x230cm",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 169.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-queen-3pc-estampada-italia-150-fios-dupla-face-natura-250x230cm-69eb81ad21980-large.png?v=1777586298",
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 95,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-queen-3pc-estampada-italia-150-fios-dupla-face-natura-250x230cm",
@@ -1734,7 +1908,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Natura",
+    "variantGroup": "italia-queen-3p-150f-250x230"
   },
   {
     "id": 105,
@@ -1750,15 +1926,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rami",
+    "variantGroup": "italia-queen-3p-150f-250x230"
   },
   {
     "id": 106,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Fendi",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-italia-150-fios-poa-dupla-face-fendi-160x220-cm-69ebc6f68f0ae-large.png?v=1777586347",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 103,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-fendi",
@@ -1766,15 +1944,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Fendi",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 107,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças 150 Fios Matelado Dupla Face Estampado Itália Poá Verde",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-italia-150-fios-poa-dupla-face-verde-160x220-cm-69ebb489d6592-large.png?v=1777586242",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 115,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2-pecas-150-fios-matelado-dupla-face-estampado-italia-poa-verde",
@@ -1782,12 +1962,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Poá Verde",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 108,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Dupla Face Estampado 150 Fios Itália Arabesco",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-cobre-leito-colcha-solteiro-2pc-dp-face-150-fios-italia-arabesco-160x220-cm-69ea6dc1d7e29-large.png?v=1777586329",
     "rating": 4.5,
@@ -1798,12 +1980,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Arabesco",
+    "variantGroup": "italia-solteiro-2p-150f"
   },
   {
     "id": 109,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Dupla Face Matelado Pompeia Caqui",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-solteiro-2-pecas-dupla-face-caqui-6984c894670c3-large.png?v=1777586335",
     "rating": 4.5,
@@ -1814,12 +1998,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Caqui",
+    "variantGroup": "pompeia-solteiro-2p"
   },
   {
     "id": 110,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Dupla Face Matelado Pompeia Rose",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-pompeia-solteiro-2-pecas-dupla-face-rose-6984c89782373-large.png?v=1777586387",
     "rating": 4.4,
@@ -1830,7 +2016,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Rose",
+    "variantGroup": "pompeia-solteiro-2p"
   },
   {
     "id": 111,
@@ -1846,7 +2034,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "italia-solteiro-2p-150f-160x220"
   },
   {
     "id": 112,
@@ -1862,12 +2052,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Fendi",
+    "variantGroup": "italia-solteiro-2p-150f-160x220"
   },
   {
     "id": 113,
     "name": "Kit Colcha Cobre Leito Solteiro 2 Peças Itália 150 Fios Grid Dupla Face Grafite 160x220 cm",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2-pecas-italia-150-fios-grid-dupla-face-grafite-160x220-cm-69ebc8397d8f4-large.png?v=1777586273",
     "rating": 4.5,
@@ -1878,7 +2070,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Grafite",
+    "variantGroup": "italia-solteiro-2p-150f-160x220"
   },
   {
     "id": 114,
@@ -1894,15 +2088,17 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "italia-solteiro-2p-150f-160x220"
   },
   {
     "id": 115,
     "name": "Kit Colcha Cobre Leito Solteiro 2Pç Estampada Itália 150 Fios Dupla Face Flora 220x160cm",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 119.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/kit-colcha-cobre-leito-solteiro-2pc-estampada-italia-150-fios-dupla-face-flora-220x160cm-69eba66aa2127-large.png?v=1777586375",
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 116,
     "category": "Colchas e Cobre-Leito",
     "slug": "kit-colcha-cobre-leito-solteiro-2pc-estampada-italia-150-fios-dupla-face-flora-220x160cm",
@@ -1910,12 +2106,14 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Novidades"
-    ]
+    ],
+    "variantLabel": "Flora",
+    "variantGroup": "italia-solteiro-2p-150f-220x160"
   },
   {
     "id": 116,
     "name": "Tapete Chenille Bolinha Popcorn  38x58 cm Toque Macio e Design Moderno - Rosa",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-chenille-bolinha-popcorn-38x58-cm-toque-macio-e-design-moderno-rosa-69b45c6934934-large.png?v=1777586477",
     "rating": 4.8,
@@ -1931,7 +2129,7 @@ export const products: Product[] = [
   {
     "id": 117,
     "name": "Tapete Foam Absorvente 38x58 cm Soft Antiderrapante Toque Macio - Areia",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-areia-6983552665f58-large.png?v=1777586158",
     "rating": 4.5,
@@ -1947,7 +2145,7 @@ export const products: Product[] = [
   {
     "id": 118,
     "name": "Tapete Foam Absorvente 38x58 cm Soft Antiderrapante Toque Macio - Azul",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-azul-6981f5174203a-large.png?v=1777586358",
     "rating": 4.4,
@@ -1963,7 +2161,7 @@ export const products: Product[] = [
   {
     "id": 119,
     "name": "Tapete Foam Absorvente 38x58 cm Soft Antiderrapante Toque Macio - Cinza",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-cinza-698357d8723d3-large.png?v=1777586286",
     "rating": 4.3,
@@ -1995,7 +2193,7 @@ export const products: Product[] = [
   {
     "id": 121,
     "name": "Tapete Foam Absorvente 38x58 cm Soft Antiderrapante Toque Macio - Taupe",
-    "price": 16.0,
+    "price": 16,
     "compareAtPrice": 39.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-absorvente-38x58-cm-soft-antiderrapante-toque-macio-taupe-6983586c3c28c-large.png?v=1777586370",
     "rating": 4.1,
@@ -2011,7 +2209,7 @@ export const products: Product[] = [
   {
     "id": 122,
     "name": "Tapete Foam Passadeira Absorvente 40x110 cm Soft Antiderrapante Toque Macio - Rosa",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 49.9,
     "image": "https://cdn.shopify.com/s/files/1/0818/1540/4758/files/tapete-foam-passadeira-absorvente-40x110-cm-soft-antiderrapante-toque-macio-rosa-6981f0fdd3934-large.png?v=1777586437",
     "rating": 4.8,
@@ -2115,7 +2313,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Branco/Cáqui/Marfim",
+    "variantGroup": "isabelle-queen-8p"
   },
   {
     "id": 128,
@@ -2136,7 +2336,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Cinza/Marfim",
+    "variantGroup": "isabelle-queen-8p"
   },
   {
     "id": 129,
@@ -2157,7 +2359,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Fendi/Azul Marinho/Marfim",
+    "variantGroup": "isabelle-queen-8p"
   },
   {
     "id": 130,
@@ -2178,7 +2382,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Palha/Rosê/Marfim",
+    "variantGroup": "isabelle-queen-8p"
   },
   {
     "id": 131,
@@ -2207,7 +2413,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Palha/Vinho/Marfim",
+    "variantGroup": "isabelle-queen-8p"
   },
   {
     "id": 132,
@@ -2248,7 +2456,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Branco/Outono/Bege",
+    "variantGroup": "sabrina-queen-8p"
   },
   {
     "id": 134,
@@ -2277,7 +2487,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza/Jardim Rosê/Prata",
+    "variantGroup": "sabrina-queen-8p"
   },
   {
     "id": 135,
@@ -2298,7 +2510,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Cinza/Xadrez Verde/Prata",
+    "variantGroup": "sabrina-queen-8p"
   },
   {
     "id": 136,
@@ -2342,7 +2556,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Azul/Branco",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 137,
@@ -2362,7 +2578,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Azul/Prata",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 138,
@@ -2382,7 +2600,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Cinza/Azul",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 139,
@@ -2402,7 +2622,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Cinza/Prata",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 140,
@@ -2422,7 +2644,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Fendi/Marfim",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 141,
@@ -2442,7 +2666,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Fendi/Prata",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 142,
@@ -2462,7 +2688,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Marfim",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 143,
@@ -2482,7 +2710,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Rosê/Azul",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 144,
@@ -2502,7 +2732,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Rosê/Marfim",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 145,
@@ -2522,7 +2754,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Rosê/Prata",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 146,
@@ -2542,7 +2776,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Azul",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 147,
@@ -2562,7 +2798,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Fendi/Azul",
+    "variantGroup": "serena-queen-10p-300f"
   },
   {
     "id": 148,
@@ -2591,7 +2829,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza/Rosê",
+    "variantGroup": "vitoria-queen-8p"
   },
   {
     "id": 149,
@@ -2603,7 +2843,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-dublinbrancoverde-6985f0f0eb7fa-large.jpg?v=1778538578",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-queen-vitoria-8-pecas-dublinbrancoverde-6985f0f4141bb-large.jpg?v=1778538578"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 215,
     "category": "Kit Cama Posta Queen",
     "slug": "kit-cama-posta-queen-vitoria-8-pecas-dublin-branco-verde",
@@ -2612,7 +2852,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Dublin/Branco/Verde",
+    "variantGroup": "vitoria-queen-8p"
   },
   {
     "id": 150,
@@ -2633,12 +2875,14 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Fendi/Bege",
+    "variantGroup": "vitoria-queen-8p"
   },
   {
     "id": 151,
     "name": "Tapete De Banheiro Bolinha Popcorn Antiderrapante 40x60cm Chenille Cinza",
-    "price": 17.0,
+    "price": 17,
     "compareAtPrice": 52.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-bolinha-popcorn-antiderrapante-40x60cm-chenille-cinza-691e0f27373f5-large.jpg?v=1778571837",
     "images": [
@@ -2718,7 +2962,7 @@ export const products: Product[] = [
   {
     "id": 152,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Azul",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-azul-63a1db3b2199d-large.jpg?v=1778571844",
     "images": [
@@ -2793,12 +3037,14 @@ export const products: Product[] = [
         "date": "Compra verificada",
         "photo": "https://cdn.yampi.io/rocket/uploads/reviews/lindacasa/69b32e43d2e5a.jpg"
       }
-    ]
+    ],
+    "variantLabel": "Azul",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 153,
     "name": "Tapete De Banheiro Bolinha Popcorn Antiderrapante 60x40cm Chenille Azul Marinho",
-    "price": 17.0,
+    "price": 17,
     "compareAtPrice": 52.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-azul-marinho-691e0f13c15c7-large.jpg?v=1778571851",
     "images": [
@@ -2876,7 +3122,7 @@ export const products: Product[] = [
   {
     "id": 154,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Off White",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-off-white-66d60368d26e4-large.jpg?v=1778571858",
     "images": [
@@ -2885,7 +3131,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-off-white-66d60368d26e4-large_269354b5-cd4b-4a82-81a0-c075ca8ddd2e.jpg?v=1778618754",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-off-white-66d603690d0fe-large_711a92d0-1fa5-42cb-b075-68d20cbd0f3e.jpg?v=1778618754"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 191,
     "category": "Decorações",
     "slug": "tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-off-white",
@@ -2949,12 +3195,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Off White",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 155,
     "name": "Tapete De Banheiro Bolinha Popcorn Antiderrapante 60x40cm Chenille Rosa",
-    "price": 17.0,
+    "price": 17,
     "compareAtPrice": 52.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-rosa-691e0f9987057-large.jpg?v=1778571866",
     "images": [
@@ -3032,7 +3280,7 @@ export const products: Product[] = [
   {
     "id": 156,
     "name": "Tapete De Banheiro Bolinha Popcorn Antiderrapante 60x40cm Chenille Azul Claro",
-    "price": 17.0,
+    "price": 17,
     "compareAtPrice": 52.28,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-bolinha-popcorn-antiderrapante-60x40cm-chenille-azul-claro-691e0f749ea1d-large.jpg?v=1778571874",
     "images": [
@@ -3052,7 +3300,7 @@ export const products: Product[] = [
   {
     "id": 157,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm 200 Fios Estampadas Petit Poá Cáqui",
-    "price": 39.0,
+    "price": 39,
     "compareAtPrice": 59.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-200-fios-estampadas-petit-poa-caqui-6565c8ed84fca-large.jpg?v=1778571881",
     "images": [
@@ -3095,12 +3343,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Petit Poá Cáqui",
+    "variantGroup": "kit-200f-45x45"
   },
   {
     "id": 158,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Micro Percal 300 Fios Aveline Off White",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 106.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-micro-percal-300-fios-aveline-off-white-6572ff6783f51-large.jpg?v=1778571888",
     "images": [
@@ -3143,12 +3393,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Off White",
+    "variantGroup": "aveline-300f-45x45"
   },
   {
     "id": 159,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Chumbo",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-chumbo-697a5505e79d1-large.jpg?v=1778571895",
     "images": [
@@ -3221,12 +3473,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Chumbo",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 160,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm 200 Fios Estampadas Petit Poá Rosê",
-    "price": 39.0,
+    "price": 39,
     "compareAtPrice": 59.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-200-fios-estampadas-petit-poa-rose-6565c9351671a-large.jpg?v=1778571902",
     "images": [
@@ -3269,12 +3523,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Petit Poá Rosê",
+    "variantGroup": "kit-200f-45x45"
   },
   {
     "id": 161,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm 200 Fios Estampadas Petit Poá Marinho",
-    "price": 39.0,
+    "price": 39,
     "compareAtPrice": 59.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-200-fios-estampadas-petit-poa-marinho-6565c90e92494-large.jpg?v=1778571910",
     "images": [
@@ -3318,12 +3574,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Petit Poá Marinho",
+    "variantGroup": "kit-200f-45x45"
   },
   {
     "id": 162,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Bege",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-bege-697a54cb6e59b-large.jpg?v=1778571918",
     "images": [
@@ -3359,12 +3617,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Bege",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 163,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Micro Percal 300 Fios Aveline Caqui",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 106.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-micro-percal-300-fios-aveline-caqui-6572ff666413c-large.jpg?v=1778571926",
     "images": [
@@ -3407,12 +3667,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Caqui",
+    "variantGroup": "aveline-300f-45x45"
   },
   {
     "id": 164,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Petróleo",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-petroleo-697a539f933fd-large.jpg?v=1778571933",
     "images": [
@@ -3448,19 +3710,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Petróleo",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 165,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Flannel Bariloche Mostarda",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 79.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-flannel-bariloche-mostarda-663cf1a558af0-large.jpg?v=1778571940",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-flannel-bariloche-mostarda-663cf1a558af0-large.jpg?v=1778571940",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-decorativas-para-sofa-45x45cm-flannel-bariloche-mostarda-666445a97cf41-large.jpg?v=1778571940"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 193,
     "category": "Decorações",
     "slug": "kit-4-capas-de-almofadas-decorativas-para-sofa-45x45cm-flannel-bariloche-mostarda",
@@ -3496,12 +3760,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Flannel Mostarda",
+    "variantGroup": "bariloche-45x45"
   },
   {
     "id": 166,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 60x30cm Micro Percal 300 Fios Aveline Off White",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 106.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-60x30cm-micro-percal-300-fios-aveline-off-white-657307d33654b-large.jpg?v=1778571948",
     "images": [
@@ -3544,12 +3810,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Off White",
+    "variantGroup": "aveline-300f-60x30"
   },
   {
     "id": 167,
     "name": "Tapete de Banheiro Hotelaria Antiderrapante 50x70cm Algodão 400g/m² Basic Verde Pinho",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 29.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-50x70cm-algodao-400gm2-piso-antiderrapante-basic-verde-pinho-6904a03e03085-large.jpg?v=1778571955",
     "images": [
@@ -3583,7 +3851,7 @@ export const products: Product[] = [
   {
     "id": 168,
     "name": "Kit 4 Almofadas Cheias Decorativas para Sofá 60x30cm Micro Percal 300 Fios Aveline Off White",
-    "price": 139.0,
+    "price": 139,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-almofadas-60x30cm-micro-percal-300-fios-aveline-off-white-65730b2d44240-large.jpg?v=1778571962",
     "images": [
@@ -3626,12 +3894,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cheias Off White",
+    "variantGroup": "aveline-300f-60x30"
   },
   {
     "id": 169,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Flannel Bariloche Marinho",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 79.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-flannel-bariloche-marinho-663cf193246c5-large.jpg?v=1778571970",
     "images": [
@@ -3674,12 +3944,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Flannel Marinho",
+    "variantGroup": "bariloche-45x45"
   },
   {
     "id": 170,
     "name": "Tapete de Banheiro Hotelaria Antiderrapante 50x70cm Algodão 400g/m² Basic Petróleo",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 29.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-50x70cm-algodao-400gm2-piso-antiderrapante-basic-petroleo-6904a027e0861-large.jpg?v=1778571977",
     "images": [
@@ -3707,7 +3979,7 @@ export const products: Product[] = [
   {
     "id": 171,
     "name": "Tapete de Banheiro Hotelaria Antiderrapante 50x70cm Algodão 400g/m² Basic Azul",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 29.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-de-banheiro-50x70cm-algodao-400gm2-piso-antiderrapante-basic-azul-69049fdd469e1-large.jpg?v=1778571983",
     "images": [
@@ -3740,7 +4012,7 @@ export const products: Product[] = [
   {
     "id": 172,
     "name": "Tapete Ultra Absorvente 60x40cm Soft Antiderrapante 100% Poliéster Rosa",
-    "price": 19.0,
+    "price": 19,
     "compareAtPrice": 55.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/tapete-ultra-absorvente-60x40cm-soft-antiderrapante-100-poliester-rosa-697a5468d3544-large.jpg?v=1778571990",
     "images": [
@@ -3762,12 +4034,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosa",
+    "variantGroup": "ultra-60x40"
   },
   {
     "id": 173,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Flannel Bariloche Cinza",
-    "price": 59.0,
+    "price": 59,
     "compareAtPrice": 79.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-decorativas-para-sofa-45x45cm-flannel-bariloche-cinza-66632a3f14e6b-large.jpg?v=1778571997",
     "images": [
@@ -3810,12 +4084,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Flannel Cinza",
+    "variantGroup": "bariloche-45x45"
   },
   {
     "id": 174,
     "name": "Kit 4 Capas De Almofadas Decorativas para Sofá 45x45cm Micro Percal 300 Fios Aveline Rosê",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 106.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-4-capas-de-almofadas-45x45cm-micro-percal-300-fios-aveline-rose-6572ff687f911-large.jpg?v=1778572004",
     "images": [
@@ -3858,12 +4134,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosê",
+    "variantGroup": "aveline-300f-45x45"
   },
   {
     "id": 175,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Munique Cinza/Rosê",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-cinzarose-641ac8de6a4f7-large.jpg?v=1778618735",
     "images": [
@@ -3906,12 +4184,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza/Rosê",
+    "variantGroup": "munique-4p"
   },
   {
     "id": 176,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Branco",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-branco-648c609e92d53-large.jpg?v=1778618749",
     "images": [
@@ -3954,12 +4234,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Branco",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 177,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Cinza",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinza-648c609f434ab-large.jpg?v=1778618766",
     "images": [
@@ -4002,12 +4284,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 178,
     "name": "Jogo De Banho 2 Peças 430g/M² Capri Toalhas Banhão 100% Algodão Off White",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-off-white-667ecedc449a3-large.jpg?v=1778618779",
     "images": [
@@ -4050,12 +4334,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Off White",
+    "variantGroup": "capri-2p"
   },
   {
     "id": 179,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Munique Verde/Rosê",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 199.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-munique-100-algodao-verderose-641ac8df7478f-large.jpg?v=1778618787",
     "images": [
@@ -4098,12 +4384,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Verde/Rosê",
+    "variantGroup": "munique-4p"
   },
   {
     "id": 180,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Cinza/Rosê",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-cinzarose-648c60a00909d-large.jpg?v=1778618794",
     "images": [
@@ -4146,19 +4434,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza/Rosê",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 181,
     "name": "Jogo De Banho 2 Peças 430g/M² Capri Toalhas Banhão 100% Algodão Azul Encantado",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-azul-encantado-667ecf30e8c29-large.jpg?v=1778618800",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-azul-encantado-667ecf30e8c29-large.jpg?v=1778618800",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-azul-encantado-667ecf3090db5-large.jpg?v=1778618800"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 233,
     "category": "Toalhas",
     "slug": "jogo-de-banho-2-pecas-430g-m-capri-toalhas-banhao-100-algodao-azul-encantado",
@@ -4194,19 +4484,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Azul Encantado",
+    "variantGroup": "capri-2p"
   },
   {
     "id": 182,
     "name": "Jogo De Banho 2 Peças 430g/M² Capri Toalhas Banhão 100% Algodão Verde Sutil",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-verde-sutil-667ecf21d719a-large.jpg?v=1778618808",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-verde-sutil-667ecf21d719a-large.jpg?v=1778618808",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-verde-sutil-667ecf22ba31a-large.jpg?v=1778618808"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 13,
     "category": "Toalhas",
     "slug": "jogo-de-banho-2-pecas-430g-m-capri-toalhas-banhao-100-algodao-verde-sutil",
@@ -4242,19 +4534,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Verde Sutil",
+    "variantGroup": "capri-2p"
   },
   {
     "id": 183,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Verde",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-verde-648c60a230a6a-large.jpg?v=1778618816",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-verde-648c60a230a6a-large.jpg?v=1778618816",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-verde-648c60a231dca-large.jpg?v=1778618816"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 137,
     "category": "Toalhas",
     "slug": "jogo-de-banho-5-pecas-100-algodao-430g-m-comfort-verde",
@@ -4290,12 +4584,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Verde",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 184,
     "name": "Jogo De Banho 2 Peças 430g/M² Capri Toalhas Banhão 100% Algodão Rosa Romã",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-100-algodao-rosa-roma-667ed16cc48f0-large.jpg?v=1778618821",
     "images": [
@@ -4343,7 +4639,7 @@ export const products: Product[] = [
   {
     "id": 185,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Rosê/Verde",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-roseverde-648c60a16edee-large.jpg?v=1778618826",
     "images": [
@@ -4386,12 +4682,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosê/Verde",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 186,
     "name": "Jogo De Banho 2 Peças 430g/M² Capri Toalhas Banhão 100% Algodão Cinza Névoa",
-    "price": 79.0,
+    "price": 79,
     "compareAtPrice": 109.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-2-pecas-430gm2-capri-toalhas-banhao-100-algodao-cinza-nevoa-681bb33809d7b-large.jpg?v=1778618834",
     "images": [
@@ -4434,12 +4732,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza Névoa",
+    "variantGroup": "capri-2p"
   },
   {
     "id": 187,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Marinho",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-marinho-6604795c4e4dd-large.jpg?v=1778618842",
     "images": [
@@ -4482,12 +4782,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Marinho",
+    "variantGroup": "hortencia-4p"
   },
   {
     "id": 188,
     "name": "Jogo De Banho 5 Peças 100% Algodão 430g/M² Comfort Rosê",
-    "price": 167.0,
+    "price": 167,
     "compareAtPrice": 279.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-5-pcs-comfort-100-algodao-rose-648c60a0b6137-large.jpg?v=1778618850",
     "images": [
@@ -4530,12 +4832,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosê",
+    "variantGroup": "comfort-5p"
   },
   {
     "id": 189,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Pérola/Bambu",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-toalhas-banhao-100-algodao-perolabambu-682b0eb8bdd03-large.jpg?v=1778618855",
     "images": [
@@ -4578,12 +4882,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Pérola/Bambu",
+    "variantGroup": "hortencia-4p"
   },
   {
     "id": 190,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Rosê",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-370gm2-hortencia-100-algodao-rose-66047984bd7c3-large.jpg?v=1778618868",
     "images": [
@@ -4626,19 +4932,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosê",
+    "variantGroup": "hortencia-4p"
   },
   {
     "id": 191,
     "name": "Jogo De Banho 4 Peças 100% Algodão 370g/M² Toalhas Banhão Hortência Verde Água",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 219.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-100-algodao-370gm2-toalhas-banhao-hortencia-verde-agua-699cb3e5e965b-large.png?v=1778618874",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-100-algodao-370gm2-toalhas-banhao-hortencia-verde-agua-699cb3e5e965b-large.png?v=1778618874",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-banho-4-pecas-100-algodao-370gm2-toalhas-banhao-hortencia-verde-agua-699cb3e633895-large.jpg?v=1778618874"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 175,
     "category": "Toalhas",
     "slug": "jogo-de-banho-4-pecas-100-algodao-370g-m-toalhas-banhao-hortencia-verde-agua",
@@ -4674,12 +4982,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Verde Água",
+    "variantGroup": "hortencia-4p"
   },
   {
     "id": 192,
     "name": "Jogo de Lençol Queen 4 Peças Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 239.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-branco-618561a8b1a64-large_fb193465-f215-4667-8816-e1618107c17b.jpg?v=1778625598",
     "images": [
@@ -4722,19 +5032,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Ponto Palito Branco",
+    "variantGroup": "imperial-queen-4p-400f"
   },
   {
     "id": 193,
     "name": "Jogo de Lençol Queen 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Rose",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-rose-67eeccaa8e38c-large_9d5a441a-6572-402a-9493-c7536d238fd1.jpg?v=1778625604",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-rose-67eeccaa8e38c-large_9d5a441a-6572-402a-9493-c7536d238fd1.jpg?v=1778625604",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-rose-67eeccaa9fcd5-large_0bb72ebf-41be-4c94-89a1-bf76480a1e53.jpg?v=1778625604"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 193,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-rose-1",
@@ -4770,12 +5082,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Rose",
+    "variantGroup": "napoli-queen-4p-300f"
   },
   {
     "id": 194,
     "name": "Jogo de Lençol Queen 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Fendi",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-fendi-67eecc90ccdec-large_307f0b57-6348-40f2-9bff-2809916e47ab.jpg?v=1778625610",
     "images": [
@@ -4818,12 +5132,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Fendi",
+    "variantGroup": "napoli-queen-4p-300f"
   },
   {
     "id": 195,
     "name": "Jogo de Lençol Queen 4 Peças Percal 400 Fios Imperial Ponto Palito Cinza",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 239.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-cinza-618561d3de4c5-large_2fe6ead2-fe63-4373-94ac-d0d55c32a34f.jpg?v=1778625615",
     "images": [
@@ -4866,19 +5182,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Ponto Palito Cinza",
+    "variantGroup": "imperial-queen-4p-400f"
   },
   {
     "id": 196,
     "name": "Jogo de Lençol Queen 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Cinza",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eecbddea0af-large_237b2101-d44f-446c-92f3-bc5dc9f36072.jpg?v=1778625626",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eecbddea0af-large_237b2101-d44f-446c-92f3-bc5dc9f36072.jpg?v=1778625626",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eecbdccb4b1-large_9cc6702b-3106-4d9a-9d43-9ab9bf20b3a7.jpg?v=1778625626"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 91,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-1",
@@ -4914,12 +5232,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Cinza",
+    "variantGroup": "napoli-queen-4p-300f"
   },
   {
     "id": 197,
     "name": "Jogo de Lençol Casal 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Rose",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-rose-67eecb8b6b2e1-large_8afa96f2-50a4-4de4-a590-bc127d681297.jpg?v=1778625631",
     "images": [
@@ -4962,12 +5282,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Rose",
+    "variantGroup": "napoli-casal-4p-300f"
   },
   {
     "id": 198,
     "name": "Jogo de Lençol Casal 4 Peças Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-4pcs-branco-61855f790961c-large_d120c092-06e7-4450-a265-3623ca963110.jpg?v=1778625636",
     "images": [
@@ -5015,7 +5337,7 @@ export const products: Product[] = [
   {
     "id": 199,
     "name": "Par de Fronhas 50x70cm Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 39.0,
+    "price": 39,
     "compareAtPrice": 57.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/par-de-fronhas-2-fronhas-percal-400-fios-ponto-palito-branco-6185697a77021-large_8b815e88-9e5a-49be-ada9-43cd163057ed.jpg?v=1778625643",
     "images": [
@@ -5062,7 +5384,7 @@ export const products: Product[] = [
   {
     "id": 200,
     "name": "Jogo de Lençol Solteiro 3 Peças Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 89.0,
+    "price": 89,
     "compareAtPrice": 149.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-solteiro-3pcs-branco-61855caa12a8c-large_b1494bc5-952a-4e14-8939-ce833257d691.jpg?v=1778625648",
     "images": [
@@ -5110,14 +5432,14 @@ export const products: Product[] = [
   {
     "id": 201,
     "name": "Jogo de Lençol Queen 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Azul",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-67efd13b676c0-large_40164f3b-e3f4-49fe-b687-3e625303e66c.jpg?v=1778625653",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-67efd13b676c0-large_40164f3b-e3f4-49fe-b687-3e625303e66c.jpg?v=1778625653",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-67efd13a81875-large_66382e13-f576-46a4-87bb-77bf5d4f1f90.jpg?v=1778625653"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 121,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-1",
@@ -5153,12 +5475,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Azul",
+    "variantGroup": "napoli-queen-4p-300f"
   },
   {
     "id": 202,
     "name": "Jogo de Lençol Casal 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Fendi",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-fendi-67eecaf8bfbd3-large_fae4f4e6-e391-4ed6-90e1-cca39ac0c0a5.jpg?v=1778625661",
     "images": [
@@ -5201,19 +5525,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Fendi",
+    "variantGroup": "napoli-casal-4p-300f"
   },
   {
     "id": 203,
     "name": "Jogo de Lençol Queen 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Branco",
-    "price": 119.0,
+    "price": 119,
     "compareAtPrice": 209.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-67eecbb724795-large_10e60b8b-07eb-4ac8-8080-1f24f84dc586.jpg?v=1778625667",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-67eecbb724795-large_10e60b8b-07eb-4ac8-8080-1f24f84dc586.jpg?v=1778625667",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-67eecbb72e7e7-large_f59feecb-f14c-47ca-8157-fd1005c47d56.jpg?v=1778625667"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 35,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-1",
@@ -5249,19 +5575,21 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Lese Branco",
+    "variantGroup": "napoli-queen-4p-300f"
   },
   {
     "id": 204,
     "name": "Jogo de Lençol Casal 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Cinza",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eeca61143d1-large_a20c6ee7-dffa-4598-bfbf-ecf214b1c15d.jpg?v=1778625672",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eeca61143d1-large_a20c6ee7-dffa-4598-bfbf-ecf214b1c15d.jpg?v=1778625672",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-67eeca61cf962-large_840c080b-abd7-4728-a246-e0bf6c490be4.jpg?v=1778625672"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 31,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-cinza-1",
@@ -5298,30 +5626,34 @@ export const products: Product[] = [
         "date": "Compra verificada",
         "photo": "https://cdn.yampi.io/rocket/uploads/reviews/lindacasa/69daf80407c87.jpg"
       }
-    ]
+    ],
+    "variantLabel": "Lese Cinza",
+    "variantGroup": "napoli-casal-4p-300f"
   },
   {
     "id": 205,
     "name": "Jogo de Lençol Casal 3 Peças Percal 400 Fios Imperial Ponto Palito Cinza",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 139.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-3-pecas-cinza-61856015e10e6-large_ff863030-8f57-4a8b-bce6-ed1d016810b6.jpg?v=1778625677",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-3-pecas-cinza-61856015e10e6-large_ff863030-8f57-4a8b-bce6-ed1d016810b6.jpg?v=1778625677",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-3-pecas-cinza-61856015e59ec-large_e7532e02-d201-4f4c-ac33-d3abdcdbf5da.jpg?v=1778625677"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 71,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-casal-3-pecas-percal-400-fios-imperial-ponto-palito-cinza-1",
     "description": "O tom que resolve o quarto sem precisar de mais nada",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Cinza",
+    "variantGroup": "imperial-casal-3p-400f"
   },
   {
     "id": 206,
     "name": "Jogo de Lençol Casal 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Azul",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-67efd1227ea8a-large_ad53787a-e777-4af9-9620-302f3acc9795.jpg?v=1778625683",
     "images": [
@@ -5334,30 +5666,34 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-azul-1",
     "description": "Cama posta com a delicadeza do lese bordado inglês",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Lese Azul",
+    "variantGroup": "napoli-casal-4p-300f"
   },
   {
     "id": 207,
     "name": "Jogo de Lençol Queen 4 Peças Percal 400 Fios Imperial Ponto Palito Palha",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 239.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-palha-618561bdcf194-large_69e56abb-b03d-4a82-9c31-413d45fff5d1.jpg?v=1778625690",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-palha-618561bdcf194-large_69e56abb-b03d-4a82-9c31-413d45fff5d1.jpg?v=1778625690",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-palha-618561bdd44da-large_3ccbcef9-b9da-47a7-9ba0-5d8f78b9fc9f.jpg?v=1778625690"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 79,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-queen-4-pecas-percal-400-fios-imperial-ponto-palito-palha-1",
     "description": "Tom natural que traz calma sem monotonia",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Palha",
+    "variantGroup": "imperial-queen-4p-400f"
   },
   {
     "id": 208,
     "name": "Par de Fronhas Charme Percal 300 Fios 50x70 com Aba Americana Branco",
-    "price": 29.0,
+    "price": 29,
     "compareAtPrice": 47.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/par-de-fronhas-charme-percal-300-fios-70x50-com-aba-americana-branco-614882120a4df-large_b377c7b0-e7c4-41a1-b258-a0cfe92bad12.jpg?v=1778625698",
     "images": [
@@ -5375,7 +5711,7 @@ export const products: Product[] = [
   {
     "id": 209,
     "name": "Jogo de Lençol Solteiro 2 Peças Percal 400 Fios Imperial Ponto Palito Cinza",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-solteiro-2pcs-cinza-61855d31b69bb-large_195df9dc-d6e6-4671-8034-996c4c8a4117.jpg?v=1778625703",
     "images": [
@@ -5388,12 +5724,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-400-fios-imperial-ponto-palito-cinza-1",
     "description": "O tom que resolve o quarto sem precisar de mais nada",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Cinza",
+    "variantGroup": "imperial-solteiro-2p-400f"
   },
   {
     "id": 210,
     "name": "Jogo de Lençol Casal 3 Peças Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 139.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-3-pecas-branco-61855ff41ffe7-large_e4666fbd-3ea1-45de-b48f-a0299be0fabd.jpg?v=1778625708",
     "images": [
@@ -5406,12 +5744,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-percal-400-fios-imperial-ponto-palito-branco-1",
     "description": "A base que nunca erra e dura anos na decoração",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Branco",
+    "variantGroup": "imperial-casal-3p-400f"
   },
   {
     "id": 211,
     "name": "Jogo de Lençol Queen 4 Peças Percal 400 Fios Imperial Ponto Palito Dublin",
-    "price": 129.0,
+    "price": 129,
     "compareAtPrice": 239.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-queen-4pcs-dublin-61e5b8a66a2ca-large_6cad49e8-7c76-4135-aeef-7b96a89a2c66.jpg?v=1778625714",
     "images": [
@@ -5424,12 +5764,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-queen-4-pecas-percal-400-fios-imperial-ponto-palito-dublin-1",
     "description": "O cinza-verde que ninguém mais tem",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Dublin",
+    "variantGroup": "imperial-queen-4p-400f"
   },
   {
     "id": 212,
     "name": "Jogo de Lençol Casal 3 Peças Percal 400 Fios Imperial Ponto Palito Palha",
-    "price": 69.0,
+    "price": 69,
     "compareAtPrice": 139.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-cama-casal-3-pecas-palha-6185600a9dd23-large_09c91bc8-6b5f-40fe-97ac-a6d4551a01e2.jpg?v=1778625721",
     "images": [
@@ -5442,12 +5784,14 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-3-pecas-percal-400-fios-imperial-ponto-palito-palha-1",
     "description": "Tom natural que traz calma sem monotonia",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Palha",
+    "variantGroup": "imperial-casal-3p-400f"
   },
   {
     "id": 213,
     "name": "Jogo de Lençol Casal 4 Peças Napoli Percal 300 Fios Lese Bordado Inglês Branco",
-    "price": 99.0,
+    "price": 99,
     "compareAtPrice": 179.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-67eeca09c7538-large_daf2ae22-d1f1-4cd0-9fe1-13883242bdbb.jpg?v=1778625726",
     "images": [
@@ -5460,30 +5804,34 @@ export const products: Product[] = [
     "slug": "jogo-de-lencol-casal-4-pecas-napoli-percal-300-fios-lese-bordado-ingles-branco-1",
     "description": "Cama posta com a delicadeza do lese bordado inglês",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Lese Branco",
+    "variantGroup": "napoli-casal-4p-300f"
   },
   {
     "id": 214,
     "name": "Jogo de Lençol Solteiro 2 Peças Percal 400 Fios Imperial Ponto Palito Branco",
-    "price": 49.0,
+    "price": 49,
     "compareAtPrice": 99.99,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-solteiro-2pcs-branco-61855d0410a77-large_10b9bdfd-b7da-4d51-80b4-23b2119478d3.jpg?v=1778625731",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-solteiro-2pcs-branco-61855d0410a77-large_10b9bdfd-b7da-4d51-80b4-23b2119478d3.jpg?v=1778625731",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/jogo-lencol-percal-400-fios-ponto-palito-solteiro-2pcs-branco-61855d04154e0-large_a7a46cc8-8b8c-4bbb-9521-49410e8a6ecb.jpg?v=1778625731"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 151,
     "category": "Jogos de Lençol",
     "slug": "jogo-de-lencol-solteiro-2-pecas-percal-400-fios-imperial-ponto-palito-branco-1",
     "description": "A base que nunca erra e dura anos na decoração",
     "isTest": false,
-    "tags": []
+    "tags": [],
+    "variantLabel": "Ponto Palito Branco",
+    "variantGroup": "imperial-solteiro-2p-400f"
   },
   {
     "id": 215,
     "name": "Protetor de Colchão Sem Ruído Impermeável 100% Algodão 180 Fios Casal Branco",
-    "price": 54.0,
+    "price": 54,
     "compareAtPrice": 104.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/protetor-de-colchao-sem-ruido-impermeavel-100-algodao-180-fios-casal-branco-634ef520515a4-large_f63c21f5-d091-4802-bb07-6843f3747b14.jpg?v=1778625737",
     "images": [
@@ -5544,7 +5892,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "premium-90x2"
   },
   {
     "id": 217,
@@ -5572,12 +5922,14 @@ export const products: Product[] = [
         "date": "Compra verificada",
         "photo": "https://cdn.yampi.io/rocket/uploads/reviews/lindacasa/69efce916f1dd.jpg"
       }
-    ]
+    ],
+    "variantLabel": "Marfim",
+    "variantGroup": "grecia-90x2"
   },
   {
     "id": 218,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Bege",
-    "price": 169.0,
+    "price": 169,
     "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-bege-69b845a5b3910-large.jpg?v=1778626283",
     "images": [
@@ -5591,12 +5943,14 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Bege",
+    "variantGroup": "grecia-70x1"
   },
   {
     "id": 219,
     "name": "Cortina Blackout 100% Vedação Luxor 3,90 x 2,60m Sala Quarto Para Varão 3M Caqui",
-    "price": 179.0,
+    "price": 179,
     "compareAtPrice": 349.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-luxor-390-x-260m-sala-quarto-para-varao-3m-caqui-653fe6af41469-large.jpg?v=1778626288",
     "images": [
@@ -5644,7 +5998,7 @@ export const products: Product[] = [
   {
     "id": 220,
     "name": "Cortina Blackout 100% Vedação Luxor 2,70 x 1,70m Sala Quarto Janela Para Varão 2M Cinza",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 186.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-luxor-270-x-170m-sala-quarto-janela-para-varao-2m-cinza-653fffb7765c3-large.jpg?v=1778626295",
     "images": [
@@ -5687,12 +6041,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "luxor-70x1"
   },
   {
     "id": 221,
     "name": "Cortina Blackout 100% Vedação Luxor 2,70 x 1,70m Sala Quarto Janela Para Varão 2M Marfim",
-    "price": 109.0,
+    "price": 109,
     "compareAtPrice": 186.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-luxor-270-x-170m-sala-quarto-janela-para-varao-2m-marfim-653fedb7c774b-large.jpg?v=1778626300",
     "images": [
@@ -5735,7 +6091,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Marfim",
+    "variantGroup": "luxor-70x1"
   },
   {
     "id": 222,
@@ -5783,7 +6141,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Areia",
+    "variantGroup": "premium-40x2"
   },
   {
     "id": 223,
@@ -5831,7 +6191,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Areia",
+    "variantGroup": "premium-90x2"
   },
   {
     "id": 224,
@@ -5850,7 +6212,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Prata",
+    "variantGroup": "grecia-90x2"
   },
   {
     "id": 225,
@@ -5869,7 +6233,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Bege",
+    "variantGroup": "grecia-90x2"
   },
   {
     "id": 226,
@@ -5888,7 +6254,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Branco",
+    "variantGroup": "grecia-90x2"
   },
   {
     "id": 227,
@@ -5907,7 +6275,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Prata",
+    "variantGroup": "grecia-40x2"
   },
   {
     "id": 228,
@@ -5926,7 +6296,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Bege",
+    "variantGroup": "grecia-40x2"
   },
   {
     "id": 229,
@@ -5945,7 +6317,9 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Marfim",
+    "variantGroup": "grecia-40x2"
   },
   {
     "id": 230,
@@ -5957,19 +6331,21 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-branco-6928a81004746-large.jpg?v=1778626354",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-semi-blackout-440x260m-para-varao-3m-gaze-de-linho-com-voil-grecia-branco-6928a82589c96-large.jpg?v=1778626354"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 163,
     "category": "Cortinas",
     "slug": "cortina-voil-gaze-de-linho-com-forro-tecido-blackout-4-40x2-60m-para-varao-3m-grecia-branco",
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Branco",
+    "variantGroup": "grecia-40x2"
   },
   {
     "id": 231,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Prata",
-    "price": 169.0,
+    "price": 169,
     "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-prata-69b848369a75c-large.jpg?v=1778626359",
     "images": [
@@ -5983,31 +6359,35 @@ export const products: Product[] = [
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Prata",
+    "variantGroup": "grecia-70x1"
   },
   {
     "id": 232,
     "name": "Cortina Voil Gaze de Linho com Forro Tecido Blackout 2,70x1,80m para Varão 2M Grécia Marfim",
-    "price": 169.0,
+    "price": 169,
     "compareAtPrice": 289.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-marfim-69b84820c4497-large.jpg?v=1778626365",
     "images": [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-marfim-69b84820c4497-large.jpg?v=1778626365",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-voil-gaze-de-linho-com-forro-tecido-blackout-270x180m-para-varao-2m-grecia-marfim-69b84820bf826-large.jpg?v=1778626365"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 197,
     "category": "Cortinas",
     "slug": "cortina-voil-gaze-de-linho-com-forro-tecido-blackout-2-70x1-80m-para-varao-2m-grecia-marfim",
     "description": "A Cortina Semi Blackout Gaze de Linho transforma o ambiente com elegância e suavidade. O tecido em gaze de linho oferece textura sofisticada. O efeito semi blackout garante proteção luminosa equilibra...",
     "isTest": false,
     "tags": [],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Marfim",
+    "variantGroup": "grecia-70x1"
   },
   {
     "id": 233,
     "name": "Cortina Blackout 100% Vedação Premium 2,70x1,80m Sala Quarto Varão 2M Cinza",
-    "price": 149.0,
+    "price": 149,
     "compareAtPrice": 239.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-270x180m-sala-quarto-varao-2m-cinza-68cd4c2dde867-large.jpg?v=1778626372",
     "images": [
@@ -6050,12 +6430,14 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "premium-70x1"
   },
   {
     "id": 234,
     "name": "Cortina Blackout 100% Vedação Premium 2,70x1,80m Sala Quarto Varão 2M Areia",
-    "price": 149.0,
+    "price": 149,
     "compareAtPrice": 239.9,
     "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/cortina-blackout-100-vedacao-premium-270x180m-sala-quarto-varao-2m-areia-68cd4c3610e26-large.jpg?v=1778626377",
     "images": [
@@ -6098,7 +6480,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Areia",
+    "variantGroup": "premium-70x1"
   },
   {
     "id": 235,
@@ -6146,7 +6530,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Cinza",
+    "variantGroup": "premium-40x2"
   },
   {
     "id": 236,
@@ -6166,7 +6552,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Fendi/Marfim",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 237,
@@ -6186,7 +6574,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Azul/Branco",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 238,
@@ -6206,7 +6596,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Fendi/Prata",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 239,
@@ -6218,7 +6610,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-roseazul-marinho-6985f3f7852a2-large.jpg?v=1778626590",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-roseazul-marinho-6985f3f68e549-large.jpg?v=1778626590"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 163,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-vitoria-8-pecas-rose-azul-marinho",
@@ -6235,7 +6627,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Rosê/Azul Marinho",
+    "variantGroup": "vitoria-king-8p"
   },
   {
     "id": 240,
@@ -6256,7 +6650,9 @@ export const products: Product[] = [
     "tags": [
       "Kit Cama Posta"
     ],
-    "customerReviews": []
+    "customerReviews": [],
+    "variantLabel": "Branco/Cáqui/Marfim",
+    "variantGroup": "isabelle-king-8p"
   },
   {
     "id": 241,
@@ -6268,7 +6664,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e8af01ff7-large.jpg?v=1778626604",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-brancoroseprata-6967e8aed174f-large.jpg?v=1778626604"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 89,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-serena-10-pecas-percal-300-fios-bordado-ingles-branco-rose-prata",
@@ -6276,7 +6672,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Rosê/Prata",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 242,
@@ -6296,7 +6694,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Rosê/Prata",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 243,
@@ -6316,7 +6716,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Cinza/Prata",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 244,
@@ -6328,7 +6730,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e8f37a292-large.jpg?v=1778626621",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-cinzaazul-6967e8f37d62c-large.jpg?v=1778626621"
     ],
-    "rating": 4.0,
+    "rating": 4,
     "reviews": 73,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-serena-10-pecas-percal-300-fios-bordado-ingles-cinza-azul",
@@ -6336,7 +6738,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Azul",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 245,
@@ -6348,7 +6752,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-dublinbrancoverde-6985f35df27bb-large.jpg?v=1778626629",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-dublinbrancoverde-6985f35d1dea7-large.jpg?v=1778626629"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 101,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-vitoria-8-pecas-dublin-branco-verde",
@@ -6356,7 +6760,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Dublin/Branco/Verde",
+    "variantGroup": "vitoria-king-8p"
   },
   {
     "id": 246,
@@ -6376,7 +6782,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Prata",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 247,
@@ -6388,7 +6796,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e39a17fe61-large.jpg?v=1778626644",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-fendiazul-696e39a1d5db8-large.jpg?v=1778626644"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 35,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-serena-10-pecas-percal-300-fio-bordado-ingles-fendi-azul",
@@ -6405,7 +6813,9 @@ export const products: Product[] = [
         "rating": 5,
         "date": "Compra verificada"
       }
-    ]
+    ],
+    "variantLabel": "Fendi/Azul",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 248,
@@ -6425,7 +6835,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Outono/Bege",
+    "variantGroup": "sabrina-king-8p"
   },
   {
     "id": 249,
@@ -6445,7 +6857,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Rosê/Marfim",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 250,
@@ -6465,7 +6879,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Fendi/Azul Marinho/Marfim",
+    "variantGroup": "isabelle-king-8p"
   },
   {
     "id": 251,
@@ -6485,7 +6901,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Jardim Rosê/Prata",
+    "variantGroup": "sabrina-king-8p"
   },
   {
     "id": 252,
@@ -6505,7 +6923,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Marfim",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 253,
@@ -6517,7 +6937,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancofloral-marsalamarfim-69931eb4296ca-large.jpg?v=1778626684",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-brancofloral-marsalamarfim-69931eb5603e6-large.jpg?v=1778626684"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 95,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-sabrina-8-pecas-branco-floral-marsala-marfim",
@@ -6525,7 +6945,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Floral Marsala/Marfim",
+    "variantGroup": "sabrina-king-8p"
   },
   {
     "id": 254,
@@ -6537,7 +6959,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-cinzarose-6985f3201add3-large.jpg?v=1778626691",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-vitoria-8-pecas-cinzarose-6985f32732a36-large.jpg?v=1778626691"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 227,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-vitoria-8-pecas-cinza-rose",
@@ -6545,7 +6967,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Rosê",
+    "variantGroup": "vitoria-king-8p"
   },
   {
     "id": 255,
@@ -6565,7 +6989,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Azul",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 256,
@@ -6585,7 +7011,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Palha/Vinho/Marfim",
+    "variantGroup": "isabelle-king-8p"
   },
   {
     "id": 257,
@@ -6605,7 +7033,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Branco/Cinza/Marfim",
+    "variantGroup": "serena-king-10p-300f"
   },
   {
     "id": 258,
@@ -6617,7 +7047,7 @@ export const products: Product[] = [
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzaxadrez-verdeprata-6993201beef0f-large.jpg?v=1778626718",
       "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-sabrina-8-pecas-cinzaxadrez-verdeprata-6993201c1a8ac-large.jpg?v=1778626718"
     ],
-    "rating": 5.0,
+    "rating": 5,
     "reviews": 239,
     "category": "Kit Cama Posta King",
     "slug": "kit-cama-posta-king-sabrina-8-pecas-cinza-xadrez-verde-prata",
@@ -6625,7 +7055,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Xadrez Verde/Prata",
+    "variantGroup": "sabrina-king-8p"
   },
   {
     "id": 259,
@@ -6645,7 +7077,9 @@ export const products: Product[] = [
     "isTest": false,
     "tags": [
       "Kit Cama Posta"
-    ]
+    ],
+    "variantLabel": "Cinza/Marfim",
+    "variantGroup": "isabelle-king-8p"
   }
 ];
 
@@ -6718,4 +7152,182 @@ export function getProductsByCollection(slug: string) {
   const col = getCollectionBySlug(slug);
   if (col) return products.filter((p) => productMatchesCollection(p, col));
   return products;
+}
+
+export interface VariantSibling {
+  slug: string;
+  label: string;
+  isCurrent: boolean;
+}
+
+const KNOWN_COLORS = [
+  "azul claro", "azul marinho", "azul encantado", "verde agua",
+  "verde pinho", "verde sutil", "off white", "cinza escuro",
+  "cinza nevoa", "rosa roma", "azul", "verde", "cinza", "rose", "rosa",
+  "branco", "bege", "areia", "taupe", "chumbo", "petroleo", "marinho",
+  "fendi", "prata", "caqui", "mostarda", "grafite", "nude", "grey",
+  "green", "white", "beige", "blush", "neve", "nevoa", "tofu", "vinho",
+  "outono", "ros",
+];
+
+function extractColorFromName(name: string): string | null {
+  const hyphenIdx = name.indexOf(" - ");
+  if (hyphenIdx !== -1) {
+    const after = name.slice(hyphenIdx + 3).trim();
+    if (after && after.length <= 40) return after;
+  }
+  const normalized = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  for (const c of KNOWN_COLORS) {
+    if (normalized.endsWith(" " + c)) {
+      const sliceEnd = name.length - c.length;
+      return name.slice(sliceEnd).trim();
+    }
+  }
+  return null;
+}
+
+function namePrefixWithoutColor(name: string): string | null {
+  const hyphenIdx = name.indexOf(" - ");
+  if (hyphenIdx !== -1) {
+    return name.slice(0, hyphenIdx).trim().toLowerCase();
+  }
+  const normalized = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  for (const c of KNOWN_COLORS) {
+    if (normalized.endsWith(" " + c)) {
+      return normalized.slice(0, normalized.length - c.length - 1).trim();
+    }
+  }
+  return null;
+}
+
+export function getVariantSiblings(slug: string): VariantSibling[] {
+  const current = products.find((p) => p.slug === slug);
+  if (!current) return [];
+
+  if (current.variantGroup) {
+    return products
+      .filter((p) => p.variantGroup === current.variantGroup && p.variantLabel)
+      .map((p) => ({
+        slug: p.slug,
+        label: p.variantLabel as string,
+        isCurrent: p.slug === slug,
+      }));
+  }
+
+  const colorOf = (p: Product) => p.variantLabel || extractColorFromName(p.name);
+  const colorKey = (c: string) =>
+    c.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+  const buildFromCandidates = (candidates: Product[]): VariantSibling[] => {
+    const byColor = new Map<string, { product: Product; label: string }>();
+    for (const p of candidates) {
+      const color = colorOf(p);
+      if (!color) continue;
+      const key = colorKey(color);
+      if (!byColor.has(key)) byColor.set(key, { product: p, label: color });
+      if (p.slug === current.slug) byColor.set(key, { product: p, label: color });
+    }
+    if (byColor.size < 2) return [];
+    return [...byColor.values()].map(({ product, label }) => ({
+      slug: product.slug,
+      label,
+      isCurrent: product.slug === slug,
+    }));
+  };
+
+  // Fallback 1: mesma linha conhecida, qualquer tamanho.
+  const currentLine = detectProductLine(current.name);
+  if (currentLine) {
+    const sameLine = products.filter((p) => detectProductLine(p.name) === currentLine);
+    const result = buildFromCandidates(sameLine);
+    if (result.length > 0) return result;
+  }
+
+  // Fallback 2: mesmo prefixo do nome (com ou sem hífen separando a cor).
+  const currentPrefix = namePrefixWithoutColor(current.name);
+  if (currentPrefix) {
+    const prefixKey = colorKey(currentPrefix);
+    const samePrefix = products.filter((p) => {
+      const pref = namePrefixWithoutColor(p.name);
+      return pref ? colorKey(pref) === prefixKey : false;
+    });
+    const result = buildFromCandidates(samePrefix);
+    if (result.length > 0) return result;
+  }
+
+  return [];
+}
+
+const PRODUCT_LINES = [
+  "roma", "valencia", "veneza", "napoli", "imperial", "serena",
+  "isabelle", "italia", "itália", "pompeia", "paris", "milao", "milão",
+  "monaco", "mônaco", "toscana", "siena", "verona", "florenca", "florença",
+  "sabrina", "vitoria", "vitória", "mona lisa", "aveline", "bariloche",
+  "comfort", "capri", "munique", "hortencia", "hortência",
+  "luxor", "premium", "grecia", "grécia",
+  "poa", "poá", "monica", "mônica", "calvin", "dohler", "charme",
+];
+
+function normalizeForLine(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+}
+
+function detectProductLine(name: string): string | null {
+  const normalized = normalizeForLine(name);
+  for (const line of PRODUCT_LINES) {
+    const target = normalizeForLine(line);
+    if (new RegExp(`\\b${target}\\b`).test(normalized)) return target;
+  }
+  return null;
+}
+
+export interface SizeSibling {
+  size: "Solteiro" | "Casal" | "Queen" | "King";
+  slug: string | null;
+  isCurrent: boolean;
+}
+
+const SIZES: SizeSibling["size"][] = ["Solteiro", "Casal", "King", "Queen"];
+
+export function getSizeSiblings(slug: string): SizeSibling[] {
+  const current = products.find((p) => p.slug === slug);
+  if (!current) return SIZES.map((s) => ({ size: s, slug: null, isCurrent: false }));
+
+  const currentLine = detectProductLine(current.name);
+  const currentNormalized = normalizeForLine(current.name);
+  const currentSizes = SIZES.filter((s) =>
+    new RegExp(`\\b${s.toLowerCase()}\\b`).test(currentNormalized)
+  );
+  if (currentSizes.length === 0) return SIZES.map((s) => ({ size: s, slug: null, isCurrent: false }));
+
+  return SIZES.map((size) => {
+    if (currentSizes.includes(size)) {
+      return { size, slug: current.slug, isCurrent: true };
+    }
+    const sizeRe = new RegExp(`\\b${size.toLowerCase()}\\b`);
+
+    const candidates = products.filter((p) => {
+      if (p.slug === current.slug) return false;
+      const nm = normalizeForLine(p.name);
+      if (!sizeRe.test(nm)) return false;
+      if (currentLine) {
+        const line = detectProductLine(p.name);
+        if (line !== currentLine) return false;
+      } else {
+        if (p.category !== current.category) return false;
+      }
+      return true;
+    });
+
+    if (candidates.length === 0) return { size, slug: null, isCurrent: false };
+
+    const sameColor = current.variantLabel
+      ? candidates.find((c) => c.variantLabel === current.variantLabel)
+      : null;
+    const chosen = sameColor ?? candidates[0];
+    return { size, slug: chosen.slug, isCurrent: false };
+  });
 }
