@@ -8,7 +8,6 @@ import {
   Mail,
   MapPin,
   PackageCheck,
-  RefreshCw,
   Search,
   Trash2,
   Truck,
@@ -116,22 +115,6 @@ const hubs = [
 
 function normalizeCode(value: string) {
   return value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()
-}
-
-function randomLetters(length: number) {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-  return Array.from({ length }, () => {
-    return alphabet[Math.floor(Math.random() * alphabet.length)]
-  }).join("")
-}
-
-function generateTrackingCode() {
-  const prefix = randomLetters(2)
-  const number = String(Math.floor(Math.random() * 1000000000)).padStart(9, "0")
-  const suffix = randomLetters(2)
-
-  return `${prefix}${number}${suffix}`
 }
 
 function hashCode(value: string) {
@@ -524,19 +507,6 @@ export function TrackingSimulator() {
     setCopied(false)
   }
 
-  function generateTestCode() {
-    const code = generateTrackingCode()
-    const nextResult = buildTrackingResult(code, 0)
-
-    setInput(nextResult.displayCode)
-    setResult(nextResult)
-    setOrderLookup(null)
-    setNotice("Código de teste gerado. A linha do tempo vai avançar automaticamente.")
-    setError("")
-    setCopied(false)
-    storeRecentResult(nextResult)
-  }
-
   function clearTrackingCodes() {
     window.localStorage.removeItem(STORAGE_KEY)
     setInput("")
@@ -604,19 +574,11 @@ export function TrackingSimulator() {
             </button>
           </form>
 
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={generateTestCode}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#d4a017]/50 bg-[#fff9ea] px-4 text-xs font-bold uppercase tracking-wide text-[#6f5310] transition hover:border-[#d4a017] hover:bg-[#fff3d1] focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Gerar código de teste
-            </button>
+          <div className="mt-3">
             <button
               type="button"
               onClick={clearTrackingCodes}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#ded6c8] bg-white px-4 text-xs font-bold uppercase tracking-wide text-[#525252] transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-200"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#ded6c8] bg-white px-4 text-xs font-bold uppercase tracking-wide text-[#525252] transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-200"
             >
               <Trash2 className="h-4 w-4" />
               Limpar códigos
