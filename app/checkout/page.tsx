@@ -223,6 +223,9 @@ function CheckoutContent() {
     const PAGOU_SCRIPT = 'https://js.pagou.ai/payments/v3.js';
     let cancelled = false;
 
+    let retryTimer: any = null;
+    let retries = 0;
+
     const init = () => {
       if (cancelled) return;
       const PagouSDK = (window as any).Pagou;
@@ -235,6 +238,17 @@ function CheckoutContent() {
         setCardSdkError('Chave pública da Pagou.ai não configurada.');
         return;
       }
+      // A div #pagou-card-element está dentro de AnimatePresence e pode ainda
+      // não ter sido montada no DOM no primeiro tick. Espera até aparecer.
+      const target = document.getElementById('pagou-card-element');
+      if (!target) {
+        if (retries++ < 40) {
+          retryTimer = setTimeout(init, 50);
+        } else {
+          setCardSdkError('Container do cartão não foi montado a tempo.');
+        }
+        return;
+      }
       try {
         if (typeof PagouSDK.setEnvironment === 'function') {
           PagouSDK.setEnvironment(publicKey.startsWith('pk_test_') ? 'sandbox' : 'production');
@@ -245,7 +259,7 @@ function CheckoutContent() {
           origin: window.location.origin,
         });
         const card = elements.create('card', { theme: 'default' });
-        card.mount('#pagou-card-element');
+        card.mount(target);
         setPagouElements(elements);
         setCardSdkReady(true);
         setCardSdkError(null);
@@ -271,8 +285,9 @@ function CheckoutContent() {
 
     return () => {
       cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
     };
-  }, [payMethod, cardSdkReady]);
+  }, [payMethod, cardSdkReady, currentStep]);
 
   // Address State
   const [cep, setCep] = useState('');
