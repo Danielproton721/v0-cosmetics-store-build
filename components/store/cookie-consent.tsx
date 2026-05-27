@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import { Cookie } from "lucide-react"
 
-const COOKIE_CONSENT_KEY = "confortbem-cookie-consent"
+const COOKIE_CONSENT_KEY = "confortebem-cookie-consent"
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false)

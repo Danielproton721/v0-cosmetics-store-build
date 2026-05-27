@@ -81,8 +81,8 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">8. Trocas e Devoluções</h2>
             <p className="mt-2">
               Aceitamos trocas em caso de produto com defeito de fabricação, divergência com o produto anunciado ou avaria no transporte. O prazo para comunicar a solicitação é de até 30 dias após o recebimento. Para iniciar o processo, entre em contato pelo e-mail{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>.
             </p>
           </div>
@@ -112,8 +112,8 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">12. Contato</h2>
             <p className="mt-2">
               Dúvidas sobre estes Termos de Uso? Entre em contato conosco:{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>
             </p>
           </div>
@@ -124,8 +124,8 @@ export default function TermosDeUsoPage() {
               <strong className="text-[#1a1a1a]">CNPJ:</strong> 64.980.979/0001-94<br />
               <strong className="text-[#1a1a1a]">Sede:</strong> Garça — São Paulo — Brasil<br />
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>
             </p>
           </div>

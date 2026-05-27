@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+import { recordPaymentStatus } from "@/lib/payment-status"
+
 export const dynamic = "force-dynamic"
 
 function getPayloadValue(payload: any, keys: string[]) {
@@ -32,18 +34,20 @@ export async function POST(request: Request) {
     getPayloadValue(payload, ["event", "type", "action", "name"]) ??
     "transaction.updated"
   const transactionId = getPayloadValue(payload, [
-    "id",
     "transactionId",
-    "data.id",
     "data.transactionId",
-    "transaction.id",
+    "data.id",
     "transaction.transactionId",
+    "transaction.id",
+    "id",
   ])
   const status = getPayloadValue(payload, [
     "status",
+    "event_type",
     "data.status",
+    "data.event_type",
     "transaction.status",
-  ])
+  ]) ?? (String(event).toLowerCase().includes("paid") ? "paid" : null)
   const paymentMethod = getPayloadValue(payload, [
     "paymentMethod",
     "data.paymentMethod",
@@ -57,6 +61,16 @@ export async function POST(request: Request) {
     paymentMethod,
     receivedAt: new Date().toISOString(),
   })
+
+  if (transactionId && status) {
+    recordPaymentStatus({
+      event: String(event),
+      transactionId: String(transactionId),
+      status: String(status),
+      paymentMethod: paymentMethod ? String(paymentMethod) : null,
+      updatedAt: new Date().toISOString(),
+    })
+  }
 
   return NextResponse.json({
     ok: true,

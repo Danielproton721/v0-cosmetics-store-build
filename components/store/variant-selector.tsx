@@ -28,6 +28,9 @@ export function VariantSelector({
         {variants.map((variant) => {
           const isSelected = variant.id === selectedId
           const isAvailable = variant.available
+          const discount = variant.compareAtPrice && variant.compareAtPrice > variant.price
+            ? Math.round(((variant.compareAtPrice - variant.price) / variant.compareAtPrice) * 100)
+            : 0
 
           return (
             <button
@@ -52,9 +55,9 @@ export function VariantSelector({
               )}
 
               {/* Discount badge */}
-              {variant.compareAtPrice && isAvailable && (
+              {isAvailable && discount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-[#d4a017] text-[#ffffff] text-[8px] font-bold px-1 py-px rounded-full leading-tight">
-                  {"-" + Math.round(((variant.compareAtPrice - variant.price) / variant.compareAtPrice) * 100) + "%"}
+                  -{discount}%
                 </span>
               )}
             </button>

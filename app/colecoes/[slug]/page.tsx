@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps) {
   const collection = getCollectionBySlug(slug)
   if (!collection) return { title: "Coleção não encontrada" }
   return {
-    title: `${collection.name} | ConfortBem`,
+    title: `${collection.name} | Confortebem`,
     description: collection.description,
   }
 }

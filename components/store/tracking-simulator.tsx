@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useEffect, useMemo, useState } from "react"
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react"
 import {
   CheckCircle2,
   Clock3,
@@ -8,11 +8,13 @@ import {
   Mail,
   MapPin,
   PackageCheck,
+  RefreshCw,
   Search,
+  Trash2,
   Truck,
 } from "lucide-react"
 
-type CarrierId = "correios" | "fedex" | "dhl" | "ups" | "confortbem"
+type CarrierId = "correios" | "fedex" | "dhl" | "ups" | "confortebem"
 
 type TrackingStep = {
   title: string
@@ -27,6 +29,7 @@ type TrackingResult = {
   displayCode: string
   carrierId: CarrierId
   carrierName: string
+  progressIndex: number
   currentStatus: string
   statusDetail: string
   eta: string
@@ -37,32 +40,68 @@ type TrackingResult = {
   steps: TrackingStep[]
 }
 
-const STORAGE_KEY = "confortbem-tracking-cache-v1"
+type OrderLookup = {
+  code: string
+  name: string
+  email: string
+  phone?: string
+  destinationAddress?: string
+  address?: {
+    cep?: string
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    stateUF?: string
+  }
+  savedAt?: string
+}
+
+const STORAGE_KEY = "confortebem-tracking-cache-v1"
+const ORDER_LOOKUP_STORAGE_KEY = "confortebem-order-lookup-v1"
 const MAX_RECENT = 5
+const PROGRESS_UPDATE_SECONDS = 10
+const PROGRESS_UPDATE_INTERVAL_MS = PROGRESS_UPDATE_SECONDS * 1000
 
 const carrierLabels: Record<CarrierId, string> = {
   correios: "Correios",
   fedex: "FedEx",
   dhl: "DHL",
   ups: "UPS",
-  confortbem: "ConfortBem Entregas",
+  confortebem: "Confortebem Entregas",
 }
 
 const statusTitles = [
-  "Pedido registrado",
-  "Em separação",
+  "Pagamento aprovado",
+  "Em preparação",
   "Postagem preparada",
   "Em transporte",
+  "Saiu para entrega",
+  "Tentativa de entrega não efetuada",
+  "Pedido voltando para a base de distribuição",
   "Saiu para entrega",
   "Entregue",
 ]
 
+const LAST_STEP_INDEX = statusTitles.length - 1
+const ATTEMPT_FAILED_STEP_INDEX = 5
+const RETURNING_TO_BASE_STEP_INDEX = 6
+const SECOND_DELIVERY_ATTEMPT_STEP_INDEX = 7
+const HIDDEN_UNTIL_CURRENT_STEP_INDEXES = [
+  ATTEMPT_FAILED_STEP_INDEX,
+  RETURNING_TO_BASE_STEP_INDEX,
+]
+
 const stepDescriptions = [
-  "Pedido confirmado no sistema da loja.",
-  "Itens em conferência no centro de preparo.",
+  "Pagamento aprovado e pedido confirmado no sistema da loja.",
+  "Pedido em preparação no centro de preparo.",
   "Remessa vinculada à transportadora.",
   "Pacote em transferência para a unidade regional.",
   "Entrega em rota para o endereço informado.",
+  "A transportadora não conseguiu concluir a entrega nesta tentativa.",
+  "Pedido retornando para a base de distribuição para uma nova tentativa de entrega.",
+  "Nova tentativa de entrega em rota para o endereço informado.",
   "Entrega finalizada no endereço do pedido.",
 ]
 
@@ -77,6 +116,22 @@ const hubs = [
 
 function normalizeCode(value: string) {
   return value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase()
+}
+
+function randomLetters(length: number) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+  return Array.from({ length }, () => {
+    return alphabet[Math.floor(Math.random() * alphabet.length)]
+  }).join("")
+}
+
+function generateTrackingCode() {
+  const prefix = randomLetters(2)
+  const number = String(Math.floor(Math.random() * 1000000000)).padStart(9, "0")
+  const suffix = randomLetters(2)
+
+  return `${prefix}${number}${suffix}`
 }
 
 function hashCode(value: string) {
@@ -96,12 +151,16 @@ function detectCarrier(code: string): CarrierId {
   if (/^\d{12}$/.test(code)) return "fedex"
   if (/^\d{10}$/.test(code)) return "dhl"
 
-  return "confortbem"
+  return "confortebem"
 }
 
 function formatDisplayCode(code: string, carrierId: CarrierId) {
+  if (/^CB\d{8}\d{6}$/.test(code)) {
+    return `CB-${code.slice(2, 10)}-${code.slice(10)}`
+  }
+
   if (carrierId === "correios") {
-    return `${code.slice(0, 2)} ${code.slice(2, 5)} ${code.slice(5, 8)} ${code.slice(8, 11)} ${code.slice(11)}`
+    return code
   }
 
   if (carrierId === "ups") {
@@ -145,22 +204,64 @@ function getProgressIndex(seed: number) {
   const roll = seed % 100
 
   if (roll < 10) return 1
-  if (roll < 34) return 2
-  if (roll < 78) return 3
-  if (roll < 94) return 4
-  return 5
+  if (roll < 28) return 2
+  if (roll < 56) return 3
+  if (roll < 76) return 4
+  if (roll < 88) return 5
+  if (roll < 96) return 6
+  if (roll < 99) return 7
+  return LAST_STEP_INDEX
 }
 
-function buildTrackingResult(code: string): TrackingResult {
+function clampProgressIndex(value: number) {
+  return Math.max(0, Math.min(LAST_STEP_INDEX, value))
+}
+
+function getProgressIndexFromSteps(steps?: TrackingStep[]) {
+  if (!Array.isArray(steps)) return 0
+
+  const currentIndex = steps.findIndex((step) => step.state === "current")
+  if (currentIndex >= 0) return clampProgressIndex(currentIndex)
+
+  const lastCompleteIndex = steps.reduce((lastIndex, step, index) => {
+    return step.state === "complete" ? index : lastIndex
+  }, -1)
+
+  return clampProgressIndex(lastCompleteIndex >= 0 ? lastCompleteIndex : 0)
+}
+
+function getResultProgressIndex(result: Pick<TrackingResult, "progressIndex" | "steps">) {
+  if (Number.isFinite(result.progressIndex)) {
+    return clampProgressIndex(result.progressIndex)
+  }
+
+  return getProgressIndexFromSteps(result.steps)
+}
+
+function shouldShowTimelineStep(index: number, currentProgressIndex: number) {
+  if (HIDDEN_UNTIL_CURRENT_STEP_INDEXES.includes(index)) {
+    return currentProgressIndex >= index
+  }
+
+  if (index === SECOND_DELIVERY_ATTEMPT_STEP_INDEX) {
+    return currentProgressIndex >= RETURNING_TO_BASE_STEP_INDEX
+  }
+
+  return true
+}
+
+function buildTrackingResult(code: string, progressIndex?: number): TrackingResult {
   const carrierId = detectCarrier(code)
   const seed = hashCode(code)
-  const currentIndex = getProgressIndex(seed)
+  const defaultProgressIndex = code.startsWith("CB") ? 0 : getProgressIndex(seed)
+  const currentIndex = clampProgressIndex(progressIndex ?? defaultProgressIndex)
+  const isDelivered = currentIndex >= LAST_STEP_INDEX
   const origin = hubs[seed % hubs.length]
   const transferHub = hubs[(seed + 2) % hubs.length]
   const baseDate = new Date()
   baseDate.setDate(baseDate.getDate() - currentIndex - 1)
 
-  const deliveryDate = dateAt(baseDate, 6, seed)
+  const deliveryDate = dateAt(baseDate, LAST_STEP_INDEX, seed)
   const updatedDate = dateAt(baseDate, currentIndex, seed)
 
   const locations = [
@@ -170,11 +271,14 @@ function buildTrackingResult(code: string): TrackingResult {
     `Unidade de tratamento - ${transferHub}`,
     "Rota de entrega local",
     "Endereço informado no checkout",
+    "Base de distribuição local",
+    "Rota de entrega local",
+    "Endereço informado no checkout",
   ]
 
   const steps = statusTitles.map((title, index) => {
-    const isComplete = index < currentIndex
-    const isCurrent = index === currentIndex
+    const isComplete = index < currentIndex || (isDelivered && index === LAST_STEP_INDEX)
+    const isCurrent = !isDelivered && index === currentIndex
     const state: TrackingStep["state"] = isCurrent
       ? "current"
       : isComplete
@@ -200,10 +304,11 @@ function buildTrackingResult(code: string): TrackingResult {
     displayCode: formatDisplayCode(code, carrierId),
     carrierId,
     carrierName: carrierLabels[carrierId],
+    progressIndex: currentIndex,
     currentStatus: statusTitles[currentIndex],
     statusDetail: stepDescriptions[currentIndex],
     eta:
-      currentIndex >= 5
+      currentIndex >= LAST_STEP_INDEX
         ? `Entregue em ${formatDate(deliveryDate)}`
         : `Previsto até ${formatDate(deliveryDate)}`,
     origin,
@@ -224,11 +329,59 @@ function readRecentResults() {
     const parsed = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
 
-    return parsed.filter((item): item is TrackingResult => {
-      return Boolean(item?.code && item?.steps && item?.carrierName)
-    })
+    return parsed
+      .map((item) => {
+        const code = normalizeCode(String(item?.code ?? ""))
+        if (code.length < 6) return null
+
+        const progressIndex = Number.isFinite(item?.progressIndex)
+          ? Number(item.progressIndex)
+          : getProgressIndexFromSteps(item?.steps)
+
+        return buildTrackingResult(code, progressIndex)
+      })
+      .filter((item): item is TrackingResult => Boolean(item))
   } catch {
     return []
+  }
+}
+
+function readOrderLookup(code: string) {
+  if (typeof window === "undefined") return null
+
+  try {
+    const raw = window.localStorage.getItem(ORDER_LOOKUP_STORAGE_KEY)
+    if (!raw) return null
+
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return null
+
+    const normalizedCode = normalizeCode(code)
+    const order = parsed.find((item) => normalizeCode(item?.code ?? "") === normalizedCode)
+
+    if (!order?.name) return null
+
+    return {
+      code: String(order.code ?? code),
+      name: String(order.name),
+      email: String(order.email ?? ""),
+      phone: order.phone ? String(order.phone) : undefined,
+      destinationAddress: order.destinationAddress ? String(order.destinationAddress) : undefined,
+      address: order.address && typeof order.address === "object"
+        ? {
+            cep: order.address.cep ? String(order.address.cep) : undefined,
+            street: order.address.street ? String(order.address.street) : undefined,
+            number: order.address.number ? String(order.address.number) : undefined,
+            complement: order.address.complement ? String(order.address.complement) : undefined,
+            neighborhood: order.address.neighborhood ? String(order.address.neighborhood) : undefined,
+            city: order.address.city ? String(order.address.city) : undefined,
+            stateUF: order.address.stateUF ? String(order.address.stateUF) : undefined,
+          }
+        : undefined,
+      savedAt: order.savedAt ? String(order.savedAt) : undefined,
+    } satisfies OrderLookup
+  } catch {
+    return null
   }
 }
 
@@ -240,6 +393,7 @@ export function TrackingSimulator() {
   const [input, setInput] = useState("")
   const [result, setResult] = useState<TrackingResult | null>(null)
   const [recentResults, setRecentResults] = useState<TrackingResult[]>([])
+  const [orderLookup, setOrderLookup] = useState<OrderLookup | null>(null)
   const [error, setError] = useState("")
   const [notice, setNotice] = useState("")
   const [copied, setCopied] = useState(false)
@@ -251,8 +405,9 @@ export function TrackingSimulator() {
     )
 
     if (codeFromUrl.length >= 6) {
+      const orderFromUrl = readOrderLookup(codeFromUrl)
       const cachedResult = storedResults.find((item) => item.code === codeFromUrl)
-      const nextResult = cachedResult ?? buildTrackingResult(codeFromUrl)
+      const nextResult = cachedResult ?? buildTrackingResult(codeFromUrl, orderFromUrl ? 0 : undefined)
       const nextResults = cachedResult
         ? storedResults
         : [
@@ -262,6 +417,7 @@ export function TrackingSimulator() {
 
       setInput(codeFromUrl)
       setResult(nextResult)
+      setOrderLookup(orderFromUrl)
       setNotice(cachedResult ? "Consulta recuperada deste navegador." : "Pedido carregado pelo código da compra.")
       setRecentResults(nextResults)
       saveRecentResults(nextResults)
@@ -272,16 +428,49 @@ export function TrackingSimulator() {
   }, [])
 
   const normalizedInput = useMemo(() => normalizeCode(input), [input])
+  const currentProgressIndex = result ? getResultProgressIndex(result) : 0
+  const trackingFinished = Boolean(result && currentProgressIndex >= LAST_STEP_INDEX)
+  const visibleSteps = useMemo(() => {
+    if (!result) return []
 
-  function persistResult(nextResult: TrackingResult) {
-    const nextResults = [
-      nextResult,
-      ...recentResults.filter((item) => item.code !== nextResult.code),
-    ].slice(0, MAX_RECENT)
+    return result.steps
+      .map((step, index) => ({ step, index }))
+      .filter(({ index }) => shouldShowTimelineStep(index, currentProgressIndex))
+  }, [currentProgressIndex, result])
 
-    setRecentResults(nextResults)
-    saveRecentResults(nextResults)
-  }
+  const storeRecentResult = useCallback((nextResult: TrackingResult) => {
+    setRecentResults((currentResults) => {
+      const nextResults = [
+        nextResult,
+        ...currentResults.filter((item) => item.code !== nextResult.code),
+      ].slice(0, MAX_RECENT)
+
+      saveRecentResults(nextResults)
+      return nextResults
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!result) return
+
+    const progressIndex = getResultProgressIndex(result)
+    if (progressIndex >= LAST_STEP_INDEX) return
+
+    const timer = window.setTimeout(() => {
+      const nextResult = buildTrackingResult(result.code, progressIndex + 1)
+
+      setResult(nextResult)
+      storeRecentResult(nextResult)
+      setCopied(false)
+      setNotice(
+        nextResult.progressIndex >= LAST_STEP_INDEX
+          ? "Pedido marcado como entregue automaticamente."
+          : `Atualização automática: ${nextResult.currentStatus}.`
+      )
+    }, PROGRESS_UPDATE_INTERVAL_MS)
+
+    return () => window.clearTimeout(timer)
+  }, [result, storeRecentResult])
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -295,7 +484,10 @@ export function TrackingSimulator() {
 
     setError("")
 
+    const matchedOrder = readOrderLookup(normalizedInput)
+
     if (result?.code === normalizedInput) {
+      setOrderLookup(matchedOrder)
       setNotice("Essa consulta já está aberta neste navegador.")
       return
     }
@@ -303,14 +495,16 @@ export function TrackingSimulator() {
     const cachedResult = recentResults.find((item) => item.code === normalizedInput)
     if (cachedResult) {
       setResult(cachedResult)
+      setOrderLookup(matchedOrder)
       setNotice("Consulta recuperada deste navegador.")
       return
     }
 
-    const nextResult = buildTrackingResult(normalizedInput)
+    const nextResult = buildTrackingResult(normalizedInput, matchedOrder ? 0 : undefined)
     setResult(nextResult)
+    setOrderLookup(matchedOrder)
     setNotice("")
-    persistResult(nextResult)
+    storeRecentResult(nextResult)
   }
 
   async function copyCode() {
@@ -324,7 +518,32 @@ export function TrackingSimulator() {
   function openRecent(item: TrackingResult) {
     setInput(item.code)
     setResult(item)
+    setOrderLookup(readOrderLookup(item.code))
     setNotice("Consulta recente carregada.")
+    setError("")
+    setCopied(false)
+  }
+
+  function generateTestCode() {
+    const code = generateTrackingCode()
+    const nextResult = buildTrackingResult(code, 0)
+
+    setInput(nextResult.displayCode)
+    setResult(nextResult)
+    setOrderLookup(null)
+    setNotice("Código de teste gerado. A linha do tempo vai avançar automaticamente.")
+    setError("")
+    setCopied(false)
+    storeRecentResult(nextResult)
+  }
+
+  function clearTrackingCodes() {
+    window.localStorage.removeItem(STORAGE_KEY)
+    setInput("")
+    setResult(null)
+    setRecentResults([])
+    setOrderLookup(null)
+    setNotice("Códigos de rastreio limpos deste navegador.")
     setError("")
     setCopied(false)
   }
@@ -349,7 +568,7 @@ export function TrackingSimulator() {
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
               <Truck className="h-5 w-5 text-[#d4a017]" />
               <p className="mt-3 font-bold text-[#1a1a1a]">Transportadoras</p>
-              <p className="mt-1 leading-6">Correios, FedEx, DHL, UPS e pedidos ConfortBem.</p>
+              <p className="mt-1 leading-6">Correios, FedEx, DHL, UPS e pedidos Confortebem.</p>
             </div>
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
               <PackageCheck className="h-5 w-5 text-[#d4a017]" />
@@ -369,7 +588,7 @@ export function TrackingSimulator() {
                 id="tracking-code"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Ex: AB123456789BR ou CB123456"
+                placeholder="Ex: AN067003514DC"
                 className="mt-2 h-12 w-full rounded-lg border border-[#ded6c8] bg-[#fbfaf7] px-4 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] outline-none transition focus:border-[#d4a017] focus:bg-white focus:ring-2 focus:ring-[#d4a017]/20"
                 autoComplete="off"
               />
@@ -384,6 +603,25 @@ export function TrackingSimulator() {
               Consultar
             </button>
           </form>
+
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={generateTestCode}
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#d4a017]/50 bg-[#fff9ea] px-4 text-xs font-bold uppercase tracking-wide text-[#6f5310] transition hover:border-[#d4a017] hover:bg-[#fff3d1] focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Gerar código de teste
+            </button>
+            <button
+              type="button"
+              onClick={clearTrackingCodes}
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-[#ded6c8] bg-white px-4 text-xs font-bold uppercase tracking-wide text-[#525252] transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-200"
+            >
+              <Trash2 className="h-4 w-4" />
+              Limpar códigos
+            </button>
+          </div>
 
           {notice && (
             <div className="mt-4 rounded-lg border border-[#eadfca] bg-[#fff9ea] px-4 py-3 text-sm font-semibold text-[#6f5310]">
@@ -408,6 +646,11 @@ export function TrackingSimulator() {
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#d4a017]">
                         {result.carrierName}
                       </p>
+                      {orderLookup?.name && (
+                        <p className="mt-2 text-sm font-bold text-[#1a1a1a]">
+                          Pedido de <span className="text-[#b8860b]">{orderLookup.name}</span>
+                        </p>
+                      )}
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <h2 className="text-xl font-bold text-[#1a1a1a]">{result.currentStatus}</h2>
                         <span className="rounded-full bg-[#d4a017] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
@@ -415,6 +658,11 @@ export function TrackingSimulator() {
                         </span>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[#525252]">{result.statusDetail}</p>
+                      <p className="mt-3 rounded-lg border border-[#eadfca] bg-white px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#6f5310]">
+                        {trackingFinished
+                          ? "Linha do tempo concluída"
+                          : `Atualiza automaticamente a cada ${PROGRESS_UPDATE_SECONDS} segundos`}
+                      </p>
                     </div>
 
                     <button
@@ -428,17 +676,22 @@ export function TrackingSimulator() {
                     </button>
                   </div>
 
-                  <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     <InfoBlock icon={<Clock3 className="h-4 w-4" />} label="Previsão" value={result.eta} />
                     <InfoBlock icon={<MapPin className="h-4 w-4" />} label="Origem" value={result.origin} />
+                    <InfoBlock
+                      icon={<Truck className="h-4 w-4" />}
+                      label="Destino"
+                      value={orderLookup?.destinationAddress || result.destination}
+                    />
                     <InfoBlock icon={<CheckCircle2 className="h-4 w-4" />} label="Atualização" value={result.updatedAt} />
                   </div>
                 </div>
 
                 <div className="rounded-lg border border-[#eadfca] bg-white p-4">
                   <ol className="space-y-0">
-                    {result.steps.map((step, index) => (
-                      <li key={step.title} className="grid grid-cols-[32px_1fr] gap-3">
+                    {visibleSteps.map(({ step, index }, visualIndex) => (
+                      <li key={`${index}-${step.title}`} className="grid grid-cols-[32px_1fr] gap-3">
                         <div className="flex flex-col items-center">
                           <span
                             className={`flex h-8 w-8 items-center justify-center rounded-full border text-white ${
@@ -455,7 +708,7 @@ export function TrackingSimulator() {
                               <CheckCircle2 className="h-4 w-4" />
                             )}
                           </span>
-                          {index < result.steps.length - 1 && (
+                          {visualIndex < visibleSteps.length - 1 && (
                             <span className="h-12 w-px bg-[#ded6c8]" aria-hidden="true" />
                           )}
                         </div>
@@ -467,7 +720,11 @@ export function TrackingSimulator() {
                               {step.date}
                             </p>
                           </div>
-                          <p className="mt-1 text-sm leading-6 text-[#525252]">{step.description}</p>
+                          <p className="mt-1 text-sm leading-6 text-[#525252]">
+                            {index === 0 && orderLookup?.name
+                              ? `Pagamento do pedido de ${orderLookup.name} aprovado no sistema da loja.`
+                              : step.description}
+                          </p>
                           <p className="mt-1 text-xs font-semibold text-[#8a8174]">{step.location}</p>
                         </div>
                       </li>
@@ -504,7 +761,7 @@ export function TrackingSimulator() {
               <p className="mt-1 text-sm text-white/70">Envie o número do pedido para o atendimento.</p>
             </div>
             <a
-              href="mailto:contato@confortbem.com.br"
+              href="mailto:contato@confortebem.com.br"
               className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-white px-4 text-sm font-bold text-[#1a1a1a] transition hover:bg-[#f3ead8]"
             >
               <Mail className="h-4 w-4" />

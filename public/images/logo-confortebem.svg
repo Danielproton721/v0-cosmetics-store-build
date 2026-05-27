@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1558 1028" role="img" aria-labelledby="title desc">
+  <title id="title">Confortebem</title>
+  <desc id="desc">Logo Confortebem com símbolo de casa, poltrona e o texto O conforto que abraça sua casa.</desc>
+  <defs>
+    <linearGradient id="taupe" x1="430" x2="1090" y1="120" y2="595" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b7866"/>
+      <stop offset="0.52" stop-color="#d3bdab"/>
+      <stop offset="1" stop-color="#a8927d"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="110" x2="980" y1="650" y2="845" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#001836"/>
+      <stop offset="1" stop-color="#0b2345"/>
+    </linearGradient>
+  </defs>
+
+  <g fill="none" stroke="url(#taupe)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M536 493V330c0-16 6-31 18-42l177-160c26-24 66-24 92 0l179 160c12 11 18 26 18 42v162" stroke-width="21"/>
+    <path d="M498 477c42 79 146 129 279 129s237-50 279-129" stroke-width="17"/>
+  </g>
+
+  <g fill="url(#taupe)">
+    <path d="M782 382c0-28 8-62 25-77 27-24 120-25 146-1 15 14 18 52 17 89-35-11-86-12-122-1-28 8-49 27-62 53-4-18-5-39-4-63Z" opacity=".82"/>
+    <path d="M694 428c16-20 53-27 91-21-15 19-22 44-25 78-20-12-42-18-70-16-2-15-1-29 4-41Z" opacity=".7"/>
+    <path d="M747 466c10-23 34-36 72-40 34-4 72 0 103 6 36 8 50 29 43 67l-8 45c-2 12-9 23-20 29-52 29-150 30-197 2-18-11-25-29-21-52l6-31c2-10 11-19 22-26Z" opacity=".86"/>
+    <path d="M933 410c18-13 50-16 74-6 19 8 28 26 24 50l-18 100c-4 22-19 38-41 44l-50 13c-14 4-27-8-24-23l24-132c4-20 3-34 11-46Z" opacity=".9"/>
+    <path d="M724 603h33l-22 78h-43l32-78Z" opacity=".55"/>
+    <path d="M918 607h34l18 74h-42l-10-74Z" opacity=".5"/>
+
+    <rect x="582" y="475" width="148" height="20" rx="10" opacity=".92"/>
+    <path d="M608 494h30l-31 78h-42l43-78Z" opacity=".82"/>
+    <path d="M684 494h30l43 78h-42l-31-78Z" opacity=".7"/>
+    <path d="M618 416c0-20 16-37 36-37s36 17 36 37v37c0 13-11 24-24 24h-24c-13 0-24-11-24-24v-37Z" opacity=".75"/>
+    <path d="M654 379c-22-32-27-70-15-96 22 19 30 60 15 96Z" opacity=".82"/>
+    <path d="M671 374c14-41 43-70 72-78 0 33-28 69-72 78Z" opacity=".85"/>
+    <path d="M661 409c35-24 73-30 100-18-22 26-65 34-100 18Z" opacity=".72"/>
+    <path d="M636 405c-31-11-54-36-58-62 30 4 57 32 58 62Z" opacity=".78"/>
+    <path d="M646 407c7-53 30-93 77-122l9 13c-44 26-64 63-70 111l-16-2Z" opacity=".86"/>
+  </g>
+
+  <g font-family="Georgia, 'Times New Roman', serif" font-weight="400">
+    <text x="120" y="805" fill="url(#navy)" font-size="170" letter-spacing="0">conforte</text>
+    <text x="1026" y="805" fill="#aa927d" font-size="170" letter-spacing="0">bem</text>
+  </g>
+
+  <g fill="none" stroke="#aa927d" stroke-width="5" stroke-linecap="round">
+    <path d="M142 890h100"/>
+    <path d="M1306 890h100"/>
+  </g>
+  <text x="286" y="901" fill="#071c3c" font-family="Arial, Helvetica, sans-serif" font-size="37" letter-spacing="15">
+    O CONFORTO QUE ABRAÇA SUA CASA
+  </text>
+</svg>

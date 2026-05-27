@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = getProductBySlug(slug)
 
   if (!product) {
-    return { title: "Produto não encontrado | ConfortBem" }
+    return { title: "Produto não encontrado | Confortebem" }
   }
 
   return {
-    title: `${product.name} | ConfortBem`,
+    title: `${product.name} | Confortebem`,
     description: product.description,
   }
 }

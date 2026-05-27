@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown } from "lucide-react"
+import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { collections, products } from "@/lib/products"
 
@@ -124,7 +124,7 @@ export function Header() {
         className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm transition-transform duration-300 ${headerVisible ? "translate-y-0" : "-translate-y-full"
           }`}
       >
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="relative flex h-[70px] items-center justify-between px-4 py-3">
           <button
             onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
             className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
@@ -133,13 +133,21 @@ export function Header() {
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <div className="flex-1 text-center">
+          <div className="absolute left-1/2 top-1/2 text-center -translate-x-1/2 -translate-y-1/2">
             <Link href="/" className="inline-block">
-              <img src="/images/logo.png" alt="ConfortBem" className="h-16 -my-3 mx-auto object-contain" />
+              <img src="/images/logo-confortebem.svg" alt="Confortebem" className="h-16 -my-3 mx-auto object-contain" />
             </Link>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="ml-auto flex items-center gap-1">
+            <Link
+              href="/rastreio-de-pedido"
+              className="hidden min-[420px]:inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#d4a017]/35 bg-[#fff8e5] px-3 text-[11px] font-black uppercase tracking-[0.08em] text-[#1a1a1a] transition-all hover:border-[#d4a017] hover:bg-[#d4a017] hover:text-white"
+              aria-label="Rastrear pedido"
+            >
+              <Truck size={15} />
+              <span className="hidden sm:inline">Rastreio</span>
+            </Link>
             <button
               onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))}
               className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
@@ -246,6 +254,15 @@ export function Header() {
               >
                 <Home size={18} className="text-[#d4a017]" />
                 Inicio
+              </Link>
+
+              <Link
+                href="/rastreio-de-pedido"
+                onClick={closeMenu}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-sm font-medium"
+              >
+                <Truck size={18} className="text-[#d4a017]" />
+                Rastreio de Pedido
               </Link>
 
               <div>

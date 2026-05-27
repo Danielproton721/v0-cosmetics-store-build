@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Sobre Nós | ConfortBem",
-  description: "Conheça a ConfortBem e o cuidado por trás dos nossos enxovais.",
+  title: "Sobre Nós | Confortebem",
+  description: "Conheça a Confortebem e o cuidado por trás dos nossos enxovais.",
 }
 
 export default function SobreNosPage() {
@@ -16,7 +16,7 @@ export default function SobreNosPage() {
         <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#f5f0e8] shadow-sm md:aspect-[21/9]">
           <img
             src="/images/fachadaia.png"
-            alt="Fachada da loja ConfortBem"
+            alt="Fachada da loja Confortebem"
             className="h-full w-full object-cover"
           />
         </div>
@@ -30,7 +30,7 @@ export default function SobreNosPage() {
           </h1>
           <div className="mt-6 space-y-4 text-sm leading-7 text-[#525252] md:text-base">
             <p>
-              A ConfortBem nasceu para ajudar você a montar uma casa mais
+              A Confortebem nasceu para ajudar você a montar uma casa mais
               confortável, bonita e acolhedora, com produtos escolhidos para o uso
               real do dia a dia.
             </p>

@@ -1,10 +1,52 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, useCallback } from 'react';
-import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck } from 'lucide-react';
+import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck, Upload, FileCheck2, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { useCart } from '@/lib/cart-context';
+
+const ORDER_LOOKUP_STORAGE_KEY = 'confortebem-order-lookup-v1';
+
+type PixProof = {
+  name: string;
+  size: number;
+  type: string;
+  attachedAt: string;
+};
+
+type ShippingOptionId = 'free' | 'express';
+
+const SHIPPING_OPTIONS: Array<{
+  id: ShippingOptionId;
+  name: string;
+  eta: string;
+  price: number;
+  description: string;
+}> = [
+  {
+    id: 'free',
+    name: 'Frete grátis',
+    eta: '7 dias',
+    price: 0,
+    description: 'Entrega econômica para todo o Brasil.',
+  },
+  {
+    id: 'express',
+    name: 'Frete expresso',
+    eta: 'Entrega prioritária',
+    price: 14.9,
+    description: 'Envio mais rápido com separação prioritária.',
+  },
+];
+
+function randomOrderLetters(length: number) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  return Array.from({ length }, () => {
+    return alphabet[Math.floor(Math.random() * alphabet.length)];
+  }).join('');
+}
 
 function buildOrderCode(source: string) {
   let hash = 0;
@@ -13,15 +55,88 @@ function buildOrderCode(source: string) {
     hash |= 0;
   }
 
-  const now = new Date();
-  const stamp = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, '0'),
-    String(now.getDate()).padStart(2, '0'),
-  ].join('');
-  const suffix = String(Math.abs(hash) % 1000000).padStart(6, '0');
+  const prefix = randomOrderLetters(2);
+  const numberSeed = Math.abs(hash + Date.now());
+  const number = String(numberSeed % 1000000000).padStart(9, '0');
+  const suffix = randomOrderLetters(2);
 
-  return `CB-${stamp}-${suffix}`;
+  return `${prefix}${number}${suffix}`;
+}
+
+function buildDestinationAddress(address: {
+  cep: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  stateUF: string;
+}) {
+  const streetLine = [address.street.trim(), address.number.trim()].filter(Boolean).join(', ');
+  const fullStreetLine = [streetLine, address.complement.trim()].filter(Boolean).join(' - ');
+  const cityState = [address.city.trim(), address.stateUF.trim().toUpperCase()].filter(Boolean).join(' - ');
+  const regionLine = [address.neighborhood.trim(), cityState].filter(Boolean).join(', ');
+  const cepLine = address.cep.trim() ? `CEP ${address.cep.trim()}` : '';
+
+  return [fullStreetLine, regionLine, cepLine].filter(Boolean).join(' - ');
+}
+
+function saveOrderLookup(order: {
+  code: string;
+  name: string;
+  email: string;
+  phone: string;
+  destinationAddress: string;
+  address: {
+    cep: string;
+    street: string;
+    number: string;
+    complement: string;
+    neighborhood: string;
+    city: string;
+    stateUF: string;
+  };
+}) {
+  try {
+    const raw = window.localStorage.getItem(ORDER_LOOKUP_STORAGE_KEY);
+    const current = raw ? JSON.parse(raw) : [];
+    const orders = Array.isArray(current) ? current : [];
+    const nextOrders = [
+      {
+        ...order,
+        savedAt: new Date().toISOString(),
+      },
+      ...orders.filter((item: any) => item?.code !== order.code),
+    ].slice(0, 10);
+
+    window.localStorage.setItem(ORDER_LOOKUP_STORAGE_KEY, JSON.stringify(nextOrders));
+  } catch {
+    // O rastreio continua funcionando pelo codigo mesmo se o navegador bloquear storage.
+  }
+}
+
+function savePixProofLookup(code: string, proof: PixProof) {
+  try {
+    const raw = window.localStorage.getItem(ORDER_LOOKUP_STORAGE_KEY);
+    const current = raw ? JSON.parse(raw) : [];
+    const orders = Array.isArray(current) ? current : [];
+    const nextOrders = orders.map((item: any) => {
+      if (item?.code !== code) return item;
+      return {
+        ...item,
+        pixProof: proof,
+      };
+    });
+
+    window.localStorage.setItem(ORDER_LOOKUP_STORAGE_KEY, JSON.stringify(nextOrders));
+  } catch {
+    // O comprovante e opcional; o fluxo de pagamento nao depende desse anexo.
+  }
+}
+
+function formatProofSize(size: number) {
+  if (size < 1024 * 1024) return `${Math.max(1, Math.round(size / 1024))} KB`;
+  return `${(size / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
 }
 
 function CheckoutContent() {
@@ -73,11 +188,14 @@ function CheckoutContent() {
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
+  const [shippingOptionId, setShippingOptionId] = useState<ShippingOptionId>('free');
 
   // PIX State
   const [isGeneratingPix, setIsGeneratingPix] = useState(false);
-  const [pixData, setPixData] = useState<{ qrCode: string, qrCodeImage: string | null, expiresAt?: string } | null>(null);
+  const [pixData, setPixData] = useState<{ qrCode: string, qrCodeImage: string | null, expiresAt?: string, txid?: string | null } | null>(null);
   const [pixError, setPixError] = useState<string | null>(null);
+  const [pixProof, setPixProof] = useState<PixProof | null>(null);
+  const [pixProofError, setPixProofError] = useState<string | null>(null);
 
   // Card State
   const [cardNumber, setCardNumber] = useState('');
@@ -92,6 +210,10 @@ function CheckoutContent() {
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState('');
+
+  const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
+  const shippingPrice = selectedShipping.price;
+  const checkoutTotal = totalPrice + shippingPrice;
 
   // Load Pagou.ai tokenization script
   useEffect(() => {
@@ -120,6 +242,37 @@ function CheckoutContent() {
     const base = "w-full px-4 py-3 border rounded-xl bg-gray-50 focus:bg-white focus:outline-none transition-all ";
     return base + (errors[field] ? "border-red-500 focus:ring-2 focus:ring-red-500/30" : "border-gray-200 focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017]");
   };
+
+  const issueOrderCode = useCallback((source: string) => {
+    const code = buildOrderCode(source);
+    setOrderCode(code);
+    saveOrderLookup({
+      code,
+      name: name.trim(),
+      email: email.trim(),
+      phone,
+      destinationAddress: buildDestinationAddress({
+        cep,
+        street,
+        number,
+        complement,
+        neighborhood,
+        city,
+        stateUF,
+      }),
+      address: {
+        cep: cep.trim(),
+        street: street.trim(),
+        number: number.trim(),
+        complement: complement.trim(),
+        neighborhood: neighborhood.trim(),
+        city: city.trim(),
+        stateUF: stateUF.trim().toUpperCase(),
+      },
+    });
+    if (pixProof) savePixProofLookup(code, pixProof);
+    return code;
+  }, [cep, city, complement, email, name, neighborhood, number, phone, pixProof, stateUF, street]);
 
   const createCheckoutSession = useCallback(async () => {
     const res = await fetch('/api/checkout/session', {
@@ -204,6 +357,7 @@ function CheckoutContent() {
 
   const handlePixSubmit = async () => {
     setPixError(null);
+    setPixProofError(null);
     setIsGeneratingPix(true);
     
     try {
@@ -213,7 +367,7 @@ function CheckoutContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          value: totalPrice,
+          value: checkoutTotal,
           phone,
           cpf,
           name,
@@ -231,7 +385,8 @@ function CheckoutContent() {
       setPixData({
         qrCode: data.qrCode,
         qrCodeImage: data.qrCodeImage,
-        expiresAt: data.expiresAt
+        expiresAt: data.expiresAt,
+        txid: data.txid ?? null,
       });
 
       setTimeout(() => {
@@ -244,11 +399,75 @@ function CheckoutContent() {
     }
   };
 
+  useEffect(() => {
+    if (!pixData?.txid || paymentConfirmed || orderCode) return;
+
+    let stopped = false;
+
+    const checkPixPayment = async () => {
+      try {
+        const response = await fetch(`/api/payment/status?txid=${encodeURIComponent(pixData.txid || '')}`, {
+          cache: 'no-store',
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!stopped && response.ok && data?.paid) {
+          issueOrderCode(pixData.txid || `${email}|${cpf}|pix|paid|${Date.now()}`);
+          setPaymentConfirmed(true);
+        }
+      } catch {
+        // O PIX continua aguardando a confirmacao do gateway.
+      }
+    };
+
+    checkPixPayment();
+    const interval = window.setInterval(checkPixPayment, 5000);
+
+    return () => {
+      stopped = true;
+      window.clearInterval(interval);
+    };
+  }, [cpf, email, issueOrderCode, orderCode, paymentConfirmed, pixData?.txid]);
+
   const handleCopyPix = () => {
     if (pixData?.qrCode) {
       navigator.clipboard.writeText(pixData.qrCode);
       alert('Código PIX copiado!');
     }
+  };
+
+  const handlePixProofChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setPixProofError(null);
+
+    if (!file) return;
+
+    const isAllowedType = file.type.startsWith('image/') || file.type === 'application/pdf';
+    const maxSize = 10 * 1024 * 1024;
+
+    if (!isAllowedType) {
+      setPixProof(null);
+      setPixProofError('Envie uma imagem ou PDF do comprovante.');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > maxSize) {
+      setPixProof(null);
+      setPixProofError('O arquivo precisa ter no maximo 10 MB.');
+      event.target.value = '';
+      return;
+    }
+
+    const proof = {
+      name: file.name,
+      size: file.size,
+      type: file.type || 'arquivo',
+      attachedAt: new Date().toISOString(),
+    };
+
+    setPixProof(proof);
+    if (orderCode) savePixProofLookup(orderCode, proof);
   };
 
   const handleCardSubmit = async () => {
@@ -289,7 +508,7 @@ function CheckoutContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          value: totalPrice,
+          value: checkoutTotal,
           name, email, cpf, phone,
           installments: cardInstallments,
           title: 'Combo Enxoval',
@@ -309,7 +528,7 @@ function CheckoutContent() {
 
       setCardResult({ approved: data.approved, message: data.message });
       if (data.approved) {
-        setOrderCode(buildOrderCode(data.txid || `${email}|${cpf}|${Date.now()}`));
+        issueOrderCode(data.txid || `${email}|${cpf}|card|paid|${Date.now()}`);
         setTimeout(() => setPaymentConfirmed(true), 1500);
       }
     } catch (err: any) {
@@ -483,7 +702,7 @@ function CheckoutContent() {
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500 font-medium">Total pago</span>
               <span className="font-black text-emerald-600 text-lg">
-                R$ {totalPrice.toFixed(2).replace('.', ',')}
+                R$ {checkoutTotal.toFixed(2).replace('.', ',')}
               </span>
             </div>
             {payMethod === 'card' && parseInt(cardInstallments) > 1 && (
@@ -492,7 +711,7 @@ function CheckoutContent() {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-500 font-medium">Parcelas</span>
                   <span className="font-bold text-gray-800">
-                    {cardInstallments}x de R$ {(totalPrice / parseInt(cardInstallments)).toFixed(2).replace('.', ',')}
+                    {cardInstallments}x de R$ {(checkoutTotal / parseInt(cardInstallments)).toFixed(2).replace('.', ',')}
                   </span>
                 </div>
               </>
@@ -513,7 +732,7 @@ function CheckoutContent() {
           >
             <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <p className="text-xs text-emerald-800 font-medium text-left leading-relaxed">
-              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na ConfortBem; o rastreio da transportadora será enviado quando o pedido for despachado.
+              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na Confortebem; o rastreio da transportadora será enviado quando o pedido for despachado.
             </p>
           </motion.div>
 
@@ -525,7 +744,7 @@ function CheckoutContent() {
             className="flex items-center justify-center gap-2 text-xs text-gray-400 font-bold mb-8"
           >
             <ShieldCheck className="w-4 h-4" />
-            Garantia de Satisfação ConfortBem
+            Garantia de Satisfação Confortebem
           </motion.div>
 
           {/* Botão voltar para loja */}
@@ -611,11 +830,11 @@ function CheckoutContent() {
       {/* Topbar */}
       <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2">
-          <img src="/images/logo.png" alt="ConfortBem" className="h-8 object-contain" />
+          <img src="/images/logo-confortebem.svg" alt="Confortebem" className="h-8 object-contain" />
           <span className="text-[10px] text-[#d4a017] tracking-widest uppercase font-semibold">Checkout</span>
         </div>
-        <div className="flex items-center gap-1.5 text-gray-500 font-bold text-xs sm:text-sm">
-          <ShieldCheck className="w-4 h-4 text-[#d4a017]" /> Pagamento 100% seguro
+        <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs sm:text-sm">
+          <ShieldCheck className="w-4 h-4 text-emerald-600" /> Pagamento 100% seguro
         </div>
       </div>
 
@@ -741,6 +960,49 @@ function CheckoutContent() {
                     <input type="text" value={stateUF} onChange={e => setStateUF(e.target.value)} placeholder="UF" className={getInputClass('stateUF')} />
                   </div>
                 </div>
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                  <p className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-500">Opções de frete</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {SHIPPING_OPTIONS.map((option) => {
+                      const isSelected = shippingOptionId === option.id;
+
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() => setShippingOptionId(option.id)}
+                          className={`rounded-xl border-2 bg-white p-4 text-left transition-all ${
+                            isSelected
+                              ? 'border-[#d4a017] shadow-[0_10px_25px_rgba(212,160,23,0.14)]'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <span className="flex items-center justify-between gap-3">
+                            <span className="flex items-center gap-2 text-sm font-black text-gray-900">
+                              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                                option.price === 0
+                                  ? 'bg-emerald-50 text-emerald-600'
+                                  : 'bg-[#fff8e5] text-[#d4a017]'
+                              }`}>
+                                <Truck className="h-4 w-4" />
+                              </span>
+                              {option.name}
+                            </span>
+                            <span className={`rounded-full px-2.5 py-1 text-xs font-black ${
+                              option.price === 0
+                                ? 'bg-emerald-50 text-emerald-700'
+                                : 'bg-[#fff8e5] text-[#9a7100]'
+                            }`}>
+                              {option.price === 0 ? 'Grátis' : `R$ ${option.price.toFixed(2).replace('.', ',')}`}
+                            </span>
+                          </span>
+                          <span className="mt-2 block text-xs font-bold uppercase tracking-wide text-gray-500">{option.eta}</span>
+                          <span className="mt-1 block text-xs leading-relaxed text-gray-500">{option.description}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
                 {formError && <motion.p initial={{opacity:0}} animate={{opacity:1}} className="text-red-500 text-sm font-bold text-center pt-2">{formError}</motion.p>}
                 <button onClick={handleNextToStep3} className="w-full mt-2 py-3.5 bg-[#1a1a1a] text-white font-bold rounded-xl hover:bg-black transition-all">
                   Ir para Pagamento
@@ -817,6 +1079,43 @@ function CheckoutContent() {
                         <div className="flex items-center gap-2 w-full max-w-sm">
                           <input type="text" readOnly value={pixData.qrCode} className="flex-1 bg-white text-gray-700 text-xs p-3 rounded-xl border border-gray-200 font-mono focus:outline-none" />
                           <button onClick={handleCopyPix} className="bg-[#d4a017] text-[#1a1a1a] text-xs font-bold px-4 py-3 rounded-xl hover:bg-[#d4a017]/80 transition-colors">COPIAR</button>
+                        </div>
+                        <div className="mt-4 w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-3 text-left shadow-sm">
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff8e5] text-[#d4a017]">
+                              {pixProof ? <FileCheck2 className="h-5 w-5" /> : <Upload className="h-5 w-5" />}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs font-black uppercase tracking-[0.14em] text-gray-500">Comprovante opcional</p>
+                              <p className="mt-1 text-xs font-medium leading-relaxed text-gray-500">
+                                Se quiser, anexe uma imagem ou PDF do comprovante. A confirmação do PIX continua automática.
+                              </p>
+                            </div>
+                          </div>
+
+                          <label className="mt-3 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#d4a017]/60 bg-[#fffdf5] px-4 py-3 text-xs font-black uppercase tracking-wide text-[#1a1a1a] transition hover:border-[#d4a017] hover:bg-[#fff8e5]">
+                            <Upload className="h-4 w-4 text-[#d4a017]" />
+                            {pixProof ? 'Trocar comprovante' : 'Enviar comprovante'}
+                            <input
+                              type="file"
+                              accept="image/*,application/pdf"
+                              className="sr-only"
+                              onChange={handlePixProofChange}
+                            />
+                          </label>
+
+                          {pixProof && (
+                            <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
+                              Comprovante anexado: <span className="break-words">{pixProof.name}</span>
+                              <span className="ml-1 font-semibold text-emerald-600">({formatProofSize(pixProof.size)})</span>
+                            </div>
+                          )}
+
+                          {pixProofError && (
+                            <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
+                              {pixProofError}
+                            </div>
+                          )}
                         </div>
                       </>
                     )}
@@ -896,7 +1195,7 @@ function CheckoutContent() {
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
                           >
                             {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => (
-                              <option key={n} value={n}>{n}x de R$ {(totalPrice / n).toFixed(2).replace('.', ',')} {n === 1 ? '(sem juros)' : ''}</option>
+                              <option key={n} value={n}>{n}x de R$ {(checkoutTotal / n).toFixed(2).replace('.', ',')} {n === 1 ? '(sem juros)' : ''}</option>
                             ))}
                           </select>
                         </div>
@@ -906,6 +1205,18 @@ function CheckoutContent() {
                   </motion.div>
                 )}
                 </AnimatePresence>
+
+                {pixData && payMethod === 'pix' && !paymentConfirmed && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-5 w-full rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-left"
+                  >
+                    <p className="text-xs font-bold leading-relaxed text-amber-800">
+                      O código do pedido será liberado automaticamente depois que o pagamento for confirmado.
+                    </p>
+                  </motion.div>
+                )}
               </motion.div>
             )}
             </AnimatePresence>
@@ -961,11 +1272,17 @@ function CheckoutContent() {
               </div>
               <div className="flex justify-between text-sm font-bold text-gray-500">
                 <span>Frete</span>
-                <span className="text-emerald-600">Grátis</span>
+                <span className={shippingPrice === 0 ? 'text-emerald-600' : 'text-gray-800'}>
+                  {shippingPrice === 0 ? 'Grátis' : `R$ ${shippingPrice.toFixed(2).replace('.', ',')}`}
+                </span>
+              </div>
+              <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-400">
+                <span>{selectedShipping.name}</span>
+                <span>{selectedShipping.eta}</span>
               </div>
               <div className="border-t border-gray-100 pt-3 flex justify-between items-baseline text-gray-800 font-black">
                 <span>Total</span>
-                <span className="text-lg">R$ {totalPrice.toFixed(2).replace('.', ',')}</span>
+                <span className="text-lg">R$ {checkoutTotal.toFixed(2).replace('.', ',')}</span>
               </div>
             </div>
 
@@ -994,7 +1311,7 @@ function CheckoutContent() {
 
             <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2.5 text-xs font-bold text-emerald-800">
               <ShieldCheck className="w-5 h-5 shrink-0 text-emerald-600" />
-              Garantia de Satisfação ConfortBem — Qualidade garantida.
+              Ambiente de pagamento 100% seguro e criptografado.
             </div>
 
             {/* Payment Icons */}

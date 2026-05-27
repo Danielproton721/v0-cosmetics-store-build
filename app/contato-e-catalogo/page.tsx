@@ -39,10 +39,10 @@ export default function ContatoECatalogoPage() {
                 Para pedidos, trocas, dúvidas gerais e solicitação de catálogo.
               </p>
               <a
-                href="mailto:contato@confortbem.com.br"
+                href="mailto:contato@confortebem.com.br"
                 className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
               >
-                contato@confortbem.com.br
+                contato@confortebem.com.br
               </a>
               <p className="mt-1 text-xs text-[#b0b0b0]">Respondemos em até 24h úteis</p>
             </div>
@@ -77,8 +77,8 @@ export default function ContatoECatalogoPage() {
           <h2 className="text-base font-bold text-[#1a1a1a]">Solicitar Catálogo Completo</h2>
           <p className="mt-2 text-sm leading-7 text-[#525252]">
             Quer conhecer toda a nossa linha de produtos? Envie um e-mail para{" "}
-            <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-              contato@confortbem.com.br
+            <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+              contato@confortebem.com.br
             </a>{" "}
             com o assunto <strong>"Solicitar Catálogo"</strong> e nossa equipe enviará o PDF completo
             com todas as coleções, referências e tabela de preços para revenda.
@@ -99,8 +99,8 @@ export default function ContatoECatalogoPage() {
             <p><strong className="text-[#1a1a1a]">Localização:</strong> Garça — São Paulo — Brasil</p>
             <p>
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>
             </p>
           </div>

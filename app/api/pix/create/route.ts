@@ -9,6 +9,27 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function getPublicNotifyUrl(request: Request) {
+  const url = new URL(request.url);
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
+  const hostname = host.split(":")[0]?.toLowerCase() || "";
+
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname.startsWith("192.168.") ||
+    hostname.startsWith("10.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
+  ) {
+    return null;
+  }
+
+  const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  const proto = forwardedProto === "http" || forwardedProto === "https" ? forwardedProto : url.protocol.replace(":", "");
+  return `${proto === "http" ? "https" : proto}://${host}/api/webhooks/pagouai`;
+}
+
 export async function POST(request: Request) {
   const ip = getClientIp(request);
   const ipLimit = consumeRateLimit(`pix:create:ip:${ip}`, 8, 10 * 60 * 1000);
@@ -76,47 +97,42 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Erro interno: Gateway não configurado." }, { status: 500 });
   }
 
-  const secretKey = rawKey.trim();
-  const baseUrl = "https://api.conta.pagou.ai";
-  const endpoint = `${baseUrl}/v1/transactions`;
-
-  // expirationDate v1 aceita formato AAAA-MM-DD
-  const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
+  const secretKey = rawKey.trim().replace(/^Bearer\s+/i, "");
+  const endpoint = "https://api.pagou.ai/v2/transactions";
+  const externalRef = `order_${Date.now()}_${hashRateLimitValue(`${cpfDigits}|${amountCents}|${email}`).slice(0, 8)}`;
 
   const payload = {
+    external_ref: externalRef,
     amount: amountCents,
-    paymentMethod: "pix",
-    customer: {
+    currency: "BRL",
+    method: "pix",
+    buyer: {
       name: name.trim(),
       email: email.trim(),
-      phone: phoneDigits,
       document: {
         number: cpfDigits,
-        type: "cpf",
+        type: "CPF",
       },
     },
-    items: [
+    products: [
       {
-        title: title || "Combo Enxoval",
+        name: title || "Combo Enxoval",
         quantity: 1,
-        unitPrice: amountCents,
-        tangible: false,
+        price: amountCents,
       },
     ],
-    pix: {
-      expirationDate,
-    },
   };
 
-  const basicAuth = Buffer.from(`${secretKey}:x`).toString("base64");
+  const notifyUrl = getPublicNotifyUrl(request);
+  if (notifyUrl) {
+    Object.assign(payload, { notify_url: notifyUrl });
+  }
 
   try {
     const upstream = await fetch(endpoint, {
       method: "POST",
       headers: {
-        authorization: `Basic ${basicAuth}`,
+        authorization: `Bearer ${secretKey}`,
         "content-type": "application/json",
         accept: "application/json",
       },
@@ -133,7 +149,12 @@ export async function POST(request: Request) {
     }
 
     if (!upstream.ok) {
-      const detail = data?.message || data?.error || data?.errors?.[0]?.message || "Erro desconhecido no gateway";
+      const detail =
+        data?.detail ||
+        data?.message ||
+        data?.error ||
+        data?.errors?.[0]?.message ||
+        "Erro desconhecido no gateway";
       console.error(`[PIX API] Erro no Gateway (${upstream.status}):`, detail);
       
       if (upstream.status === 401) {
@@ -146,8 +167,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const pix = data?.pix ?? {};
-    const qrCode = pix.qrcode ?? pix.qrCode ?? "";
+    const transaction = data?.data ?? data ?? {};
+    const pix = transaction?.pix ?? {};
+    const qrCode = pix.qr_code ?? pix.qrcode ?? pix.qrCode ?? "";
     const qrCodeImage = pix.url ?? null;
 
     if (!qrCode) {
@@ -155,13 +177,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Gateway não retornou QR Code PIX válido." }, { status: 502 });
     }
 
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    const expiresAt = pix.expiration_date ?? new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
     return NextResponse.json({
-      txid: data?.id ?? data?.transactionId ?? null,
+      txid: transaction?.id ?? data?.id ?? data?.transactionId ?? null,
       qrCode,
       qrCodeImage,
       expiresAt,
+      status: transaction?.status ?? "pending",
       amount: value,
       phone: phoneDigits,
     });

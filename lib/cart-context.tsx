@@ -1,12 +1,14 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
+import { getProductBySlug } from "@/lib/products"
 
 export interface CartItem {
   id: number
   slug: string
   name: string
   price: number
+  compareAtPrice?: number
   image: string
   quantity: number
 }
@@ -16,6 +18,8 @@ interface CartContextType {
   isOpen: boolean
   totalItems: number
   totalPrice: number
+  totalCompareAtPrice: number
+  totalSavings: number
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void
   removeItem: (id: number) => void
   updateQuantity: (id: number, quantity: number) => void
@@ -29,11 +33,29 @@ const CartContext = createContext<CartContextType | null>(null)
 
 const STORAGE_KEY = "gota-dourada-cart"
 
+function getValidCompareAtPrice(item: Pick<CartItem, "price" | "compareAtPrice">) {
+  return item.compareAtPrice && item.compareAtPrice > item.price
+    ? item.compareAtPrice
+    : undefined
+}
+
+function enrichCartItem<T extends Pick<CartItem, "slug" | "price" | "compareAtPrice">>(item: T): T {
+  if (getValidCompareAtPrice(item) || !item.slug) return item
+
+  const product = getProductBySlug(item.slug)
+  const compareAtPrice = product?.compareAtPrice
+
+  return compareAtPrice && compareAtPrice > item.price
+    ? { ...item, compareAtPrice }
+    : item
+}
+
 function loadCart(): CartItem[] {
   if (typeof window === "undefined") return []
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : []
+    const parsed = stored ? JSON.parse(stored) : []
+    return Array.isArray(parsed) ? parsed.map(enrichCartItem) : []
   } catch {
     return []
   }
@@ -66,18 +88,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
   const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const totalCompareAtPrice = items.reduce(
+    (sum, item) => sum + (getValidCompareAtPrice(item) ?? item.price) * item.quantity,
+    0
+  )
+  const totalSavings = Math.max(0, totalCompareAtPrice - totalPrice)
 
   const addItem = useCallback((newItem: Omit<CartItem, "quantity">, quantity = 1) => {
     setItems((prev) => {
+      const normalizedItem = enrichCartItem(newItem)
       const existing = prev.find((item) => item.id === newItem.id)
       if (existing) {
         return prev.map((item) =>
           item.id === newItem.id
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, ...normalizedItem, quantity: item.quantity + quantity }
             : item
         )
       }
-      return [...prev, { ...newItem, quantity }]
+      return [...prev, { ...normalizedItem, quantity }]
     })
     setIsOpen(true)
   }, [])
@@ -114,6 +142,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isOpen,
         totalItems,
         totalPrice,
+        totalCompareAtPrice,
+        totalSavings,
         addItem,
         removeItem,
         updateQuantity,

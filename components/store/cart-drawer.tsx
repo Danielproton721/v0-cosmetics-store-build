@@ -5,8 +5,29 @@ import Link from "next/link"
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
+function formatCurrency(value: number) {
+  return `R$ ${value.toFixed(2).replace(".", ",")}`
+}
+
+function getCartItemDiscount(item: {
+  price: number
+  compareAtPrice?: number
+  quantity: number
+}) {
+  if (!item.compareAtPrice || item.compareAtPrice <= item.price) {
+    return null
+  }
+
+  const originalTotal = item.compareAtPrice * item.quantity
+  const currentTotal = item.price * item.quantity
+  const savings = originalTotal - currentTotal
+  const percentage = Math.round(((item.compareAtPrice - item.price) / item.compareAtPrice) * 100)
+
+  return { originalTotal, currentTotal, savings, percentage }
+}
+
 export function CartDrawer() {
-  const { items, isOpen, totalItems, totalPrice, removeItem, updateQuantity, closeCart } = useCart()
+  const { items, isOpen, totalItems, totalPrice, totalSavings, removeItem, updateQuantity, closeCart } = useCart()
   const [isStartingCheckout, setIsStartingCheckout] = useState(false)
   const [checkoutError, setCheckoutError] = useState("")
   const handleCloseCart = useCallback(() => {
@@ -121,70 +142,86 @@ export function CartDrawer() {
         ) : (
           <div className="flex-1 overflow-y-auto">
             <ul className="divide-y divide-[#f0f0f0]">
-              {items.map((item) => (
-                <li key={item.id} className="flex gap-3 px-4 py-4">
-                  {/* Product image */}
-                  <Link
-                    href={`/product/${item.slug}`}
-                    onClick={handleCloseCart}
-                    className="relative w-20 h-20 rounded-lg bg-[#f5f5f5] overflow-hidden shrink-0"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="absolute inset-0 w-full h-full object-contain p-1"
-                    />
-                  </Link>
+              {items.map((item) => {
+                const discount = getCartItemDiscount(item)
 
-                  {/* Product details */}
-                  <div className="flex-1 flex flex-col justify-between min-w-0">
-                    <div>
-                      <Link
-                        href={`/product/${item.slug}`}
-                        onClick={handleCloseCart}
-                        className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight hover:text-[#d4a017] transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                      <p className="text-sm font-bold text-[#1a1a1a] mt-1">
-                        R$ {(item.price * item.quantity).toFixed(2).replace(".", ",")}
-                      </p>
-                    </div>
+                return (
+                  <li key={item.id} className="flex gap-3 px-4 py-4">
+                    {/* Product image */}
+                    <Link
+                      href={`/product/${item.slug}`}
+                      onClick={handleCloseCart}
+                      className="relative w-20 h-20 rounded-lg bg-[#f5f5f5] overflow-hidden shrink-0"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="absolute inset-0 w-full h-full object-contain p-1"
+                      />
+                    </Link>
 
-                    <div className="flex items-center justify-between mt-2">
-                      {/* Quantity controls */}
-                      <div className="flex items-center border border-[#e5e5e5] rounded-full overflow-hidden">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-7 h-7 flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
-                          aria-label="Diminuir quantidade"
+                    {/* Product details */}
+                    <div className="flex-1 flex flex-col justify-between min-w-0">
+                      <div>
+                        <Link
+                          href={`/product/${item.slug}`}
+                          onClick={handleCloseCart}
+                          className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight hover:text-[#d4a017] transition-colors"
                         >
-                          <Minus size={12} className="text-[#737373]" />
-                        </button>
-                        <span className="w-7 text-center text-xs font-semibold text-[#1a1a1a]">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-7 h-7 flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
-                          aria-label="Aumentar quantidade"
-                        >
-                          <Plus size={12} className="text-[#737373]" />
-                        </button>
+                          {item.name}
+                        </Link>
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                          {discount && (
+                            <span className="text-[11px] font-semibold text-[#9ca3af] line-through">
+                              {formatCurrency(discount.originalTotal)}
+                            </span>
+                          )}
+                          <span className="text-sm font-bold text-[#1a1a1a]">
+                            {formatCurrency(discount?.currentTotal ?? item.price * item.quantity)}
+                          </span>
+                          {discount && (
+                            <span className="rounded-full bg-[#dcfce7] px-1.5 py-0.5 text-[10px] font-extrabold text-[#15803d]">
+                              -{discount.percentage}%
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Remove button */}
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-1.5 rounded-full hover:bg-red-50 transition-colors group"
-                        aria-label={`Remover ${item.name}`}
-                      >
-                        <Trash2 size={14} className="text-[#737373] group-hover:text-red-500 transition-colors" />
-                      </button>
+                      <div className="flex items-center justify-between mt-2">
+                        {/* Quantity controls */}
+                        <div className="flex items-center border border-[#e5e5e5] rounded-full overflow-hidden">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="w-7 h-7 flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                            aria-label="Diminuir quantidade"
+                          >
+                            <Minus size={12} className="text-[#737373]" />
+                          </button>
+                          <span className="w-7 text-center text-xs font-semibold text-[#1a1a1a]">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="w-7 h-7 flex items-center justify-center hover:bg-[#f5f5f5] transition-colors"
+                            aria-label="Aumentar quantidade"
+                          >
+                            <Plus size={12} className="text-[#737373]" />
+                          </button>
+                        </div>
+
+                        {/* Remove button */}
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="p-1.5 rounded-full hover:bg-red-50 transition-colors group"
+                          aria-label={`Remover ${item.name}`}
+                        >
+                          <Trash2 size={14} className="text-[#737373] group-hover:text-red-500 transition-colors" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}
@@ -196,9 +233,18 @@ export function CartDrawer() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-[#737373]">Subtotal</span>
               <span className="text-base font-bold text-[#1a1a1a]">
-                R$ {totalPrice.toFixed(2).replace(".", ",")}
+                {formatCurrency(totalPrice)}
               </span>
             </div>
+
+            {totalSavings > 0 && (
+              <div className="flex items-center justify-between rounded-lg bg-[#f0fdf4] px-3 py-2">
+                <span className="text-xs font-bold text-[#15803d]">Desconto aplicado</span>
+                <span className="text-xs font-extrabold text-[#15803d]">
+                  -{formatCurrency(totalSavings)}
+                </span>
+              </div>
+            )}
 
             <p className="text-[10px] text-[#737373] text-center">
               Frete calculado no checkout

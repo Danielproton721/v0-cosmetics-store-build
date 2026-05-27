@@ -34,7 +34,7 @@ export function AccordionSection({
         <p className="text-sm text-[#737373] leading-relaxed">{description}</p>
       </div>
 
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="w-full hidden md:block">
         <AccordionItem value="hair-types" className="border-b border-[#f0f0f0]">
           <AccordionTrigger className="text-sm font-medium text-[#1a1a1a] hover:no-underline py-4">
             Tipos de Cabelos

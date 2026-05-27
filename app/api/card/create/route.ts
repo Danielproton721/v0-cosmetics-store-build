@@ -6,6 +6,7 @@ import {
   hashRateLimitValue,
   validateCheckoutSession,
 } from "@/lib/checkout-security";
+import { isGatewayPaidStatus } from "@/lib/payment-status";
 
 export const dynamic = "force-dynamic";
 
@@ -161,13 +162,14 @@ export async function POST(request: Request) {
 
     const status = data?.status ?? "unknown";
     const transactionId = data?.id ?? data?.transactionId ?? null;
+    const approved = isGatewayPaidStatus(status);
 
     return NextResponse.json({
       txid: transactionId,
       status,
-      approved: status === "paid" || status === "authorized",
+      approved,
       message:
-        status === "paid" || status === "authorized"
+        approved
           ? "Pagamento aprovado! ✅"
           : status === "refused"
           ? "Cartão recusado. Verifique os dados ou tente outro cartão."

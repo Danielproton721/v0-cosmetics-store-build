@@ -33,11 +33,12 @@ export function ProductCard({ name, price, compareAtPrice, image, rating, review
       slug: slug || "",
       name,
       price,
+      compareAtPrice,
       image,
     })
     setAdded(true)
     setTimeout(() => setAdded(false), 1500)
-  }, [addItem, slug, name, price, image])
+  }, [addItem, slug, name, price, compareAtPrice, image])
 
   return (
     <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col h-full">

@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "FAQ | ConfortBem",
-  description: "Perguntas frequentes sobre compras, entrega e atendimento na ConfortBem.",
+  title: "FAQ | Confortebem",
+  description: "Perguntas frequentes sobre compras, entrega e atendimento na Confortebem.",
 }
 
 const questions = [

@@ -32,8 +32,8 @@ export default function PoliticaDePrivacidadePage() {
             </p>
             <p className="mt-2">
               Contato do encarregado de dados (DPO):{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function PoliticaDePrivacidadePage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">5. Cookies e Rastreamento</h2>
             <p className="mt-2">
-              Utilizamos cookies próprios (funcionais) e de terceiros (Google Ads, Google Analytics) para medir o desempenho das nossas campanhas e melhorar a experiência de navegação. Você pode gerenciar seus cookies pelo banner exibido no primeiro acesso ao site.
+              Utilizamos cookies próprios e funcionais para manter recursos essenciais do site e melhorar a experiência de navegação. Você pode gerenciar seus cookies pelo banner exibido no primeiro acesso ao site.
             </p>
           </div>
 
@@ -107,8 +107,8 @@ export default function PoliticaDePrivacidadePage() {
             </ul>
             <p className="mt-2">
               Para exercer qualquer um desses direitos, entre em contato pelo e-mail{" "}
-              <a href="mailto:contato@confortbem.com.br" className="text-[#d4a017] underline">
-                contato@confortbem.com.br
+              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
+                contato@confortebem.com.br
               </a>.
             </p>
           </div>
@@ -132,7 +132,7 @@ export default function PoliticaDePrivacidadePage() {
               <strong className="text-[#1a1a1a]">Responsável pelo tratamento de dados:</strong><br />
               Voil Atelie Comercio de Enxovais e Decoracao LTDA — CNPJ 64.980.979/0001-94<br />
               Garça — São Paulo — Brasil<br />
-              contato@confortbem.com.br
+              contato@confortebem.com.br
             </p>
           </div>
 

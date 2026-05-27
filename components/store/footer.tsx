@@ -45,16 +45,16 @@ export function Footer() {
         </p>
       </FooterAccordion>
 
-      {/* Sessão 2 — Dados Fiscais (Compliance Google Ads) */}
+      {/* Sessão 2 — Dados Fiscais */}
       <FooterAccordion title="EMPRESA">
         <p className="text-sm text-[#737373] leading-relaxed">
-          Marca operada por Voil Atelie Comercio de Enxovais e Decoracao LTDA
+          Marca operada por CMRN GUIGA ENXOVAL LTDA
         </p>
         <p className="text-sm text-[#737373]">
-          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 64.980.979/0001-94
+          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 49.084.920/0001-24
         </p>
         <p className="text-sm text-[#737373]">
-          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Garça — São Paulo — Brasil
+          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Rua Alírio Severo Nogueira, 2039 — Lote 01 Quadra 04 — Prolongamento Recanto Elimar — Franca, SP — CEP 14.403-320
         </p>
       </FooterAccordion>
 

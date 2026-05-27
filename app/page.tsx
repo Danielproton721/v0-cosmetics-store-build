@@ -170,7 +170,7 @@ export default function Home() {
           <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#f5f0e8] md:aspect-[21/9]">
             <img
               src="/images/fachadaia.png"
-              alt="Fachada da loja ConfortBem"
+              alt="Fachada da loja Confortebem"
               className="h-full w-full object-cover"
             />
           </div>
@@ -183,7 +183,7 @@ export default function Home() {
               Conforto escolhido para a rotina da sua casa
             </h2>
             <p className="mt-4 text-sm leading-7 text-[#5f5f5f] md:text-base">
-              A ConfortBem nasceu para reunir produtos de cama, banho e enxoval
+              A Confortebem nasceu para reunir produtos de cama, banho e enxoval
               com toque macio, bom acabamento e visual acolhedor. Cada coleção é
               pensada para deixar sua casa mais bonita, prática e confortável no
               dia a dia.

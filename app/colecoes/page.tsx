@@ -4,8 +4,8 @@ import { Footer } from "@/components/store/footer"
 import { CollectionGrid } from "@/components/store/collection-grid"
 
 export const metadata = {
-  title: "Coleções | ConfortBem",
-  description: "Explore todas as coleções de produtos ConfortBem.",
+  title: "Coleções | Confortebem",
+  description: "Explore todas as coleções de produtos Confortebem.",
 }
 
 export default function ColecoesPge() {

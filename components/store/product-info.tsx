@@ -21,7 +21,8 @@ export function ProductInfo({
   recentSales,
   isTest,
 }: ProductInfoProps) {
-  const discount = compareAtPrice
+  const hasDiscount = Boolean(compareAtPrice && compareAtPrice > price)
+  const discount = hasDiscount && compareAtPrice
     ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100)
     : 0
 
@@ -73,7 +74,7 @@ export function ProductInfo({
         <span className="text-sm text-[#737373]">BRL</span>
       </div>
 
-      {compareAtPrice && (
+      {hasDiscount && compareAtPrice && (
         <div className="flex items-center gap-2 mt-1">
           <span className="text-sm text-[#737373] line-through">
             R$ {compareAtPrice.toFixed(2).replace(".", ",")}
