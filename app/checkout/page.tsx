@@ -535,6 +535,17 @@ function CheckoutContent() {
     if (orderCode) savePixProofLookup(orderCode, proof);
   };
 
+  // Remonta o Payment Element após uma falha (banco recusa, antifraude, etc).
+  // O iframe da Pagou é "consumido" em cada submit() — sem remount, a próxima
+  // tentativa joga "CardElement is not mounted".
+  const resetPagouCardElement = useCallback(() => {
+    setPagouElements(null);
+    setCardSdkReady(false);
+    setCardSdkError(null);
+    const container = document.getElementById('pagou-card-element');
+    if (container) container.innerHTML = '';
+  }, []);
+
   const handleFinalCardStatus = (status: string, transaction?: any) => {
     const approved = ['paid', 'captured', 'succeeded', 'completed', 'authorized', 'approved'].includes(status);
     const message = approved
@@ -542,12 +553,15 @@ function CheckoutContent() {
       : status === 'requires_action' || status === 'three_ds_required'
       ? 'Autenticação 3D Secure necessária — siga as instruções do seu banco.'
       : status === 'failed' || status === 'refused' || status === 'canceled'
-      ? 'Cartão recusado. Verifique os dados ou tente outro cartão.'
+      ? 'Cartão recusado ou bloqueado pelo seu banco. Libere a compra no app do banco e tente novamente.'
       : 'Pagamento em análise.';
     setCardResult({ approved, message });
     if (approved) {
       issueOrderCode(transaction?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
       setTimeout(() => setPaymentConfirmed(true), 1500);
+    } else if (!approved) {
+      // Falha definitiva — remonta o card pra próxima tentativa.
+      resetPagouCardElement();
     }
   };
 
@@ -666,10 +680,20 @@ function CheckoutContent() {
     } catch (err: any) {
       console.error('[CARD]', err);
       setCardError(err?.message || 'Erro inesperado. Tente novamente.');
+      // Remonta o card element pra o usuário tentar de novo sem refresh.
+      resetPagouCardElement();
     } finally {
       setIsProcessingCard(false);
     }
   };
+
+  // Permite ao usuário forçar um novo formulário de cartão depois de
+  // exibir uma mensagem de erro/recusa, sem precisar atualizar a página.
+  const retryCardForm = useCallback(() => {
+    setCardError(null);
+    setCardResult(null);
+    resetPagouCardElement();
+  }, [resetPagouCardElement]);
 
 
   const handleNextToStep2 = () => {
@@ -1261,12 +1285,23 @@ function CheckoutContent() {
                     className="space-y-4"
                   >
                     {cardResult ? (
-                      <div className={`p-4 rounded-xl text-center font-bold text-sm ${
-                        cardResult.approved
-                          ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
-                          : 'bg-red-50 border border-red-200 text-red-600'
-                      }`}>
-                        {cardResult.approved ? '✅ ' : '❌ '}{cardResult.message}
+                      <div className="space-y-3">
+                        <div className={`p-4 rounded-xl text-center font-bold text-sm ${
+                          cardResult.approved
+                            ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
+                            : 'bg-red-50 border border-red-200 text-red-600'
+                        }`}>
+                          {cardResult.approved ? '✅ ' : '❌ '}{cardResult.message}
+                        </div>
+                        {!cardResult.approved && (
+                          <button
+                            type="button"
+                            onClick={retryCardForm}
+                            className="w-full py-3 rounded-xl bg-[#d4a017] text-white font-bold text-sm hover:bg-[#b8890e] transition-colors"
+                          >
+                            Tentar com outro cartão
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <>
@@ -1304,7 +1339,18 @@ function CheckoutContent() {
                             ))}
                           </select>
                         </div>
-                        {cardError && <p className="text-red-500 text-sm font-bold text-center">{cardError}</p>}
+                        {cardError && (
+                          <div className="space-y-2">
+                            <p className="text-red-500 text-sm font-bold text-center">{cardError}</p>
+                            <button
+                              type="button"
+                              onClick={retryCardForm}
+                              className="w-full py-2.5 rounded-xl border-2 border-[#d4a017] text-[#d4a017] font-bold text-sm hover:bg-[#fff9e6] transition-colors"
+                            >
+                              Tentar novamente
+                            </button>
+                          </div>
+                        )}
                       </>
                     )}
                   </motion.div>
