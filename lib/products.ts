@@ -7080,6 +7080,20 @@ export const products: Product[] = [
     ],
     "variantLabel": "Cinza/Marfim",
     "variantGroup": "isabelle-king-8p"
+  },
+  {
+    "id": 260,
+    "name": "Produto Teste R$ 5,00",
+    "price": 5,
+    "compareAtPrice": 5,
+    "image": "https://cdn.shopify.com/s/files/1/1000/7153/9053/files/kit-cama-posta-king-isabelle-8-pecas-cinzamarfim-69971f1a89fa5-large.jpg?v=1778626725",
+    "rating": 5,
+    "reviews": 1,
+    "category": "Diversos",
+    "slug": "produto-teste-5-reais",
+    "description": "Produto de teste para validar a integração de pagamento. Valor simbólico de R$ 5,00.",
+    "isTest": true,
+    "tags": []
   }
 ];
 
