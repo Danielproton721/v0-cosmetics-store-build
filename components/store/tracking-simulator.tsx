@@ -60,8 +60,24 @@ type OrderLookup = {
 const STORAGE_KEY = "confortebem-tracking-cache-v1"
 const ORDER_LOOKUP_STORAGE_KEY = "confortebem-order-lookup-v1"
 const MAX_RECENT = 5
-const PROGRESS_UPDATE_SECONDS = 10
-const PROGRESS_UPDATE_INTERVAL_MS = PROGRESS_UPDATE_SECONDS * 1000
+// Recalcula a cada 1 minuto. O status real é derivado do tempo decorrido
+// desde a compra (savedAt), não de um timer simples.
+const PROGRESS_UPDATE_INTERVAL_MS = 60 * 1000
+
+// Offset em horas, a partir do momento da compra, em que cada step entra
+// como "completo". Ex.: index 3 ("Em transporte") chega 28 h depois e
+// permanece como o status corrente por 9 dias antes do próximo.
+const STEP_OFFSET_HOURS = [
+  0,                              // 0 Pagamento aprovado     — instante da compra
+  1,                              // 1 Em preparação          — +1 h
+  1 + 24,                         // 2 Postagem preparada     — +24 h (= 25 h)
+  1 + 24 + 3,                     // 3 Em transporte          — +3 h (= 28 h)
+  1 + 24 + 3 + 9 * 24 + 1,        // 4 Saiu para entrega      — após 9 d + 1 h
+  1 + 24 + 3 + 9 * 24 + 1 + 5,    // 5 Tentativa não efetuada — +5 h
+  1 + 24 + 3 + 9 * 24 + 1 + 5 + 6,// 6 Voltando para base     — +6 h
+  1 + 24 + 3 + 9 * 24 + 1 + 5 + 6 + 24, // 7 Saiu p/ entrega 2ª — +24 h
+  1 + 24 + 3 + 9 * 24 + 1 + 5 + 6 + 24 + 3, // 8 Entregue        — +3 h
+]
 
 const carrierLabels: Record<CarrierId, string> = {
   correios: "Correios",
@@ -167,6 +183,24 @@ function dateAt(base: Date, daysOffset: number, seed: number) {
   return date
 }
 
+// Data exata de um step com base no horário da compra + offset definido.
+function stepDateFromCreated(createdAt: Date, stepIndex: number) {
+  const date = new Date(createdAt)
+  date.setHours(date.getHours() + (STEP_OFFSET_HOURS[stepIndex] ?? 0))
+  return date
+}
+
+// Calcula em qual step o pedido está, dado o tempo real decorrido desde a
+// compra. Retorna o último step cuja janela de tempo já foi atingida.
+function progressIndexFromCreated(createdAt: Date, now: Date = new Date()) {
+  const elapsedHours = (now.getTime() - createdAt.getTime()) / 3600000
+  let reached = 0
+  for (let i = 0; i < STEP_OFFSET_HOURS.length; i += 1) {
+    if (elapsedHours >= STEP_OFFSET_HOURS[i]) reached = i
+  }
+  return reached
+}
+
 function formatDateTime(date: Date) {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
@@ -233,19 +267,41 @@ function shouldShowTimelineStep(index: number, currentProgressIndex: number) {
   return true
 }
 
-function buildTrackingResult(code: string, progressIndex?: number): TrackingResult {
+function buildTrackingResult(
+  code: string,
+  progressIndex?: number,
+  createdAt?: Date,
+): TrackingResult {
   const carrierId = detectCarrier(code)
   const seed = hashCode(code)
-  const defaultProgressIndex = code.startsWith("CB") ? 0 : getProgressIndex(seed)
-  const currentIndex = clampProgressIndex(progressIndex ?? defaultProgressIndex)
+  const useRealSchedule = Boolean(createdAt)
+
+  let currentIndex: number
+  if (useRealSchedule && createdAt) {
+    // Quando temos o momento real da compra, o status é função do tempo.
+    // Se o caller forçou um progressIndex, respeita.
+    currentIndex = clampProgressIndex(progressIndex ?? progressIndexFromCreated(createdAt))
+  } else {
+    const defaultProgressIndex = code.startsWith("CB") ? 0 : getProgressIndex(seed)
+    currentIndex = clampProgressIndex(progressIndex ?? defaultProgressIndex)
+  }
+
   const isDelivered = currentIndex >= LAST_STEP_INDEX
   const origin = hubs[seed % hubs.length]
   const transferHub = hubs[(seed + 2) % hubs.length]
+
+  // baseDate: usado só pela trilha "sintética" (sem createdAt) pra manter
+  // o comportamento legado. Quando temos createdAt, ignorado.
   const baseDate = new Date()
   baseDate.setDate(baseDate.getDate() - currentIndex - 1)
 
-  const deliveryDate = dateAt(baseDate, LAST_STEP_INDEX, seed)
-  const updatedDate = dateAt(baseDate, currentIndex, seed)
+  const dateForStep = (index: number) =>
+    useRealSchedule && createdAt
+      ? stepDateFromCreated(createdAt, index)
+      : dateAt(baseDate, index, seed)
+
+  const deliveryDate = dateForStep(LAST_STEP_INDEX)
+  const updatedDate = dateForStep(currentIndex)
 
   const locations = [
     "Pedido online",
@@ -273,9 +329,9 @@ function buildTrackingResult(code: string, progressIndex?: number): TrackingResu
       description: stepDescriptions[index],
       date:
         isComplete || isCurrent
-          ? formatDateTime(dateAt(baseDate, index, seed))
+          ? formatDateTime(dateForStep(index))
           : index === currentIndex + 1
-            ? `Previsto para ${formatDate(dateAt(baseDate, index, seed))}`
+            ? `Previsto para ${formatDate(dateForStep(index))}`
             : "Aguardando",
       location: locations[index],
       state,
@@ -389,8 +445,9 @@ export function TrackingSimulator() {
 
     if (codeFromUrl.length >= 6) {
       const orderFromUrl = readOrderLookup(codeFromUrl)
+      const createdAt = orderFromUrl?.savedAt ? new Date(orderFromUrl.savedAt) : undefined
       const cachedResult = storedResults.find((item) => item.code === codeFromUrl)
-      const nextResult = cachedResult ?? buildTrackingResult(codeFromUrl, orderFromUrl ? 0 : undefined)
+      const nextResult = cachedResult ?? buildTrackingResult(codeFromUrl, undefined, createdAt)
       const nextResults = cachedResult
         ? storedResults
         : [
@@ -439,21 +496,32 @@ export function TrackingSimulator() {
     const progressIndex = getResultProgressIndex(result)
     if (progressIndex >= LAST_STEP_INDEX) return
 
-    const timer = window.setTimeout(() => {
-      const nextResult = buildTrackingResult(result.code, progressIndex + 1)
+    // Auto-atualização só vale pra pedidos reais (com savedAt). O status é
+    // recalculado a partir do tempo decorrido — não há mais o "avança +1
+    // a cada N segundos" que causava progresso irreal.
+    const createdAtRaw = orderLookup?.savedAt
+    if (!createdAtRaw) return
+    const createdAt = new Date(createdAtRaw)
+    if (Number.isNaN(createdAt.getTime())) return
 
+    const tick = () => {
+      const newIndex = progressIndexFromCreated(createdAt)
+      if (newIndex === progressIndex) return
+
+      const nextResult = buildTrackingResult(result.code, newIndex, createdAt)
       setResult(nextResult)
       storeRecentResult(nextResult)
       setCopied(false)
       setNotice(
         nextResult.progressIndex >= LAST_STEP_INDEX
-          ? "Pedido marcado como entregue automaticamente."
+          ? "Pedido entregue."
           : `Atualização automática: ${nextResult.currentStatus}.`
       )
-    }, PROGRESS_UPDATE_INTERVAL_MS)
+    }
 
-    return () => window.clearTimeout(timer)
-  }, [result, storeRecentResult])
+    const timer = window.setInterval(tick, PROGRESS_UPDATE_INTERVAL_MS)
+    return () => window.clearInterval(timer)
+  }, [result, orderLookup, storeRecentResult])
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -483,7 +551,8 @@ export function TrackingSimulator() {
       return
     }
 
-    const nextResult = buildTrackingResult(normalizedInput, matchedOrder ? 0 : undefined)
+    const createdAt = matchedOrder?.savedAt ? new Date(matchedOrder.savedAt) : undefined
+    const nextResult = buildTrackingResult(normalizedInput, undefined, createdAt)
     setResult(nextResult)
     setOrderLookup(matchedOrder)
     setNotice("")
@@ -623,7 +692,9 @@ export function TrackingSimulator() {
                       <p className="mt-3 rounded-lg border border-[#eadfca] bg-white px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#6f5310]">
                         {trackingFinished
                           ? "Linha do tempo concluída"
-                          : `Atualiza automaticamente a cada ${PROGRESS_UPDATE_SECONDS} segundos`}
+                          : orderLookup?.savedAt
+                            ? "Atualiza automaticamente a cada minuto"
+                            : "Status atualizado na próxima consulta"}
                       </p>
                     </div>
 
