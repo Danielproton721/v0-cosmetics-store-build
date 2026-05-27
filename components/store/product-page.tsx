@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { Check, X } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
+import { useMenu } from "@/lib/menu-context"
 import { ProductGallery } from "./product-gallery"
 import { ShippingCalculator } from "./shipping-calculator"
 import { AccordionSection } from "./accordion-section"
@@ -221,6 +222,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
     setIsMounted(true)
   }, [])
   const { addItem, isOpen: isCartOpen } = useCart()
+  const { isOpen: isMenuOpen } = useMenu()
   const inlineButtonRef = useRef<HTMLDivElement>(null)
 
   // Derive active price, image and images from selected variant or product defaults
@@ -235,7 +237,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const activeImages = selectedVariant?.images ?? product.images ?? [product.image]
 
   const totalPrice = activePrice * quantity
-  const shouldShowFloatingCTA = showFloating && !isCartOpen
+  const shouldShowFloatingCTA = showFloating && !isCartOpen && !isMenuOpen
   const installmentOptions = useMemo(
     () =>
       cardInstallmentRates.map((option) => {

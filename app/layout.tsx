@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { CartProvider } from '@/lib/cart-context'
+import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
 import { CookieConsent } from '@/components/store/cookie-consent'
 import './globals.css'
@@ -43,9 +44,11 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="font-sans antialiased">
         <CartProvider>
-          {children}
-          <CartDrawer />
-          <CookieConsent />
+          <MenuProvider>
+            {children}
+            <CartDrawer />
+            <CookieConsent />
+          </MenuProvider>
         </CartProvider>
         <Analytics />
       </body>

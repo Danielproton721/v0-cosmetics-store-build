@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
+import { useMenu } from "@/lib/menu-context"
 import { collections, products } from "@/lib/products"
 
 function normalizeSearchValue(value: string) {
@@ -56,7 +57,7 @@ const menuCollections = collections
   })
 
 export function Header() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const { isOpen: menuOpen, open: openMenu, close: closeMenuCtx } = useMenu()
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [collectionsOpen, setCollectionsOpen] = useState(true)
@@ -83,8 +84,8 @@ export function Header() {
   }, [])
 
   const closeMenu = useCallback(() => {
-    setMenuOpen(false)
-  }, [])
+    closeMenuCtx()
+  }, [closeMenuCtx])
 
   const closeSearch = useCallback(() => {
     setSearchOpen(false)
@@ -126,7 +127,7 @@ export function Header() {
       >
         <div className="relative flex h-[70px] items-center justify-between px-4 py-3">
           <button
-            onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
+            onClick={() => (menuOpen ? closeMenu() : openMenu())}
             className="p-2 text-[#1a1a1a] hover:opacity-70 transition-opacity"
             aria-label="Menu"
           >
