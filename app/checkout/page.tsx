@@ -308,6 +308,55 @@ function CheckoutContent() {
     return base + (errors[field] ? "border-red-500 focus:ring-2 focus:ring-red-500/30" : "border-gray-200 focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017]");
   };
 
+  const sendOrderConfirmationEmail = useCallback(
+    async (code: string, method: 'pix' | 'card') => {
+      if (!email || items.length === 0) return;
+      try {
+        await fetch('/api/email/order-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderCode: code,
+            customer: {
+              name: name.trim(),
+              email: email.trim(),
+              phone: phone.replace(/\D/g, ''),
+              cpf: cpf.replace(/\D/g, ''),
+            },
+            address: {
+              cep: cep.trim(),
+              street: street.trim(),
+              number: number.trim(),
+              complement: complement.trim() || undefined,
+              neighborhood: neighborhood.trim(),
+              city: city.trim(),
+              stateUF: stateUF.trim().toUpperCase(),
+            },
+            items: items.map((item) => ({
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              price: item.price,
+              compareAtPrice: item.compareAtPrice,
+              quantity: item.quantity,
+            })),
+            subtotal: totalPrice,
+            shipping: shippingPrice,
+            total: checkoutTotal,
+            paymentMethod: method,
+          }),
+        });
+      } catch (err) {
+        // E-mail é "best effort" — falha não bloqueia a confirmação.
+        console.error('[ORDER EMAIL] Falha ao despachar:', err);
+      }
+    },
+    [
+      cep, city, complement, cpf, email, items, name, neighborhood, number,
+      phone, shippingPrice, stateUF, street, totalPrice, checkoutTotal,
+    ],
+  );
+
   const issueOrderCode = useCallback((source: string) => {
     const code = buildOrderCode(source);
     setOrderCode(code);
@@ -477,8 +526,9 @@ function CheckoutContent() {
         const data = await response.json().catch(() => null);
 
         if (!stopped && response.ok && data?.paid) {
-          issueOrderCode(pixData.txid || `${email}|${cpf}|pix|paid|${Date.now()}`);
+          const code = issueOrderCode(pixData.txid || `${email}|${cpf}|pix|paid|${Date.now()}`);
           setPaymentConfirmed(true);
+          void sendOrderConfirmationEmail(code, 'pix');
         }
       } catch {
         // O PIX continua aguardando a confirmacao do gateway.
@@ -557,7 +607,8 @@ function CheckoutContent() {
       : 'Pagamento em análise.';
     setCardResult({ approved, message });
     if (approved) {
-      issueOrderCode(transaction?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
+      const code = issueOrderCode(transaction?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
+      void sendOrderConfirmationEmail(code, 'card');
       setTimeout(() => setPaymentConfirmed(true), 1500);
     } else if (!approved) {
       // Falha definitiva — remonta o card pra próxima tentativa.
