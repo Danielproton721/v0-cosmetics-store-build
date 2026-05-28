@@ -33,20 +33,34 @@ export type OrderEmailInput = {
   paymentMethod: "pix" | "card";
 };
 
-const BRAND = {
-  name: "Confortebem",
+const BRAND_NAME = "Confortebem";
+const BRAND_TRACKING_URL =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://confortebem.shop";
+
+// Paleta brand
+const C = {
   primary: "#1a1a1a",
-  accent: "#d4a017",
-  green: "#15803d",
-  text: "#333333",
-  muted: "#737373",
-  border: "#eadfca",
-  bg: "#fbfaf7",
+  dark: "#202020",
+  accent: "#d4a017", // dourado
+  accentSoft: "#fff8e8",
+  accentBorder: "#f1d6a4",
+  green: "#14752d",
+  greenSoft: "#f1fff5",
+  greenBorder: "#c6edcf",
+  text: "#202020",
+  muted: "#777777",
+  mutedSoft: "#a7a7a7",
+  line: "#ececec",
+  lineSoft: "#f1f1f1",
+  bg: "#e7e7e7",
   card: "#ffffff",
+  cardSoft: "#fafafa",
+  cardSofter: "#fbfbfb",
+  footerLine: "#373737",
 };
 
 const formatBRL = (value: number) =>
-  `R$ ${value.toFixed(2).replace(".", ",")}`;
+  `R$ ${Number(value).toFixed(2).replace(".", ",")}`;
 
 const escapeHtml = (value: string) =>
   String(value ?? "")
@@ -58,6 +72,8 @@ const escapeHtml = (value: string) =>
 
 export function renderOrderConfirmationEmail(order: OrderEmailInput) {
   const methodLabel = order.paymentMethod === "pix" ? "Pix" : "Cartão de Crédito";
+  const firstName = (order.customer.name || "").trim().split(" ")[0] || "Cliente";
+
   const addressLine1 = [
     order.address.street,
     order.address.number,
@@ -77,18 +93,20 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
     .map((item) => {
       const lineTotal = item.price * item.quantity;
       const imgCell = item.image
-        ? `<td width="64" style="padding:12px 12px 12px 0;vertical-align:top;">
-             <img src="${escapeHtml(item.image)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;border-radius:8px;border:1px solid ${BRAND.border};object-fit:cover;" />
+        ? `<td width="56" style="padding:10px 12px 10px 0;vertical-align:top;">
+             <img src="${escapeHtml(item.image)}" width="56" height="56" alt="" style="display:block;width:56px;height:56px;border-radius:8px;border:1px solid ${C.line};object-fit:cover;" />
            </td>`
-        : "";
+        : `<td width="56" style="padding:10px 12px 10px 0;vertical-align:top;">
+             <div style="width:56px;height:56px;border-radius:8px;border:1px solid ${C.line};background:${C.cardSoft};"></div>
+           </td>`;
       return `
         <tr>
           ${imgCell}
-          <td style="padding:12px 0;vertical-align:top;color:${BRAND.text};font-size:14px;line-height:20px;">
-            <strong style="display:block;color:${BRAND.primary};font-size:14px;font-weight:700;">${escapeHtml(item.name)}</strong>
-            <span style="display:inline-block;margin-top:4px;color:${BRAND.muted};font-size:12px;">Qtd: ${item.quantity}</span>
+          <td style="padding:10px 0;vertical-align:top;color:${C.text};font-size:13px;line-height:18px;">
+            <strong style="display:block;color:${C.primary};font-size:13px;font-weight:700;">${escapeHtml(item.name)}</strong>
+            <span style="display:inline-block;margin-top:3px;color:${C.muted};font-size:11px;">Qtd: ${item.quantity} · ${formatBRL(item.price)} un.</span>
           </td>
-          <td align="right" style="padding:12px 0 12px 12px;vertical-align:top;color:${BRAND.text};font-size:14px;font-weight:700;white-space:nowrap;">
+          <td align="right" style="padding:10px 0 10px 12px;vertical-align:top;color:${C.text};font-size:13px;font-weight:700;white-space:nowrap;">
             ${formatBRL(lineTotal)}
           </td>
         </tr>
@@ -96,93 +114,165 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
     })
     .join("");
 
-  const subject = `Pedido confirmado · ${order.orderCode} · ${BRAND.name}`;
+  const trackingHref = `${BRAND_TRACKING_URL}/rastreio-de-pedido?codigo=${encodeURIComponent(order.orderCode)}`;
 
-  const html = `<!doctype html>
+  const subject = `Pedido confirmado · ${order.orderCode} · ${BRAND_NAME}`;
+
+  const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:${BRAND.bg};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.text};">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND.bg};padding:32px 16px;">
-    <tr>
-      <td align="center">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
-          <tr>
-            <td align="center" style="padding-bottom:24px;">
-              <span style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:700;color:${BRAND.primary};letter-spacing:0.3px;">conforte<span style="color:${BRAND.accent};">bem</span></span>
-            </td>
-          </tr>
+<body style="margin:0;padding:0;background:${C.bg};font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
+    Seu pedido ${escapeHtml(order.orderCode)} foi confirmado no ${BRAND_NAME}.
+  </div>
 
-          <tr>
-            <td style="background:${BRAND.card};border:1px solid ${BRAND.border};border-radius:16px;padding:32px;">
-              <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:${BRAND.primary};">Pedido confirmado, ${escapeHtml(order.customer.name.split(" ")[0] || order.customer.name)}! 🎉</h1>
-              <p style="margin:0 0 24px;color:${BRAND.muted};font-size:14px;line-height:22px;">
-                Recebemos o seu pagamento e seu pedido está em preparação. Use o código abaixo para acompanhar o envio.
+  <div style="max-width:600px;margin:0 auto;background:${C.card};">
+    <!-- top accent bar -->
+    <div style="background:${C.accent};height:5px;"></div>
+
+    <!-- header / logo -->
+    <div style="background:${C.card};padding:24px 32px 20px;text-align:center;border-bottom:1px solid ${C.lineSoft};">
+      <span style="display:inline-block;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:700;color:${C.primary};letter-spacing:0.4px;">
+        conforte<span style="color:${C.accent};">bem</span>
+      </span>
+      <p style="margin:6px 0 0;font-size:11px;color:${C.muted};letter-spacing:1.4px;text-transform:uppercase;">O conforto que abraça sua casa</p>
+    </div>
+
+    <!-- intro -->
+    <div style="background:${C.cardSofter};padding:22px 30px;text-align:center;border-bottom:1px solid ${C.line};">
+      <h1 style="margin:0 0 7px;font-size:19px;color:${C.primary};font-weight:700;line-height:1.25;">
+        Olá, ${escapeHtml(firstName)} — recebemos seu pedido <span style="color:${C.accent};">${escapeHtml(order.orderCode)}</span>.
+      </h1>
+      <p style="margin:0;font-size:12px;color:${C.muted};line-height:1.45;">
+        O pagamento foi confirmado e o seu pedido já está em preparação. Use o código acima para acompanhar a entrega.
+      </p>
+    </div>
+
+    <!-- main card -->
+    <div style="padding:16px 30px;">
+      <div style="background:${C.card};border-radius:15px;border:1px solid ${C.line};overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,0.08);">
+        <!-- pill header -->
+        <div style="background:${C.primary};padding:11px;text-align:center;">
+          <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+            <tr>
+              <td style="padding-right:10px;vertical-align:middle;">
+                <div style="width:30px;height:30px;background:${C.accent};border-radius:8px;text-align:center;line-height:30px;">
+                  <span style="color:${C.primary};font-size:15px;font-weight:800;">✓</span>
+                </div>
+              </td>
+              <td style="vertical-align:middle;">
+                <span style="color:#ffffff;font-size:15px;font-weight:700;letter-spacing:0.5px;">Pagamento confirmado</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- total + tracking code -->
+        <div style="padding:18px 24px 16px;background:${C.cardSoft};">
+          <div style="background:${C.card};border:1px solid ${C.line};border-radius:18px;padding:22px;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,0.06);">
+            <p style="margin:0 0 8px;font-size:10px;color:${C.muted};text-transform:uppercase;letter-spacing:1.4px;font-weight:700;">Total pago</p>
+            <p style="margin:0 0 14px;font-size:28px;font-weight:800;color:${C.green};line-height:1.05;">${formatBRL(order.total)}</p>
+
+            <div style="display:inline-block;background:${C.greenSoft};border:1px solid ${C.greenBorder};border-radius:999px;padding:7px 13px;margin:0 0 18px;">
+              <p style="margin:0;font-size:10px;color:${C.green};font-weight:700;line-height:1.25;letter-spacing:0.3px;">
+                ${methodLabel} aprovado
               </p>
+            </div>
 
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND.primary};border-radius:12px;padding:20px;color:#ffffff;">
-                <tr>
-                  <td>
-                    <span style="display:block;font-size:11px;font-weight:700;letter-spacing:1px;color:${BRAND.accent};text-transform:uppercase;">Código do pedido</span>
-                    <strong style="display:block;margin-top:6px;font-size:22px;font-weight:800;letter-spacing:1px;">${escapeHtml(order.orderCode)}</strong>
-                  </td>
-                </tr>
-              </table>
-
-              <h2 style="margin:32px 0 12px;font-size:14px;font-weight:800;color:${BRAND.primary};text-transform:uppercase;letter-spacing:1px;">Itens do pedido</h2>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${BRAND.border};">
-                ${itemRows}
-              </table>
-
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px;border-top:1px solid ${BRAND.border};">
-                <tr>
-                  <td style="padding:12px 0;color:${BRAND.muted};font-size:13px;">Subtotal</td>
-                  <td align="right" style="padding:12px 0;color:${BRAND.text};font-size:13px;font-weight:600;">${formatBRL(order.subtotal)}</td>
-                </tr>
-                <tr>
-                  <td style="padding:0 0 12px;color:${BRAND.muted};font-size:13px;">Frete</td>
-                  <td align="right" style="padding:0 0 12px;color:${BRAND.text};font-size:13px;font-weight:600;">${order.shipping > 0 ? formatBRL(order.shipping) : "Grátis"}</td>
-                </tr>
-                <tr>
-                  <td style="padding:12px 0;border-top:1px solid ${BRAND.border};color:${BRAND.primary};font-size:15px;font-weight:800;">Total pago</td>
-                  <td align="right" style="padding:12px 0;border-top:1px solid ${BRAND.border};color:${BRAND.green};font-size:18px;font-weight:800;">${formatBRL(order.total)}</td>
-                </tr>
-                <tr>
-                  <td style="padding:0;color:${BRAND.muted};font-size:12px;">Forma de pagamento</td>
-                  <td align="right" style="padding:0;color:${BRAND.text};font-size:12px;font-weight:600;">${methodLabel}</td>
-                </tr>
-              </table>
-
-              <h2 style="margin:32px 0 12px;font-size:14px;font-weight:800;color:${BRAND.primary};text-transform:uppercase;letter-spacing:1px;">Endereço de entrega</h2>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND.bg};border:1px solid ${BRAND.border};border-radius:12px;padding:16px;">
-                <tr>
-                  <td style="color:${BRAND.text};font-size:14px;line-height:22px;">
-                    <strong style="display:block;font-weight:700;color:${BRAND.primary};">${escapeHtml(order.customer.name)}</strong>
-                    ${addressLine1 ? `<span style="display:block;margin-top:4px;">${escapeHtml(addressLine1)}</span>` : ""}
-                    ${addressLine2 ? `<span style="display:block;color:${BRAND.muted};font-size:13px;">${escapeHtml(addressLine2)}</span>` : ""}
-                    ${order.customer.phone ? `<span style="display:block;margin-top:6px;color:${BRAND.muted};font-size:12px;">Telefone: ${escapeHtml(order.customer.phone)}</span>` : ""}
-                  </td>
-                </tr>
-              </table>
-
-              <p style="margin:32px 0 0;color:${BRAND.muted};font-size:12px;line-height:18px;">
-                Em caso de dúvidas, responda este e-mail. Estamos à disposição.
+            <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:${C.primary};">Código do pedido</p>
+            <div style="background:#f7f7f7;border:1px solid #dfdfdf;border-radius:11px;padding:0 12px;margin:0 0 14px;min-height:44px;line-height:44px;overflow:hidden;">
+              <p style="margin:0;font-size:15px;font-family:'Courier New',monospace;color:${C.primary};line-height:44px;font-weight:700;letter-spacing:1.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                ${escapeHtml(order.orderCode)}
               </p>
-            </td>
-          </tr>
+            </div>
 
-          <tr>
-            <td align="center" style="padding:24px 0 0;color:${BRAND.muted};font-size:11px;line-height:16px;">
-              © ${new Date().getFullYear()} ${BRAND.name}. Todos os direitos reservados.
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+            <a href="${escapeHtml(trackingHref)}" style="display:block;background:${C.accent};color:${C.primary};text-decoration:none;padding:0 18px;border-radius:999px;font-size:14px;font-weight:800;line-height:54px;min-height:54px;box-shadow:0 8px 18px rgba(212,160,23,0.28);letter-spacing:0.4px;text-transform:uppercase;">
+              Acompanhar meu pedido
+            </a>
+
+            <p style="margin:10px 0 0;font-size:10px;color:${C.muted};line-height:1.32;">
+              O link abre a página de rastreio com o seu código já preenchido.
+            </p>
+          </div>
+        </div>
+
+        <!-- items -->
+        <div style="padding:0 24px 4px;background:${C.cardSoft};">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:800;color:${C.primary};letter-spacing:1.2px;text-transform:uppercase;">Itens do pedido</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${C.line};">
+            ${itemRows}
+          </table>
+        </div>
+
+        <!-- totals -->
+        <div style="padding:0 24px 16px;background:${C.cardSoft};">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${C.line};">
+            <tr>
+              <td style="padding:10px 0;color:${C.muted};font-size:12px;">Subtotal</td>
+              <td align="right" style="padding:10px 0;color:${C.text};font-size:12px;font-weight:600;">${formatBRL(order.subtotal)}</td>
+            </tr>
+            <tr>
+              <td style="padding:0 0 10px;color:${C.muted};font-size:12px;">Frete</td>
+              <td align="right" style="padding:0 0 10px;color:${C.text};font-size:12px;font-weight:600;">${order.shipping > 0 ? formatBRL(order.shipping) : "Grátis"}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;border-top:1px solid ${C.line};color:${C.primary};font-size:13px;font-weight:800;">Total pago</td>
+              <td align="right" style="padding:10px 0;border-top:1px solid ${C.line};color:${C.green};font-size:15px;font-weight:800;">${formatBRL(order.total)}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- shipping address -->
+        <div style="padding:0 24px 16px;background:${C.cardSoft};">
+          <p style="margin:0 0 6px;font-size:11px;font-weight:800;color:${C.primary};letter-spacing:1.2px;text-transform:uppercase;">Endereço de entrega</p>
+          <div style="background:${C.card};border:1px solid ${C.line};border-radius:12px;padding:14px 16px;">
+            <p style="margin:0;color:${C.text};font-size:13px;line-height:20px;">
+              <strong style="display:block;font-weight:700;color:${C.primary};">${escapeHtml(order.customer.name)}</strong>
+              ${addressLine1 ? `<span style="display:block;margin-top:3px;">${escapeHtml(addressLine1)}</span>` : ""}
+              ${addressLine2 ? `<span style="display:block;color:${C.muted};font-size:12px;">${escapeHtml(addressLine2)}</span>` : ""}
+              ${order.customer.phone ? `<span style="display:block;margin-top:6px;color:${C.muted};font-size:11px;">Telefone: ${escapeHtml(order.customer.phone)}</span>` : ""}
+            </p>
+          </div>
+        </div>
+
+        <!-- warning band -->
+        <div style="padding:0 24px 22px;background:${C.cardSoft};">
+          <div style="background:${C.accentSoft};border:1px solid ${C.accentBorder};border-radius:9px;padding:12px;text-align:center;">
+            <p style="margin:0;font-size:12px;color:#9a5b00;line-height:1.45;">
+              Em até 24 h enviamos um novo e-mail com o código de rastreio dos Correios assim que o pedido for despachado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- secondary note -->
+    <div style="padding:0 32px 24px;">
+      <div style="background:#f7f7f7;border-radius:10px;padding:13px 16px;text-align:center;border:1px solid #eeeeee;">
+        <p style="margin:0;font-size:11px;color:${C.muted};line-height:1.55;">
+          Em caso de dúvidas, basta responder este e-mail. Nosso time de atendimento responde em horário comercial.
+        </p>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div style="background:${C.dark};padding:28px 32px;text-align:center;">
+      <span style="display:inline-block;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.4px;">
+        conforte<span style="color:${C.accent};">bem</span>
+      </span>
+      <div style="width:42px;height:2px;background:${C.accent};margin:10px auto 14px;"></div>
+      <p style="margin:0 0 14px;font-size:11px;color:${C.mutedSoft};line-height:1.45;">
+        Enxovais e decoração com curadoria premium.
+      </p>
+      <div style="border-top:1px solid ${C.footerLine};padding-top:14px;">
+        <p style="margin:0;font-size:11px;color:#8a8a8a;">© ${new Date().getFullYear()} ${BRAND_NAME}. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>`;
 

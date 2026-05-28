@@ -34,7 +34,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Servidor de e-mail não configurado." }, { status: 500 });
   }
 
-  const fromAddress = process.env.RESEND_FROM_EMAIL || "Confortebem <onboarding@resend.dev>";
+  const fromAddress =
+    process.env.RESEND_FROM_EMAIL || "Confortebem <suporte.oficial@confortebem.shop>";
 
   try {
     const { subject, html } = renderOrderConfirmationEmail(order as OrderEmailInput);
