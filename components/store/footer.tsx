@@ -3,7 +3,18 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ChevronDown, Mail } from "lucide-react"
-import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from "@/components/store/payment-icons"
+
+const PAYMENT_ICONS = [
+  { alt: "Amex", src: "https://icons.yampi.me/svg/card-amex.svg" },
+  { alt: "Visa", src: "https://icons.yampi.me/svg/card-visa.svg" },
+  { alt: "Diners", src: "https://icons.yampi.me/svg/card-diners.svg" },
+  { alt: "Mastercard", src: "https://icons.yampi.me/svg/card-mastercard.svg" },
+  { alt: "Discover", src: "https://icons.yampi.me/svg/card-discover.svg" },
+  { alt: "Aura", src: "https://icons.yampi.me/svg/card-aura.svg" },
+  { alt: "Elo", src: "https://icons.yampi.me/svg/card-elo.svg" },
+  { alt: "Hiper", src: "https://icons.yampi.me/svg/card-hiper.svg" },
+  { alt: "Pix", src: "https://icons.yampi.me/svg/card-pix.svg" },
+]
 
 interface FooterAccordionProps {
   title: string
@@ -87,19 +98,17 @@ export function Footer() {
         <p className="text-xs text-[#737373] leading-relaxed">
           Aceitamos Pix e cartões de crédito das principais bandeiras.
         </p>
-        <div className="flex items-center gap-3 flex-wrap mt-1">
-          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
-            <PixIcon className="h-4 w-auto" />
-          </span>
-          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
-            <VisaIcon className="h-4 w-auto" />
-          </span>
-          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
-            <MastercardIcon className="h-4 w-auto" />
-          </span>
-          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
-            <EloIcon className="h-4 w-auto" />
-          </span>
+        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+          {PAYMENT_ICONS.map((icon) => (
+            <img
+              key={icon.alt}
+              src={icon.src}
+              alt={icon.alt}
+              width={32}
+              height={22}
+              loading="lazy"
+            />
+          ))}
         </div>
       </FooterAccordion>
 
