@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 import { CartProvider } from '@/lib/cart-context'
 import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
@@ -42,6 +43,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18178198959"
+          strategy="beforeInteractive"
+        />
+        <Script id="google-ads-gtag" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-18178198959');
+          `}
+        </Script>
+      </head>
       <body className="font-sans antialiased">
         <CartProvider>
           <MenuProvider>
