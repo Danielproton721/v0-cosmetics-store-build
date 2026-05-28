@@ -159,8 +159,8 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
           <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
             <tr>
               <td style="padding-right:10px;vertical-align:middle;">
-                <div style="width:30px;height:30px;background:${C.accent};border-radius:8px;text-align:center;line-height:30px;">
-                  <span style="color:${C.primary};font-size:15px;font-weight:800;">✓</span>
+                <div style="width:30px;height:30px;background:${C.green};border-radius:50%;text-align:center;line-height:30px;">
+                  <span style="color:#ffffff;font-size:16px;font-weight:800;">✓</span>
                 </div>
               </td>
               <td style="vertical-align:middle;">
