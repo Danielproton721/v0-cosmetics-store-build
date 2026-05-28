@@ -293,6 +293,11 @@ function CheckoutContent() {
         return;
       }
       try {
+        console.log('[Pagou SDK] mounting card element (try)');
+        // Sempre limpa o container antes de montar — se sobrar um iframe
+        // morto de mount anterior o SDK não desenha em cima.
+        target.innerHTML = '';
+
         if (typeof PagouSDK.setEnvironment === 'function') {
           PagouSDK.setEnvironment(publicKey.startsWith('pk_test_') ? 'sandbox' : 'production');
         }
@@ -303,11 +308,12 @@ function CheckoutContent() {
         });
         const card = elements.create('card', { theme: 'default' });
         card.mount(target);
+        console.log('[Pagou SDK] card element mounted ok');
         setPagouElements(elements);
         setCardSdkReady(true);
         setCardSdkError(null);
       } catch (err: any) {
-        console.error('[Pagou SDK]', err);
+        console.error('[Pagou SDK] mount failed:', err);
         setCardSdkError(err?.message || 'Falha ao iniciar formulário de cartão.');
       }
     };
@@ -335,13 +341,17 @@ function CheckoutContent() {
   // Quando o usuário sai de "Cartão", o React desmonta o <div #pagou-card-element>
   // mas o state cardSdkReady continua true — aí, voltando pra Cartão, o useEffect
   // acima não re-roda e o iframe não remonta. Aqui resetamos pra forçar remount.
+  // Também limpamos o container no DOM (caso algum iframe morto fique pra trás).
   useEffect(() => {
-    if (payMethod !== 'card' && cardSdkReady) {
+    if (payMethod !== 'card' && (cardSdkReady || pagouElements)) {
+      console.log('[Pagou SDK] payMethod left card — resetting');
       setPagouElements(null);
       setCardSdkReady(false);
       setCardSdkError(null);
+      const container = document.getElementById('pagou-card-element');
+      if (container) container.innerHTML = '';
     }
-  }, [payMethod, cardSdkReady]);
+  }, [payMethod, cardSdkReady, pagouElements]);
 
   // Address State
   const [cep, setCep] = useState('');
