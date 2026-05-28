@@ -332,6 +332,17 @@ function CheckoutContent() {
     };
   }, [payMethod, cardSdkReady, currentStep]);
 
+  // Quando o usuário sai de "Cartão", o React desmonta o <div #pagou-card-element>
+  // mas o state cardSdkReady continua true — aí, voltando pra Cartão, o useEffect
+  // acima não re-roda e o iframe não remonta. Aqui resetamos pra forçar remount.
+  useEffect(() => {
+    if (payMethod !== 'card' && cardSdkReady) {
+      setPagouElements(null);
+      setCardSdkReady(false);
+      setCardSdkError(null);
+    }
+  }, [payMethod, cardSdkReady]);
+
   // Address State
   const [cep, setCep] = useState('');
   const [street, setStreet] = useState('');
