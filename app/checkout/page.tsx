@@ -1,12 +1,21 @@
 "use client";
 
-import React, { useState, useEffect, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck, Upload, FileCheck2, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { useCart } from '@/lib/cart-context';
 
 const ORDER_LOOKUP_STORAGE_KEY = 'confortebem-order-lookup-v1';
+const GOOGLE_ADS_PURCHASE_CONVERSION_ID = 'AW-18178198959/8W4lCPf56bQcEK-bhdxD';
+const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'confortebem-google-ads-conversions-v1';
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 type PixProof = {
   name: string;
@@ -134,6 +143,39 @@ function savePixProofLookup(code: string, proof: PixProof) {
   }
 }
 
+function sendGoogleAdsPurchaseConversion(transactionId: string, value: number) {
+  if (typeof window === 'undefined' || !transactionId) return;
+
+  try {
+    const raw = window.localStorage.getItem(GOOGLE_ADS_CONVERSION_STORAGE_KEY);
+    const tracked = raw ? JSON.parse(raw) : [];
+    const trackedIds = Array.isArray(tracked) ? tracked : [];
+
+    if (trackedIds.includes(transactionId)) return;
+
+    if (typeof window.gtag !== 'function') {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        window.dataLayer?.push(arguments);
+      };
+    }
+
+    window.gtag('event', 'conversion', {
+      send_to: GOOGLE_ADS_PURCHASE_CONVERSION_ID,
+      value: Number(value.toFixed(2)),
+      currency: 'BRL',
+      transaction_id: transactionId,
+    });
+
+    window.localStorage.setItem(
+      GOOGLE_ADS_CONVERSION_STORAGE_KEY,
+      JSON.stringify([transactionId, ...trackedIds].slice(0, 50)),
+    );
+  } catch (error) {
+    console.error('[GOOGLE ADS] Falha ao enviar conversao de compra:', error);
+  }
+}
+
 function formatProofSize(size: number) {
   if (size < 1024 * 1024) return `${Math.max(1, Math.round(size / 1024))} KB`;
   return `${(size / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
@@ -209,6 +251,7 @@ function CheckoutContent() {
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState('');
+  const purchaseConversionSentRef = useRef(false);
 
   const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
   const shippingPrice = selectedShipping.price;
@@ -406,6 +449,13 @@ function CheckoutContent() {
       throw new Error(data?.error || 'Nao foi possivel validar o checkout.');
     }
   }, [items]);
+
+  useEffect(() => {
+    if (!paymentConfirmed || !orderCode || purchaseConversionSentRef.current) return;
+
+    purchaseConversionSentRef.current = true;
+    sendGoogleAdsPurchaseConversion(orderCode, checkoutTotal);
+  }, [checkoutTotal, orderCode, paymentConfirmed]);
 
   const triggerError = (newErrors: Record<string, boolean>) => {
     setErrors(newErrors);
