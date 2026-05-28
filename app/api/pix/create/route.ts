@@ -101,14 +101,30 @@ export async function POST(request: Request) {
   const endpoint = "https://api.pagou.ai/v2/transactions";
   const externalRef = `order_${Date.now()}_${hashRateLimitValue(`${cpfDigits}|${amountCents}|${email}`).slice(0, 8)}`;
 
-  const payload = {
+  // Pagou.ai v2 hoje exige IP do comprador em todos os métodos. Caímos
+  // em IP brasileiro público quando estamos em local/dev.
+  const isPrivateIp = (value: string) =>
+    !value ||
+    value === "unknown" ||
+    value === "127.0.0.1" ||
+    value === "::1" ||
+    value === "0.0.0.0" ||
+    value.startsWith("192.168.") ||
+    value.startsWith("10.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(value);
+  const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
+
+  const payload: Record<string, any> = {
     external_ref: externalRef,
     amount: amountCents,
     currency: "BRL",
     method: "pix",
+    ip_address: buyerIp,
     buyer: {
       name: name.trim(),
       email: email.trim(),
+      phone: phoneDigits,
+      ip_address: buyerIp,
       document: {
         number: cpfDigits,
         type: "CPF",
@@ -149,20 +165,39 @@ export async function POST(request: Request) {
     }
 
     if (!upstream.ok) {
-      const detail =
-        data?.detail ||
-        data?.message ||
-        data?.error ||
-        data?.errors?.[0]?.message ||
-        "Erro desconhecido no gateway";
-      console.error(`[PIX API] Erro no Gateway (${upstream.status}):`, detail);
-      
+      const collectErrors = (input: any): string[] => {
+        if (!input) return [];
+        if (typeof input === "string") return [input];
+        if (Array.isArray(input)) return input.flatMap(collectErrors);
+        if (typeof input === "object") {
+          const parts: string[] = [];
+          if (input.message) parts.push(String(input.message));
+          if (input.detail) parts.push(String(input.detail));
+          if (input.error && typeof input.error === "string") parts.push(input.error);
+          if (input.field && input.message) parts.push(`${input.field}: ${input.message}`);
+          if (input.path) parts.push(`${Array.isArray(input.path) ? input.path.join(".") : input.path}: ${input.message || ""}`);
+          return parts.length ? parts : [JSON.stringify(input)];
+        }
+        return [String(input)];
+      };
+
+      const errorParts = [
+        ...collectErrors(data?.errors),
+        ...collectErrors(data?.validation_errors),
+        ...collectErrors(data?.error),
+        ...collectErrors(data?.detail),
+        ...collectErrors(data?.message),
+      ].filter(Boolean);
+
+      const detail = errorParts.length ? errorParts.join(" | ") : raw || "Erro desconhecido no gateway";
+      console.error(`[PIX API] Erro (${upstream.status}):`, raw);
+
       if (upstream.status === 401) {
-         return NextResponse.json({ error: "Chave de autenticação inválida na Pagou.ai." }, { status: 401 });
+        return NextResponse.json({ error: "Chave de autenticação inválida na Pagou.ai." }, { status: 401 });
       }
-      
+
       return NextResponse.json(
-        { error: `Falha ao processar PIX no gateway.`, detail },
+        { error: detail, gateway: data ?? raw },
         { status: 502 }
       );
     }

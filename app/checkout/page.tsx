@@ -541,9 +541,13 @@ function CheckoutContent() {
       });
       
       const data = await res.json();
-      
+
       if (!res.ok) {
-        throw new Error(data.error || data.detail || 'Erro ao gerar PIX');
+        const gatewayHint = data?.gateway
+          ? ` | gateway: ${typeof data.gateway === 'string' ? data.gateway : JSON.stringify(data.gateway)}`
+          : '';
+        console.error('[PIX][gateway response]', data);
+        throw new Error((data?.error || data?.detail || 'Erro ao gerar PIX') + gatewayHint);
       }
       
       setPixData({
