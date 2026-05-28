@@ -27,13 +27,13 @@ export default function PoliticaDePrivacidadePage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">1. Identificação do Controlador</h2>
             <p className="mt-2">
               Esta Política de Privacidade é aplicada pela marca <strong>Confortebem</strong>, operada por{" "}
-              <strong>Voil Atelie Comercio de Enxovais e Decoracao LTDA</strong>, inscrita no CNPJ{" "}
-              <strong>64.980.979/0001-94</strong>, com sede em Garça — São Paulo — Brasil.
+              <strong>CMRN GUIGA ENXOVAL LTDA</strong>, inscrita no CNPJ{" "}
+              <strong>49.084.920/0001-24</strong>, com sede em Franca — São Paulo — Brasil.
             </p>
             <p className="mt-2">
               Contato do encarregado de dados (DPO):{" "}
-              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
-                contato@confortebem.com.br
+              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
+                suporte.oficial@confortebem.shop
               </a>
             </p>
           </div>
@@ -107,8 +107,8 @@ export default function PoliticaDePrivacidadePage() {
             </ul>
             <p className="mt-2">
               Para exercer qualquer um desses direitos, entre em contato pelo e-mail{" "}
-              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
-                contato@confortebem.com.br
+              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
+                suporte.oficial@confortebem.shop
               </a>.
             </p>
           </div>
@@ -130,9 +130,9 @@ export default function PoliticaDePrivacidadePage() {
           <div className="rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-4">
             <p className="text-xs text-[#737373]">
               <strong className="text-[#1a1a1a]">Responsável pelo tratamento de dados:</strong><br />
-              Voil Atelie Comercio de Enxovais e Decoracao LTDA — CNPJ 64.980.979/0001-94<br />
-              Garça — São Paulo — Brasil<br />
-              contato@confortebem.com.br
+              CMRN GUIGA ENXOVAL LTDA — CNPJ 49.084.920/0001-24<br />
+              Franca — São Paulo — Brasil<br />
+              suporte.oficial@confortebem.shop
             </p>
           </div>
 

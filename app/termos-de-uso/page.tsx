@@ -27,8 +27,8 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">1. Identificação</h2>
             <p className="mt-2">
               Este site é operado pela marca <strong>Confortebem</strong>, de titularidade de{" "}
-              <strong>Voil Atelie Comercio de Enxovais e Decoracao LTDA</strong>, inscrita no CNPJ{" "}
-              <strong>64.980.979/0001-94</strong>, com sede em Garça — São Paulo — Brasil.
+              <strong>CMRN GUIGA ENXOVAL LTDA</strong>, inscrita no CNPJ{" "}
+              <strong>49.084.920/0001-24</strong>, com sede em Franca — São Paulo — Brasil.
             </p>
             <p className="mt-2">
               Ao acessar e utilizar este site, você declara ter lido, entendido e concordado integralmente com estes Termos de Uso.
@@ -81,8 +81,8 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">8. Trocas e Devoluções</h2>
             <p className="mt-2">
               Aceitamos trocas em caso de produto com defeito de fabricação, divergência com o produto anunciado ou avaria no transporte. O prazo para comunicar a solicitação é de até 30 dias após o recebimento. Para iniciar o processo, entre em contato pelo e-mail{" "}
-              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
-                contato@confortebem.com.br
+              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
+                suporte.oficial@confortebem.shop
               </a>.
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">9. Propriedade Intelectual</h2>
             <p className="mt-2">
-              Todo o conteúdo do site — textos, imagens, logotipos, identidade visual e código-fonte — é propriedade exclusiva da Confortebem / Voil Atelie Comercio de Enxovais e Decoracao LTDA. É proibida qualquer reprodução, distribuição ou uso comercial sem autorização prévia e por escrito.
+              Todo o conteúdo do site — textos, imagens, logotipos, identidade visual e código-fonte — é propriedade exclusiva da Confortebem / CMRN GUIGA ENXOVAL LTDA. É proibida qualquer reprodução, distribuição ou uso comercial sem autorização prévia e por escrito.
             </p>
           </div>
 
@@ -104,7 +104,7 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">11. Legislação Aplicável e Foro</h2>
             <p className="mt-2">
-              Estes Termos de Uso são regidos pelas leis brasileiras, em especial o Código de Defesa do Consumidor (Lei 8.078/1990), o Marco Civil da Internet (Lei 12.965/2014) e a Lei Geral de Proteção de Dados (Lei 13.709/2018). Fica eleito o foro da Comarca de Garça — SP para dirimir eventuais controvérsias.
+              Estes Termos de Uso são regidos pelas leis brasileiras, em especial o Código de Defesa do Consumidor (Lei 8.078/1990), o Marco Civil da Internet (Lei 12.965/2014) e a Lei Geral de Proteção de Dados (Lei 13.709/2018). Fica eleito o foro da Comarca de Franca — SP para dirimir eventuais controvérsias.
             </p>
           </div>
 
@@ -112,20 +112,20 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">12. Contato</h2>
             <p className="mt-2">
               Dúvidas sobre estes Termos de Uso? Entre em contato conosco:{" "}
-              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
-                contato@confortebem.com.br
+              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
+                suporte.oficial@confortebem.shop
               </a>
             </p>
           </div>
 
           <div className="rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-4">
             <p className="text-xs text-[#737373]">
-              <strong className="text-[#1a1a1a]">Razão Social:</strong> Voil Atelie Comercio de Enxovais e Decoracao LTDA<br />
-              <strong className="text-[#1a1a1a]">CNPJ:</strong> 64.980.979/0001-94<br />
-              <strong className="text-[#1a1a1a]">Sede:</strong> Garça — São Paulo — Brasil<br />
+              <strong className="text-[#1a1a1a]">Razão Social:</strong> CMRN GUIGA ENXOVAL LTDA<br />
+              <strong className="text-[#1a1a1a]">CNPJ:</strong> 49.084.920/0001-24<br />
+              <strong className="text-[#1a1a1a]">Sede:</strong> Franca — São Paulo — Brasil<br />
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:contato@confortebem.com.br" className="text-[#d4a017] underline">
-                contato@confortebem.com.br
+              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
+                suporte.oficial@confortebem.shop
               </a>
             </p>
           </div>

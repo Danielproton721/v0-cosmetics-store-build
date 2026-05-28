@@ -21,6 +21,19 @@ export default function TrocasEDevolucoesPage() {
         </h1>
 
         <div className="mt-6 space-y-5 text-sm leading-7 text-[#525252] md:text-base">
+          <div className="rounded-lg border border-[#eadfca] bg-[#fff9ea] p-4">
+            <p className="text-sm font-bold text-[#1a1a1a]">
+              Direito de arrependimento — 7 dias corridos
+            </p>
+            <p className="mt-1 text-sm leading-6 text-[#6f5310]">
+              Conforme o <strong>art. 49 do Código de Defesa do Consumidor</strong>{" "}
+              (Lei 8.078/1990), você tem o direito de desistir da compra em até{" "}
+              <strong>7 dias corridos</strong> a contar da data de recebimento do
+              produto, sem precisar justificar o motivo. Nesses casos, o valor
+              integral é devolvido pelo mesmo meio de pagamento, incluindo o frete.
+            </p>
+          </div>
+
           <p>
             Você pode solicitar troca ou devolução dentro do prazo informado no
             momento da compra, desde que o produto esteja sem sinais de uso, com
@@ -32,7 +45,7 @@ export default function TrocasEDevolucoesPage() {
               Como solicitar
             </h2>
             <p className="mt-2">
-              Envie uma mensagem para contato@confortebem.com.br com o número do
+              Envie uma mensagem para suporte.oficial@confortebem.shop com o número do
               pedido, nome completo, motivo da solicitação e fotos do produto, se
               houver defeito ou avaria.
             </p>

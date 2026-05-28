@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ChevronDown, Mail } from "lucide-react"
+import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from "@/components/store/payment-icons"
 
 interface FooterAccordionProps {
   title: string
@@ -66,9 +67,40 @@ export function Footer() {
         <Link href="/termos-de-uso" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Termos de Uso
         </Link>
+        <Link href="/trocas-e-devolucoes" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
+          Trocas e Devoluções
+        </Link>
         <Link href="/contato-e-catalogo" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Contato e Catálogo
         </Link>
+        <a
+          href="mailto:suporte.oficial@confortebem.shop"
+          className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors inline-flex items-center gap-2"
+        >
+          <Mail size={14} />
+          suporte.oficial@confortebem.shop
+        </a>
+      </FooterAccordion>
+
+      {/* Sessão 4 — Formas de pagamento */}
+      <FooterAccordion title="FORMAS DE PAGAMENTO">
+        <p className="text-xs text-[#737373] leading-relaxed">
+          Aceitamos Pix e cartões de crédito das principais bandeiras.
+        </p>
+        <div className="flex items-center gap-3 flex-wrap mt-1">
+          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
+            <PixIcon className="h-4 w-auto" />
+          </span>
+          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
+            <VisaIcon className="h-4 w-auto" />
+          </span>
+          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
+            <MastercardIcon className="h-4 w-auto" />
+          </span>
+          <span className="inline-flex items-center justify-center h-8 px-2 rounded-md border border-[#e5e5e5] bg-white">
+            <EloIcon className="h-4 w-auto" />
+          </span>
+        </div>
       </FooterAccordion>
 
       {/* Copyright — Bottom bar */}
