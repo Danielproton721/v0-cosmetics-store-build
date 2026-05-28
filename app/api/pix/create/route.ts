@@ -145,6 +145,9 @@ export async function POST(request: Request) {
   }
 
   try {
+    console.log("[PIX API] >>> request payload:", JSON.stringify(payload));
+    console.log("[PIX API] >>> using key prefix:", `${secretKey.slice(0, 6)}...${secretKey.slice(-4)}`);
+
     const upstream = await fetch(endpoint, {
       method: "POST",
       headers: {
@@ -157,6 +160,8 @@ export async function POST(request: Request) {
     });
 
     const raw = await upstream.text();
+    console.log(`[PIX API] <<< status ${upstream.status}, body:`, raw);
+
     let data: any = null;
     try {
       data = raw ? JSON.parse(raw) : null;
