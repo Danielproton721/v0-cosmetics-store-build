@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Nossa História | Confortebem",
-  description: "Conheça a história da Confortebem.",
+  title: "Nossa História | Fio Nobre",
+  description: "Conheça a história da Fio Nobre.",
 }
 
 export default function NossaHistoriaPage() {
@@ -21,7 +21,7 @@ export default function NossaHistoriaPage() {
         </h1>
         <div className="mt-6 space-y-4 text-sm leading-7 text-[#525252] md:text-base">
           <p>
-            A Confortebem foi criada com uma ideia simples: transformar a escolha de
+            A Fio Nobre foi criada com uma ideia simples: transformar a escolha de
             enxovais em uma experiência mais clara, inspiradora e confiável.
           </p>
           <p>

@@ -136,7 +136,7 @@ export function Header() {
 
           <div className="absolute left-1/2 top-1/2 text-center -translate-x-1/2 -translate-y-1/2">
             <Link href="/" className="inline-block">
-              <img src="/images/logo-confortebem.svg" alt="Confortebem" className="h-16 -my-3 mx-auto object-contain" />
+              <img src="/images/logo-fio-nobre.png" alt="Fio Nobre" className="h-16 -my-3 mx-auto object-contain" />
             </Link>
           </div>
 

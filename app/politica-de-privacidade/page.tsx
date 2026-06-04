@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Política de Privacidade | Confortebem",
-  description: "Saiba como a Confortebem coleta, usa e protege seus dados pessoais em conformidade com a LGPD.",
+  title: "Política de Privacidade | Fio Nobre",
+  description: "Saiba como a Fio Nobre coleta, usa e protege seus dados pessoais em conformidade com a LGPD.",
 }
 
 export default function PoliticaDePrivacidadePage() {
@@ -26,14 +26,14 @@ export default function PoliticaDePrivacidadePage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">1. Identificação do Controlador</h2>
             <p className="mt-2">
-              Esta Política de Privacidade é aplicada pela marca <strong>Confortebem</strong>, operada por{" "}
-              <strong>CMRN GUIGA ENXOVAL LTDA</strong>, inscrita no CNPJ{" "}
-              <strong>49.084.920/0001-24</strong>, com sede em Franca — São Paulo — Brasil.
+              Esta Política de Privacidade é aplicada pela marca <strong>Fio Nobre</strong>, operada por{" "}
+              <strong>C ALVES FRANCA LTDA</strong>, inscrita no CNPJ{" "}
+              <strong>64.846.844/0001-30</strong>, com sede em Capitão Poço — Pará — Brasil.
             </p>
             <p className="mt-2">
               Contato do encarregado de dados (DPO):{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>
             </p>
           </div>
@@ -107,8 +107,8 @@ export default function PoliticaDePrivacidadePage() {
             </ul>
             <p className="mt-2">
               Para exercer qualquer um desses direitos, entre em contato pelo e-mail{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>.
             </p>
           </div>
@@ -130,9 +130,9 @@ export default function PoliticaDePrivacidadePage() {
           <div className="rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-4">
             <p className="text-xs text-[#737373]">
               <strong className="text-[#1a1a1a]">Responsável pelo tratamento de dados:</strong><br />
-              CMRN GUIGA ENXOVAL LTDA — CNPJ 49.084.920/0001-24<br />
-              Franca — São Paulo — Brasil<br />
-              suporte.oficial@confortebem.shop
+              C ALVES FRANCA LTDA — CNPJ 64.846.844/0001-30<br />
+              Capitão Poço — Pará — Brasil<br />
+              suporte@fionobres.shop
             </p>
           </div>
 

@@ -50,7 +50,7 @@ export function Footer() {
     <footer className="bg-[#ffffff] border-t border-[#e5e5e5] pb-24">
 
       {/* Sessão 1 — Sobre a Empresa */}
-      <FooterAccordion title="Confortebem">
+      <FooterAccordion title="Fio Nobre">
         <p className="text-sm text-[#737373] leading-relaxed">
           Enxovais, conforto e bem-estar para o lar. Curadoria premium em cortinas, jogos de cama,
           tapetes e almofadas com foco em qualidade e requinte.
@@ -60,13 +60,13 @@ export function Footer() {
       {/* Sessão 2 — Dados Fiscais */}
       <FooterAccordion title="EMPRESA">
         <p className="text-sm text-[#737373] leading-relaxed">
-          Marca operada por CMRN GUIGA ENXOVAL LTDA
+          Marca operada por C ALVES FRANCA LTDA
         </p>
         <p className="text-sm text-[#737373]">
-          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 49.084.920/0001-24
+          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 64.846.844/0001-30
         </p>
         <p className="text-sm text-[#737373]">
-          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Rua Alírio Severo Nogueira, 2039 — Lote 01 Quadra 04 — Prolongamento Recanto Elimar — Franca, SP — CEP 14.403-320
+          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Rua Eduardo Gomes, 428 — Jardim Tropical — Capitão Poço, PA — CEP 68.650-000
         </p>
       </FooterAccordion>
 
@@ -85,11 +85,11 @@ export function Footer() {
           Contato e Catálogo
         </Link>
         <a
-          href="mailto:suporte.oficial@confortebem.shop"
+          href="mailto:suporte@fionobres.shop"
           className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors inline-flex items-center gap-2"
         >
           <Mail size={14} />
-          suporte.oficial@confortebem.shop
+          suporte@fionobres.shop
         </a>
       </FooterAccordion>
 
@@ -115,7 +115,7 @@ export function Footer() {
       {/* Copyright — Bottom bar */}
       <div className="px-4 pt-6 pb-6 border-t border-[#e5e5e5] flex flex-col items-center gap-1 text-center mt-4">
         <p className="text-[11px] text-[#737373] uppercase tracking-wide">
-          © 2026 CONFORTEBEM. TODOS OS DIREITOS RESERVADOS.
+          © 2026 FIO NOBRE. TODOS OS DIREITOS RESERVADOS.
         </p>
         <p className="text-[11px] text-[#b0b0b0] uppercase tracking-wide">
           DESIGN DE INTERIORES &amp; BEM-ESTAR

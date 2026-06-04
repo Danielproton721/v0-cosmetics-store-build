@@ -6,16 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { useCart } from '@/lib/cart-context';
 
-const ORDER_LOOKUP_STORAGE_KEY = 'confortebem-order-lookup-v1';
-const GOOGLE_ADS_PURCHASE_CONVERSION_ID = 'AW-18178198959/8W4lCPf56bQcEK-bhdxD';
-const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'confortebem-google-ads-conversions-v1';
-
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-  }
-}
+const ORDER_LOOKUP_STORAGE_KEY = 'fio-nobre-order-lookup-v1';
 
 type PixProof = {
   name: string;
@@ -143,39 +134,6 @@ function savePixProofLookup(code: string, proof: PixProof) {
   }
 }
 
-function sendGoogleAdsPurchaseConversion(transactionId: string, value: number) {
-  if (typeof window === 'undefined' || !transactionId) return;
-
-  try {
-    const raw = window.localStorage.getItem(GOOGLE_ADS_CONVERSION_STORAGE_KEY);
-    const tracked = raw ? JSON.parse(raw) : [];
-    const trackedIds = Array.isArray(tracked) ? tracked : [];
-
-    if (trackedIds.includes(transactionId)) return;
-
-    if (typeof window.gtag !== 'function') {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function gtag() {
-        window.dataLayer?.push(arguments);
-      };
-    }
-
-    window.gtag('event', 'conversion', {
-      send_to: GOOGLE_ADS_PURCHASE_CONVERSION_ID,
-      value: Number(value.toFixed(2)),
-      currency: 'BRL',
-      transaction_id: transactionId,
-    });
-
-    window.localStorage.setItem(
-      GOOGLE_ADS_CONVERSION_STORAGE_KEY,
-      JSON.stringify([transactionId, ...trackedIds].slice(0, 50)),
-    );
-  } catch (error) {
-    console.error('[GOOGLE ADS] Falha ao enviar conversao de compra:', error);
-  }
-}
-
 function formatProofSize(size: number) {
   if (size < 1024 * 1024) return `${Math.max(1, Math.round(size / 1024))} KB`;
   return `${(size / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
@@ -251,7 +209,6 @@ function CheckoutContent() {
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState('');
-  const purchaseConversionSentRef = useRef(false);
 
   const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
   const shippingPrice = selectedShipping.price;
@@ -470,13 +427,6 @@ function CheckoutContent() {
       throw new Error(data?.error || 'Nao foi possivel validar o checkout.');
     }
   }, [items]);
-
-  useEffect(() => {
-    if (!paymentConfirmed || !orderCode || purchaseConversionSentRef.current) return;
-
-    purchaseConversionSentRef.current = true;
-    sendGoogleAdsPurchaseConversion(orderCode, checkoutTotal);
-  }, [checkoutTotal, orderCode, paymentConfirmed]);
 
   const triggerError = (newErrors: Record<string, boolean>) => {
     setErrors(newErrors);
@@ -1014,7 +964,7 @@ function CheckoutContent() {
           >
             <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <p className="text-xs text-emerald-800 font-medium text-left leading-relaxed">
-              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na Confortebem; o rastreio da transportadora será enviado quando o pedido for despachado.
+              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na Fio Nobre; o rastreio da transportadora será enviado quando o pedido for despachado.
             </p>
           </motion.div>
 
@@ -1026,7 +976,7 @@ function CheckoutContent() {
             className="flex items-center justify-center gap-2 text-xs text-gray-400 font-bold mb-8"
           >
             <ShieldCheck className="w-4 h-4" />
-            Garantia de Satisfação Confortebem
+            Garantia de Satisfação Fio Nobre
           </motion.div>
 
           {/* Botão voltar para loja */}
@@ -1112,7 +1062,7 @@ function CheckoutContent() {
       {/* Topbar */}
       <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2">
-          <img src="/images/logo-confortebem.svg" alt="Confortebem" className="h-8 object-contain" />
+          <img src="/images/logo-fio-nobre.png" alt="Fio Nobre" className="h-8 object-contain" />
           <span className="text-[10px] text-[#d4a017] tracking-widest uppercase font-semibold">Checkout</span>
         </div>
         <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs sm:text-sm">

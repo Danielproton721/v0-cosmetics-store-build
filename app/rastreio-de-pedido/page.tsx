@@ -3,8 +3,8 @@ import { Header } from "@/components/store/header"
 import { TrackingSimulator } from "@/components/store/tracking-simulator"
 
 export const metadata = {
-  title: "Rastreio de Pedido | Confortebem",
-  description: "Acompanhe as informações de envio do seu pedido Confortebem.",
+  title: "Rastreio de Pedido | Fio Nobre",
+  description: "Acompanhe as informações de envio do seu pedido Fio Nobre.",
 }
 
 export default function RastreioDePedidoPage() {

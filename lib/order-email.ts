@@ -33,10 +33,10 @@ export type OrderEmailInput = {
   paymentMethod: "pix" | "card";
 };
 
-const BRAND_NAME = "Confortebem";
+const BRAND_NAME = "Fio Nobre";
 const BRAND_TRACKING_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://confortebem.shop";
-const BRAND_LOGO_URL = `${BRAND_TRACKING_URL}/images/logo-confortebem.svg`;
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://fionobres.shop";
+const BRAND_LOGO_URL = `${BRAND_TRACKING_URL}/images/logo-fio-nobre.png`;
 
 // Paleta brand
 const C = {
@@ -260,7 +260,9 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
 
     <!-- footer -->
     <div style="background:${C.dark};padding:28px 32px;text-align:center;">
-      <img src="${BRAND_LOGO_URL}" alt="${BRAND_NAME}" height="64" style="display:inline-block;height:64px;width:auto;max-width:200px;border:0;outline:none;text-decoration:none;filter:brightness(0) invert(1);" />
+      <div style="display:inline-block;background:#ffffff;border-radius:14px;padding:10px 16px;">
+        <img src="${BRAND_LOGO_URL}" alt="${BRAND_NAME}" height="64" style="display:block;height:64px;width:auto;max-width:200px;border:0;outline:none;text-decoration:none;" />
+      </div>
       <div style="width:42px;height:2px;background:${C.accent};margin:10px auto 14px;"></div>
       <p style="margin:0 0 14px;font-size:11px;color:${C.mutedSoft};line-height:1.45;">
         Enxovais e decoração com curadoria premium.

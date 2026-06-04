@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
-import Script from 'next/script'
 import { CartProvider } from '@/lib/cart-context'
 import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
@@ -8,25 +7,13 @@ import { CookieConsent } from '@/components/store/cookie-consent'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Confortebem | O Conforto que Abraça Sua Casa',
+  title: 'Fio Nobre | O Conforto que Abraça Sua Casa',
   description: 'Especialistas em enxovais para sua casa. Conforto, estilo e qualidade para o seu dia a dia.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: { url: '/icon.svg', type: 'image/svg+xml' },
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 }
 
@@ -43,21 +30,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18178198959"
-          strategy="beforeInteractive"
-        />
-        <Script id="google-ads-gtag" strategy="beforeInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'AW-18178198959');
-          `}
-        </Script>
-      </head>
       <body className="font-sans antialiased">
         <CartProvider>
           <MenuProvider>

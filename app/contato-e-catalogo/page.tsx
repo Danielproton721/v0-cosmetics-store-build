@@ -3,8 +3,8 @@ import { Footer } from "@/components/store/footer"
 import { Mail, Instagram } from "lucide-react"
 
 export const metadata = {
-  title: "Contato e Catálogo | Confortebem",
-  description: "Entre em contato com a Confortebem. Tire dúvidas, solicite o catálogo completo e fale com nossa equipe.",
+  title: "Contato e Catálogo | Fio Nobre",
+  description: "Entre em contato com a Fio Nobre. Tire dúvidas, solicite o catálogo completo e fale com nossa equipe.",
 }
 
 export default function ContatoECatalogoPage() {
@@ -39,10 +39,10 @@ export default function ContatoECatalogoPage() {
                 Para pedidos, trocas, dúvidas gerais e solicitação de catálogo.
               </p>
               <a
-                href="mailto:suporte.oficial@confortebem.shop"
+                href="mailto:suporte@fionobres.shop"
                 className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
               >
-                suporte.oficial@confortebem.shop
+                suporte@fionobres.shop
               </a>
               <p className="mt-1 text-xs text-[#b0b0b0]">Respondemos em até 24h úteis</p>
             </div>
@@ -60,12 +60,12 @@ export default function ContatoECatalogoPage() {
                 Acompanhe novidades, lançamentos e inspire-se com nossas decorações.
               </p>
               <a
-                href="https://instagram.com/confortebem"
+                href="https://instagram.com/fionobres"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
               >
-                @confortebem
+                @fionobres
               </a>
             </div>
           </div>
@@ -77,8 +77,8 @@ export default function ContatoECatalogoPage() {
           <h2 className="text-base font-bold text-[#1a1a1a]">Solicitar Catálogo Completo</h2>
           <p className="mt-2 text-sm leading-7 text-[#525252]">
             Quer conhecer toda a nossa linha de produtos? Envie um e-mail para{" "}
-            <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-              suporte.oficial@confortebem.shop
+            <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              suporte@fionobres.shop
             </a>{" "}
             com o assunto <strong>"Solicitar Catálogo"</strong> e nossa equipe enviará o PDF completo
             com todas as coleções, referências e tabela de preços para revenda.
@@ -91,16 +91,16 @@ export default function ContatoECatalogoPage() {
             Dados da Empresa
           </p>
           <div className="mt-3 space-y-1 text-sm text-[#525252]">
-            <p><strong className="text-[#1a1a1a]">Marca:</strong> Confortebem</p>
+            <p><strong className="text-[#1a1a1a]">Marca:</strong> Fio Nobre</p>
             <p>
-              <strong className="text-[#1a1a1a]">Razão Social:</strong> CMRN GUIGA ENXOVAL LTDA
+              <strong className="text-[#1a1a1a]">Razão Social:</strong> C ALVES FRANCA LTDA
             </p>
-            <p><strong className="text-[#1a1a1a]">CNPJ:</strong> 49.084.920/0001-24</p>
-            <p><strong className="text-[#1a1a1a]">Localização:</strong> Franca — São Paulo — Brasil</p>
+            <p><strong className="text-[#1a1a1a]">CNPJ:</strong> 64.846.844/0001-30</p>
+            <p><strong className="text-[#1a1a1a]">Localização:</strong> Capitão Poço — Pará — Brasil</p>
             <p>
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>
             </p>
           </div>

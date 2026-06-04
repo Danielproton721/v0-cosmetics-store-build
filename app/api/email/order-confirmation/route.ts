@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   }
 
   const fromAddress =
-    process.env.RESEND_FROM_EMAIL || "Confortebem <suporte.oficial@confortebem.shop>";
+    process.env.RESEND_FROM_EMAIL || "Fio Nobre <suporte@fionobres.shop>";
 
   try {
     const { subject, html } = renderOrderConfirmationEmail(order as OrderEmailInput);

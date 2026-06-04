@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Termos de Uso | Confortebem",
-  description: "Leia os Termos de Uso da Confortebem e saiba as regras para utilização do nosso site e serviços.",
+  title: "Termos de Uso | Fio Nobre",
+  description: "Leia os Termos de Uso da Fio Nobre e saiba as regras para utilização do nosso site e serviços.",
 }
 
 export default function TermosDeUsoPage() {
@@ -26,9 +26,9 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">1. Identificação</h2>
             <p className="mt-2">
-              Este site é operado pela marca <strong>Confortebem</strong>, de titularidade de{" "}
-              <strong>CMRN GUIGA ENXOVAL LTDA</strong>, inscrita no CNPJ{" "}
-              <strong>49.084.920/0001-24</strong>, com sede em Franca — São Paulo — Brasil.
+              Este site é operado pela marca <strong>Fio Nobre</strong>, de titularidade de{" "}
+              <strong>C ALVES FRANCA LTDA</strong>, inscrita no CNPJ{" "}
+              <strong>64.846.844/0001-30</strong>, com sede em Capitão Poço — Pará — Brasil.
             </p>
             <p className="mt-2">
               Ao acessar e utilizar este site, você declara ter lido, entendido e concordado integralmente com estes Termos de Uso.
@@ -38,7 +38,7 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">2. Objeto</h2>
             <p className="mt-2">
-              A Confortebem oferece enxovais, artigos de decoração e produtos para o lar (cortinas, jogos de cama, tapetes, almofadas e itens relacionados) por meio deste canal de e-commerce, destinado exclusivamente a consumidores finais (pessoa física) no território brasileiro.
+              A Fio Nobre oferece enxovais, artigos de decoração e produtos para o lar (cortinas, jogos de cama, tapetes, almofadas e itens relacionados) por meio deste canal de e-commerce, destinado exclusivamente a consumidores finais (pessoa física) no território brasileiro.
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">6. Prazo de Entrega e Frete</h2>
             <p className="mt-2">
-              Os prazos de entrega são estimados no momento do checkout com base no CEP de destino. Eventuais atrasos causados por transportadoras, Correios ou situações de força maior não são de responsabilidade da Confortebem, porém nos comprometemos a comunicar qualquer anormalidade ao cliente e buscar solução.
+              Os prazos de entrega são estimados no momento do checkout com base no CEP de destino. Eventuais atrasos causados por transportadoras, Correios ou situações de força maior não são de responsabilidade da Fio Nobre, porém nos comprometemos a comunicar qualquer anormalidade ao cliente e buscar solução.
             </p>
           </div>
 
@@ -81,8 +81,8 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">8. Trocas e Devoluções</h2>
             <p className="mt-2">
               Aceitamos trocas em caso de produto com defeito de fabricação, divergência com o produto anunciado ou avaria no transporte. O prazo para comunicar a solicitação é de até 30 dias após o recebimento. Para iniciar o processo, entre em contato pelo e-mail{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>.
             </p>
           </div>
@@ -90,21 +90,21 @@ export default function TermosDeUsoPage() {
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">9. Propriedade Intelectual</h2>
             <p className="mt-2">
-              Todo o conteúdo do site — textos, imagens, logotipos, identidade visual e código-fonte — é propriedade exclusiva da Confortebem / CMRN GUIGA ENXOVAL LTDA. É proibida qualquer reprodução, distribuição ou uso comercial sem autorização prévia e por escrito.
+              Todo o conteúdo do site — textos, imagens, logotipos, identidade visual e código-fonte — é propriedade exclusiva da Fio Nobre / C ALVES FRANCA LTDA. É proibida qualquer reprodução, distribuição ou uso comercial sem autorização prévia e por escrito.
             </p>
           </div>
 
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">10. Limitação de Responsabilidade</h2>
             <p className="mt-2">
-              A Confortebem não se responsabiliza por danos indiretos ou imprevisíveis decorrentes do uso do site ou de atrasos na entrega causados por terceiros. Nosso compromisso é garantir a melhor experiência possível dentro do nosso controle operacional.
+              A Fio Nobre não se responsabiliza por danos indiretos ou imprevisíveis decorrentes do uso do site ou de atrasos na entrega causados por terceiros. Nosso compromisso é garantir a melhor experiência possível dentro do nosso controle operacional.
             </p>
           </div>
 
           <div>
             <h2 className="text-base font-bold text-[#1a1a1a]">11. Legislação Aplicável e Foro</h2>
             <p className="mt-2">
-              Estes Termos de Uso são regidos pelas leis brasileiras, em especial o Código de Defesa do Consumidor (Lei 8.078/1990), o Marco Civil da Internet (Lei 12.965/2014) e a Lei Geral de Proteção de Dados (Lei 13.709/2018). Fica eleito o foro da Comarca de Franca — SP para dirimir eventuais controvérsias.
+              Estes Termos de Uso são regidos pelas leis brasileiras, em especial o Código de Defesa do Consumidor (Lei 8.078/1990), o Marco Civil da Internet (Lei 12.965/2014) e a Lei Geral de Proteção de Dados (Lei 13.709/2018). Fica eleito o foro da Comarca de Capitão Poço — PA para dirimir eventuais controvérsias.
             </p>
           </div>
 
@@ -112,20 +112,20 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">12. Contato</h2>
             <p className="mt-2">
               Dúvidas sobre estes Termos de Uso? Entre em contato conosco:{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>
             </p>
           </div>
 
           <div className="rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-4">
             <p className="text-xs text-[#737373]">
-              <strong className="text-[#1a1a1a]">Razão Social:</strong> CMRN GUIGA ENXOVAL LTDA<br />
-              <strong className="text-[#1a1a1a]">CNPJ:</strong> 49.084.920/0001-24<br />
-              <strong className="text-[#1a1a1a]">Sede:</strong> Franca — São Paulo — Brasil<br />
+              <strong className="text-[#1a1a1a]">Razão Social:</strong> C ALVES FRANCA LTDA<br />
+              <strong className="text-[#1a1a1a]">CNPJ:</strong> 64.846.844/0001-30<br />
+              <strong className="text-[#1a1a1a]">Sede:</strong> Capitão Poço — Pará — Brasil<br />
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:suporte.oficial@confortebem.shop" className="text-[#d4a017] underline">
-                suporte.oficial@confortebem.shop
+              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+                suporte@fionobres.shop
               </a>
             </p>
           </div>

@@ -2,8 +2,8 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 
 export const metadata = {
-  title: "Trocas e Devoluções | Confortebem",
-  description: "Informações sobre trocas, devoluções e prazos da Confortebem.",
+  title: "Trocas e Devoluções | Fio Nobre",
+  description: "Informações sobre trocas, devoluções e prazos da Fio Nobre.",
 }
 
 export default function TrocasEDevolucoesPage() {
@@ -45,7 +45,7 @@ export default function TrocasEDevolucoesPage() {
               Como solicitar
             </h2>
             <p className="mt-2">
-              Envie uma mensagem para suporte.oficial@confortebem.shop com o número do
+              Envie uma mensagem para suporte@fionobres.shop com o número do
               pedido, nome completo, motivo da solicitação e fotos do produto, se
               houver defeito ou avaria.
             </p>

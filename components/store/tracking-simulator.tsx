@@ -13,7 +13,7 @@ import {
   Truck,
 } from "lucide-react"
 
-type CarrierId = "correios" | "fedex" | "dhl" | "ups" | "confortebem"
+type CarrierId = "correios" | "fedex" | "dhl" | "ups" | "fionobre"
 
 type TrackingStep = {
   title: string
@@ -57,8 +57,8 @@ type OrderLookup = {
   savedAt?: string
 }
 
-const STORAGE_KEY = "confortebem-tracking-cache-v1"
-const ORDER_LOOKUP_STORAGE_KEY = "confortebem-order-lookup-v1"
+const STORAGE_KEY = "fio-nobre-tracking-cache-v1"
+const ORDER_LOOKUP_STORAGE_KEY = "fio-nobre-order-lookup-v1"
 const MAX_RECENT = 5
 // Recalcula a cada 1 minuto. O status real é derivado do tempo decorrido
 // desde a compra (savedAt), não de um timer simples.
@@ -84,7 +84,7 @@ const carrierLabels: Record<CarrierId, string> = {
   fedex: "FedEx",
   dhl: "DHL",
   ups: "UPS",
-  confortebem: "Confortebem Entregas",
+  fionobre: "Fio Nobre Entregas",
 }
 
 const statusTitles = [
@@ -150,7 +150,7 @@ function detectCarrier(code: string): CarrierId {
   if (/^\d{12}$/.test(code)) return "fedex"
   if (/^\d{10}$/.test(code)) return "dhl"
 
-  return "confortebem"
+  return "fionobre"
 }
 
 function formatDisplayCode(code: string, carrierId: CarrierId) {
@@ -607,7 +607,7 @@ export function TrackingSimulator() {
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
               <Truck className="h-5 w-5 text-[#d4a017]" />
               <p className="mt-3 font-bold text-[#1a1a1a]">Transportadoras</p>
-              <p className="mt-1 leading-6">Correios, FedEx, DHL, UPS e pedidos Confortebem.</p>
+              <p className="mt-1 leading-6">Correios, FedEx, DHL, UPS e pedidos Fio Nobre.</p>
             </div>
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
               <PackageCheck className="h-5 w-5 text-[#d4a017]" />
@@ -794,7 +794,7 @@ export function TrackingSimulator() {
               <p className="mt-1 text-sm text-white/70">Envie o número do pedido para o atendimento.</p>
             </div>
             <a
-              href="mailto:suporte.oficial@confortebem.shop"
+              href="mailto:suporte@fionobres.shop"
               className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-white px-4 text-sm font-bold text-[#1a1a1a] transition hover:bg-[#f3ead8]"
             >
               <Mail className="h-4 w-4" />

@@ -7,13 +7,13 @@ type PaymentStatusRecord = {
 };
 
 const globalForPaymentStatus = globalThis as typeof globalThis & {
-  __confortebemPaymentStatuses?: Map<string, PaymentStatusRecord>;
+  __fionobrePaymentStatuses?: Map<string, PaymentStatusRecord>;
 };
 
 const paymentStatuses =
-  globalForPaymentStatus.__confortebemPaymentStatuses ?? new Map<string, PaymentStatusRecord>();
+  globalForPaymentStatus.__fionobrePaymentStatuses ?? new Map<string, PaymentStatusRecord>();
 
-globalForPaymentStatus.__confortebemPaymentStatuses = paymentStatuses;
+globalForPaymentStatus.__fionobrePaymentStatuses = paymentStatuses;
 
 export function normalizePaymentStatus(status: unknown) {
   return String(status ?? "").trim().toLowerCase();
