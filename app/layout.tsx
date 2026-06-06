@@ -7,7 +7,7 @@ import { CookieConsent } from '@/components/store/cookie-consent'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Fio Nobre | O Conforto que Abraça Sua Casa',
+  title: 'Fio Nobre | Enxovais com Curadoria Premium',
   description: 'Especialistas em enxovais para sua casa. Conforto, estilo e qualidade para o seu dia a dia.',
   generator: 'v0.app',
   icons: {

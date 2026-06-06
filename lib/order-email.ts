@@ -138,7 +138,7 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
     <!-- header / logo -->
     <div style="background:${C.card};padding:24px 32px 20px;text-align:center;border-bottom:1px solid ${C.lineSoft};">
       <img src="${BRAND_LOGO_URL}" alt="${BRAND_NAME}" height="80" style="display:inline-block;height:80px;width:auto;max-width:240px;border:0;outline:none;text-decoration:none;" />
-      <p style="margin:4px 0 0;font-size:11px;color:${C.muted};letter-spacing:1.4px;text-transform:uppercase;">O conforto que abraça sua casa</p>
+      <p style="margin:4px 0 0;font-size:11px;color:${C.muted};letter-spacing:1.4px;text-transform:uppercase;">Enxovais com curadoria premium</p>
     </div>
 
     <!-- intro -->

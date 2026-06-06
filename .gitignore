@@ -27,3 +27,5 @@ scraping_v0/
 codex-next-dev.out.log
 codex-next-dev.err.log
 scripts/
+templates/
+email-preview.html
