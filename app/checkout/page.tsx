@@ -8,6 +8,50 @@ import { useCart } from '@/lib/cart-context';
 
 const ORDER_LOOKUP_STORAGE_KEY = 'fio-nobre-order-lookup-v1';
 
+// Google Ads — conversao de compra (conta Fio Nobre)
+const GOOGLE_ADS_CONVERSION_SEND_TO = 'AW-18197200459/gyTWCO_dpbocEMv8jOVD';
+const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'fio-nobre-google-ads-conversions-v1';
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+// Dispara a conversao SO quando o pagamento foi confirmado. Usa o transaction_id
+// (codigo do pedido) + localStorage para nunca contar a mesma venda 2x.
+function sendGoogleAdsPurchaseConversion(transactionId: string, value: number) {
+  if (typeof window === 'undefined' || !transactionId) return;
+  try {
+    const raw = window.localStorage.getItem(GOOGLE_ADS_CONVERSION_STORAGE_KEY);
+    const tracked = raw ? JSON.parse(raw) : [];
+    const trackedIds = Array.isArray(tracked) ? tracked : [];
+    if (trackedIds.includes(transactionId)) return;
+
+    if (typeof window.gtag !== 'function') {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        window.dataLayer?.push(arguments);
+      };
+    }
+
+    window.gtag('event', 'conversion', {
+      send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
+      value: Number(value.toFixed(2)),
+      currency: 'BRL',
+      transaction_id: transactionId,
+    });
+
+    window.localStorage.setItem(
+      GOOGLE_ADS_CONVERSION_STORAGE_KEY,
+      JSON.stringify([transactionId, ...trackedIds].slice(0, 50)),
+    );
+  } catch (error) {
+    console.error('[GOOGLE ADS] Falha ao enviar conversao de compra:', error);
+  }
+}
+
 type PixProof = {
   name: string;
   size: number;
@@ -209,10 +253,19 @@ function CheckoutContent() {
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState('');
+  const purchaseConversionSentRef = useRef(false);
 
   const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
   const shippingPrice = selectedShipping.price;
   const checkoutTotal = totalPrice + shippingPrice;
+
+  // Conversao de compra (Google Ads) — dispara apenas quando o pagamento foi
+  // confirmado, enviando o valor real e o id unico do pedido.
+  useEffect(() => {
+    if (!paymentConfirmed || !orderCode || purchaseConversionSentRef.current) return;
+    purchaseConversionSentRef.current = true;
+    sendGoogleAdsPurchaseConversion(orderCode, checkoutTotal);
+  }, [paymentConfirmed, orderCode, checkoutTotal]);
 
   // Pagou.ai Payment Element SDK v3 — carrega script e monta o card element
   // quando o usuário escolhe pagamento por cartão.
