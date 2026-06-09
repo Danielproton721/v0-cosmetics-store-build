@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "txid obrigatorio." }, { status: 400 });
   }
 
-  const payment = getPaymentStatus(txid);
+  const payment = await getPaymentStatus(txid);
 
   return NextResponse.json({
     txid,

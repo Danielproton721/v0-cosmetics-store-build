@@ -6,6 +6,9 @@ import {
   hashRateLimitValue,
   validateCheckoutSession,
 } from "@/lib/checkout-security";
+import { buildOrderCode } from "@/lib/order-code";
+import { saveOrder } from "@/lib/order-store";
+import type { OrderEmailItem } from "@/lib/order-email";
 
 export const dynamic = "force-dynamic";
 
@@ -219,8 +222,59 @@ export async function POST(request: Request) {
 
     const expiresAt = pix.expiration_date ?? new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
+    const txid = transaction?.id ?? data?.id ?? data?.transactionId ?? null;
+
+    // Persiste o pedido completo associado ao txid para que o webhook consiga
+    // disparar o e-mail de confirmação no servidor (mesmo com a aba fechada).
+    // O código do pedido é gerado aqui e devolvido ao front, que o salva no
+    // localStorage do rastreio — mantendo um único código em toda a jornada.
+    let orderCode: string | null = null;
+    if (txid) {
+      orderCode = buildOrderCode(String(txid));
+      try {
+        const orderInput = (body?.order ?? {}) as {
+          address?: any;
+          items?: OrderEmailItem[];
+          subtotal?: number;
+          shipping?: number;
+        };
+
+        await saveOrder(String(txid), {
+          txid: String(txid),
+          createdAt: new Date().toISOString(),
+          orderCode,
+          paymentMethod: "pix",
+          customer: {
+            name: name.trim(),
+            email: email.trim(),
+            phone: phoneDigits,
+            cpf: cpfDigits,
+          },
+          address: {
+            cep: String(orderInput.address?.cep ?? "").trim(),
+            street: String(orderInput.address?.street ?? "").trim(),
+            number: String(orderInput.address?.number ?? "").trim(),
+            complement: orderInput.address?.complement
+              ? String(orderInput.address.complement).trim()
+              : undefined,
+            neighborhood: String(orderInput.address?.neighborhood ?? "").trim(),
+            city: String(orderInput.address?.city ?? "").trim(),
+            stateUF: String(orderInput.address?.stateUF ?? "").trim().toUpperCase(),
+          },
+          items: Array.isArray(orderInput.items) ? orderInput.items : [],
+          subtotal: Number(orderInput.subtotal ?? value),
+          shipping: Number(orderInput.shipping ?? 0),
+          total: Number(value),
+        });
+      } catch (err) {
+        // Não bloqueia o pagamento; apenas o e-mail server-side pode não sair.
+        console.error("[PIX API] Falha ao persistir pedido no KV:", err);
+      }
+    }
+
     return NextResponse.json({
-      txid: transaction?.id ?? data?.id ?? data?.transactionId ?? null,
+      txid,
+      orderCode,
       qrCode,
       qrCodeImage,
       expiresAt,

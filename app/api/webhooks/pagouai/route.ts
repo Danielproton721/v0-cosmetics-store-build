@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 
-import { recordPaymentStatus } from "@/lib/payment-status"
+import { recordPaymentStatus, isGatewayPaidStatus } from "@/lib/payment-status"
+import { getOrder } from "@/lib/order-store"
+import { dispatchOrderEmailOnce } from "@/lib/send-order-email"
 
 export const dynamic = "force-dynamic"
 
@@ -63,13 +65,45 @@ export async function POST(request: Request) {
   })
 
   if (transactionId && status) {
-    recordPaymentStatus({
+    const txid = String(transactionId)
+
+    await recordPaymentStatus({
       event: String(event),
-      transactionId: String(transactionId),
+      transactionId: txid,
       status: String(status),
       paymentMethod: paymentMethod ? String(paymentMethod) : null,
       updatedAt: new Date().toISOString(),
     })
+
+    // Pagamento confirmado: dispara o e-mail de confirmação no servidor, sem
+    // depender de o cliente estar com a aba aberta. O pedido foi persistido no
+    // KV quando o PIX foi criado. A trava de idempotência impede duplicidade
+    // caso o front também dispare o e-mail.
+    if (isGatewayPaidStatus(status)) {
+      try {
+        const order = await getOrder(txid)
+        if (order) {
+          const result = await dispatchOrderEmailOnce(txid, order)
+          console.log("[PAGOUAI WEBHOOK] e-mail:", {
+            txid,
+            outcome: result.ok
+              ? result.deduped
+                ? "ja-enviado"
+                : `enviado:${result.id ?? ""}`
+              : `falha:${result.error}`,
+          })
+        } else {
+          console.warn(
+            "[PAGOUAI WEBHOOK] pedido nao encontrado no KV para txid",
+            txid,
+            "- e-mail nao disparado pelo webhook (verifique se o KV esta provisionado).",
+          )
+        }
+      } catch (err) {
+        // Best-effort: nunca derruba o webhook por causa do e-mail.
+        console.error("[PAGOUAI WEBHOOK] erro ao despachar e-mail:", err)
+      }
+    }
   }
 
   return NextResponse.json({

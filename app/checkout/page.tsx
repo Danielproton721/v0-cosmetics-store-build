@@ -8,6 +8,57 @@ import { useCart } from '@/lib/cart-context';
 
 const ORDER_LOOKUP_STORAGE_KEY = 'fio-nobre-order-lookup-v1';
 
+// Snapshot da tela de "Pedido Confirmado" — persistido para sobreviver a reload
+// ou à pessoa sair da aba e voltar (senão ela perde o código de rastreio).
+const CONFIRMED_ORDER_STORAGE_KEY = 'fio-nobre-confirmed-order-v1';
+
+type ConfirmedOrder = {
+  orderCode: string;
+  customerName: string;
+  email: string;
+  paymentMethod: 'pix' | 'card';
+  total: number;
+  installments: number;
+  confirmedAt: string;
+};
+
+function persistConfirmedOrder(snapshot: ConfirmedOrder) {
+  try {
+    window.localStorage.setItem(CONFIRMED_ORDER_STORAGE_KEY, JSON.stringify(snapshot));
+  } catch {
+    // A tela ao vivo continua funcionando mesmo se o navegador bloquear storage.
+  }
+}
+
+function readConfirmedOrder(): ConfirmedOrder | null {
+  try {
+    const raw = window.localStorage.getItem(CONFIRMED_ORDER_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as ConfirmedOrder;
+    if (!parsed?.orderCode) return null;
+    // Expira após 7 dias para não "sequestrar" o checkout indefinidamente caso
+    // a pessoa nunca clique em fechar.
+    if (parsed.confirmedAt) {
+      const ageMs = Date.now() - new Date(parsed.confirmedAt).getTime();
+      if (Number.isFinite(ageMs) && ageMs > 7 * 24 * 60 * 60 * 1000) {
+        clearConfirmedOrder();
+        return null;
+      }
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function clearConfirmedOrder() {
+  try {
+    window.localStorage.removeItem(CONFIRMED_ORDER_STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 // Google Ads — conversao de compra (conta Fio Nobre)
 const GOOGLE_ADS_CONVERSION_SEND_TO = 'AW-18197200459/gyTWCO_dpbocEMv8jOVD';
 const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'fio-nobre-google-ads-conversions-v1';
@@ -184,21 +235,25 @@ function formatProofSize(size: number) {
 }
 
 function CheckoutContent() {
-  const { items, totalPrice, removeItem, updateQuantity } = useCart();
-  
+  const { items, totalPrice, removeItem, updateQuantity, clearCart } = useCart();
+
   const [isMounted, setIsMounted] = useState(false);
   const [showExitWarning, setShowExitWarning] = useState(false);
+  // Espelha paymentConfirmed numa ref para as armadilhas de saída lerem o valor
+  // atual sem precisar entrar na dep array (a declaração do estado vem depois).
+  const paymentConfirmedRef = useRef(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Intercepta fechamento da aba ou refresh
+  // Intercepta fechamento da aba ou refresh — mas NÃO depois do pedido pago.
   useEffect(() => {
     if (!isMounted) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (paymentConfirmedRef.current) return; // compra concluída: não prende
       e.preventDefault();
-      e.returnValue = ''; 
+      e.returnValue = '';
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -207,11 +262,13 @@ function CheckoutContent() {
   // Armadilha para o botão voltar do celular/navegador
   useEffect(() => {
     if (!isMounted) return;
-    
+
     // Empurra um estado extra para amortecer o "Voltar"
     window.history.pushState({ trap: true }, '');
 
     const handlePopState = () => {
+      // Pedido já pago: deixa o cliente navegar livremente.
+      if (paymentConfirmedRef.current) return;
       // Quando tenta voltar, em vez de sair da página, exibe o popup
       setShowExitWarning(true);
       // E repõe a armadilha
@@ -253,7 +310,11 @@ function CheckoutContent() {
   // Thank You screen state
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState('');
+  const [confirmedOrder, setConfirmedOrder] = useState<ConfirmedOrder | null>(null);
   const purchaseConversionSentRef = useRef(false);
+  // Código do pedido gerado no servidor (no /api/pix/create) e reaproveitado
+  // na confirmação, para casar com o e-mail disparado pelo webhook.
+  const pendingOrderCodeRef = useRef<string>('');
 
   const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
   const shippingPrice = selectedShipping.price;
@@ -266,6 +327,22 @@ function CheckoutContent() {
     purchaseConversionSentRef.current = true;
     sendGoogleAdsPurchaseConversion(orderCode, checkoutTotal);
   }, [paymentConfirmed, orderCode, checkoutTotal]);
+
+  // Mantém a ref espelhada com o estado (lida pelas armadilhas de saída).
+  useEffect(() => {
+    paymentConfirmedRef.current = paymentConfirmed;
+  }, [paymentConfirmed]);
+
+  // Restaura a tela de "Pedido Confirmado" quando a pessoa recarrega ou sai da
+  // aba e volta — assim ela não perde o código de rastreio. Não reescreve
+  // `orderCode` de propósito, para a conversão do Google Ads não disparar 2x.
+  useEffect(() => {
+    const saved = readConfirmedOrder();
+    if (saved) {
+      setConfirmedOrder(saved);
+      setPaymentConfirmed(true);
+    }
+  }, []);
 
   // Pagou.ai Payment Element SDK v3 — carrega script e monta o card element
   // quando o usuário escolhe pagamento por cartão.
@@ -383,7 +460,7 @@ function CheckoutContent() {
   };
 
   const sendOrderConfirmationEmail = useCallback(
-    async (code: string, method: 'pix' | 'card') => {
+    async (code: string, method: 'pix' | 'card', txid?: string | null) => {
       if (!email || items.length === 0) return;
       try {
         await fetch('/api/email/order-confirmation', {
@@ -391,6 +468,8 @@ function CheckoutContent() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderCode: code,
+            // Coordena a idempotência com o webhook (mesma chave por txid).
+            txid: txid ?? undefined,
             customer: {
               name: name.trim(),
               email: email.trim(),
@@ -430,6 +509,20 @@ function CheckoutContent() {
       phone, shippingPrice, stateUF, street, totalPrice, checkoutTotal,
     ],
   );
+
+  // Fecha/dispensa a tela de "Pedido Confirmado": apaga o snapshot persistido,
+  // esvazia o carrinho (a compra terminou) e volta para a loja.
+  const handleCloseConfirmation = useCallback(() => {
+    clearConfirmedOrder();
+    clearCart();
+    setConfirmedOrder(null);
+    setPaymentConfirmed(false);
+    paymentConfirmedRef.current = false;
+    setPixData(null);
+    setOrderCode('');
+    pendingOrderCodeRef.current = '';
+    window.location.href = '/';
+  }, [clearCart]);
 
   const issueOrderCode = useCallback((source: string) => {
     const code = buildOrderCode(source);
@@ -560,10 +653,33 @@ function CheckoutContent() {
           cpf,
           name,
           email,
-          title: "Combo Enxoval"
+          title: "Combo Enxoval",
+          // Pedido completo persistido no servidor (KV) para o webhook
+          // conseguir disparar o e-mail mesmo com a aba fechada.
+          order: {
+            address: {
+              cep: cep.trim(),
+              street: street.trim(),
+              number: number.trim(),
+              complement: complement.trim() || undefined,
+              neighborhood: neighborhood.trim(),
+              city: city.trim(),
+              stateUF: stateUF.trim().toUpperCase(),
+            },
+            items: items.map((item) => ({
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              price: item.price,
+              compareAtPrice: item.compareAtPrice,
+              quantity: item.quantity,
+            })),
+            subtotal: totalPrice,
+            shipping: shippingPrice,
+          },
         })
       });
-      
+
       const data = await res.json();
 
       if (!res.ok) {
@@ -573,13 +689,44 @@ function CheckoutContent() {
         console.error('[PIX][gateway response]', data);
         throw new Error((data?.error || data?.detail || 'Erro ao gerar PIX') + gatewayHint);
       }
-      
+
       setPixData({
         qrCode: data.qrCode,
         qrCodeImage: data.qrCodeImage,
         expiresAt: data.expiresAt,
         txid: data.txid ?? null,
       });
+
+      // Código do pedido gerado no servidor: guarda para a confirmação e já
+      // popula o lookup do rastreio (localStorage) com o MESMO código, para o
+      // link do e-mail (disparado pelo webhook) bater com o rastreio local.
+      if (data.orderCode) {
+        pendingOrderCodeRef.current = data.orderCode;
+        saveOrderLookup({
+          code: data.orderCode,
+          name: name.trim(),
+          email: email.trim(),
+          phone,
+          destinationAddress: buildDestinationAddress({
+            cep,
+            street,
+            number,
+            complement,
+            neighborhood,
+            city,
+            stateUF,
+          }),
+          address: {
+            cep: cep.trim(),
+            street: street.trim(),
+            number: number.trim(),
+            complement: complement.trim(),
+            neighborhood: neighborhood.trim(),
+            city: city.trim(),
+            stateUF: stateUF.trim().toUpperCase(),
+          },
+        });
+      }
 
       setTimeout(() => {
         document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -604,9 +751,33 @@ function CheckoutContent() {
         const data = await response.json().catch(() => null);
 
         if (!stopped && response.ok && data?.paid) {
-          const code = issueOrderCode(pixData.txid || `${email}|${cpf}|pix|paid|${Date.now()}`);
+          // Usa o código gerado no servidor (devolvido na criação do PIX). Só
+          // gera localmente como fallback caso ele não tenha vindo.
+          const code =
+            pendingOrderCodeRef.current ||
+            issueOrderCode(pixData.txid || `${email}|${cpf}|pix|paid|${Date.now()}`);
+          if (pendingOrderCodeRef.current) {
+            setOrderCode(code);
+            if (pixProof) savePixProofLookup(code, pixProof);
+          }
+          // Snapshot persistido: a tela de confirmação sobrevive a reload / sair
+          // e voltar da aba, preservando o código de rastreio.
+          const snapshot: ConfirmedOrder = {
+            orderCode: code,
+            customerName: name,
+            email,
+            paymentMethod: 'pix',
+            total: checkoutTotal,
+            installments: 1,
+            confirmedAt: new Date().toISOString(),
+          };
+          setConfirmedOrder(snapshot);
+          persistConfirmedOrder(snapshot);
           setPaymentConfirmed(true);
-          void sendOrderConfirmationEmail(code, 'pix');
+          // Rede de segurança (Camada 1): o webhook é a fonte primária do
+          // e-mail; isto cobre o caso de a notificação do gateway não chegar.
+          // A trava por txid no servidor garante um único envio.
+          void sendOrderConfirmationEmail(code, 'pix', pixData.txid);
         }
       } catch {
         // O PIX continua aguardando a confirmacao do gateway.
@@ -686,7 +857,18 @@ function CheckoutContent() {
     setCardResult({ approved, message });
     if (approved) {
       const code = issueOrderCode(transaction?.id || `${email}|${cpf}|card|paid|${Date.now()}`);
-      void sendOrderConfirmationEmail(code, 'card');
+      void sendOrderConfirmationEmail(code, 'card', transaction?.id ?? null);
+      const snapshot: ConfirmedOrder = {
+        orderCode: code,
+        customerName: name,
+        email,
+        paymentMethod: 'card',
+        total: checkoutTotal,
+        installments: parseInt(cardInstallments) || 1,
+        confirmedAt: new Date().toISOString(),
+      };
+      setConfirmedOrder(snapshot);
+      persistConfirmedOrder(snapshot);
       setTimeout(() => setPaymentConfirmed(true), 1500);
     } else if (!approved) {
       // Falha definitiva — remonta o card pra próxima tentativa.
@@ -881,6 +1063,17 @@ function CheckoutContent() {
   // TELA DE OBRIGADO — exibida após pagamento confirmado
   // ═══════════════════════════════════════════════════════════════
   if (paymentConfirmed) {
+    // Usa o snapshot persistido (sobrevive a reload / sair e voltar da aba). Cai
+    // nos estados ao vivo só como fallback do fluxo recém-confirmado.
+    const display: ConfirmedOrder = confirmedOrder ?? {
+      orderCode,
+      customerName: name,
+      email,
+      paymentMethod: payMethod,
+      total: checkoutTotal,
+      installments: parseInt(cardInstallments) || 1,
+      confirmedAt: '',
+    };
     return (
       <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-gray-50 flex items-center justify-center p-4">
         <motion.div
@@ -891,6 +1084,16 @@ function CheckoutContent() {
         >
           {/* Barra dourada no topo */}
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#d4a017] via-[#f0c850] to-[#d4a017]" />
+
+          {/* Botão de fechar — dispensa a tela persistente e volta para a loja */}
+          <button
+            type="button"
+            onClick={handleCloseConfirmation}
+            aria-label="Fechar"
+            className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition hover:bg-gray-200 hover:text-gray-800"
+          >
+            <X className="w-5 h-5" />
+          </button>
 
           {/* Ícone de sucesso animado */}
           <motion.div
@@ -935,10 +1138,10 @@ function CheckoutContent() {
             transition={{ delay: 0.65 }}
             className="text-gray-500 font-medium mb-8 text-sm sm:text-base"
           >
-            Obrigado pela sua compra, <span className="text-gray-800 font-bold">{name.split(' ')[0]}</span>! 🎉
+            Obrigado pela sua compra, <span className="text-gray-800 font-bold">{(display.customerName || '').split(' ')[0]}</span>! 🎉
           </motion.p>
 
-          {orderCode && (
+          {display.orderCode && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -949,7 +1152,7 @@ function CheckoutContent() {
                 <PackageCheck className="w-5 h-5 text-[#d4a017] shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-black">Código do pedido</p>
-                  <p className="mt-2 text-2xl font-black tracking-wide text-white break-words">{orderCode}</p>
+                  <p className="mt-2 text-2xl font-black tracking-wide text-white break-words">{display.orderCode}</p>
                   <p className="mt-2 text-xs leading-relaxed text-white/70">
                     Use este código para acompanhar o andamento do pedido depois da compra.
                   </p>
@@ -957,7 +1160,7 @@ function CheckoutContent() {
               </div>
               <button
                 type="button"
-                onClick={() => navigator.clipboard.writeText(orderCode)}
+                onClick={() => navigator.clipboard.writeText(display.orderCode)}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-xs font-black uppercase tracking-wide text-[#1a1a1a] transition hover:bg-[#f3ead8]"
               >
                 <Copy className="w-4 h-4" />
@@ -976,7 +1179,7 @@ function CheckoutContent() {
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500 font-medium">Método</span>
               <span className="font-bold text-gray-800 flex items-center gap-1.5">
-                {payMethod === 'pix' ? (
+                {display.paymentMethod === 'pix' ? (
                   <><PixIcon className="w-4 h-4" /> PIX</>
                 ) : (
                   <><CreditCard className="w-4 h-4" /> Cartão de Crédito</>
@@ -987,16 +1190,16 @@ function CheckoutContent() {
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500 font-medium">Total pago</span>
               <span className="font-black text-emerald-600 text-lg">
-                R$ {checkoutTotal.toFixed(2).replace('.', ',')}
+                R$ {display.total.toFixed(2).replace('.', ',')}
               </span>
             </div>
-            {payMethod === 'card' && parseInt(cardInstallments) > 1 && (
+            {display.paymentMethod === 'card' && display.installments > 1 && (
               <>
                 <div className="border-t border-gray-200" />
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-500 font-medium">Parcelas</span>
                   <span className="font-bold text-gray-800">
-                    {cardInstallments}x de R$ {(checkoutTotal / parseInt(cardInstallments)).toFixed(2).replace('.', ',')}
+                    {display.installments}x de R$ {(display.total / display.installments).toFixed(2).replace('.', ',')}
                   </span>
                 </div>
               </>
@@ -1004,7 +1207,7 @@ function CheckoutContent() {
             <div className="border-t border-gray-200" />
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500 font-medium">E-mail</span>
-              <span className="font-bold text-gray-800 text-xs">{email}</span>
+              <span className="font-bold text-gray-800 text-xs">{display.email}</span>
             </div>
           </motion.div>
 
@@ -1017,7 +1220,7 @@ function CheckoutContent() {
           >
             <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <p className="text-xs text-emerald-800 font-medium text-left leading-relaxed">
-              Enviamos a confirmação para <strong>{email}</strong>. O código acima acompanha o pedido na Fio Nobre; o rastreio da transportadora será enviado quando o pedido for despachado.
+              Enviamos a confirmação para <strong>{display.email}</strong>. O código acima acompanha o pedido na Fio Nobre; o rastreio da transportadora será enviado quando o pedido for despachado.
             </p>
           </motion.div>
 
@@ -1033,9 +1236,9 @@ function CheckoutContent() {
           </motion.div>
 
           {/* Botão voltar para loja */}
-          {orderCode && (
+          {display.orderCode && (
             <motion.a
-              href={`/rastreio-de-pedido?codigo=${encodeURIComponent(orderCode)}`}
+              href={`/rastreio-de-pedido?codigo=${encodeURIComponent(display.orderCode)}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.12 }}
@@ -1045,15 +1248,16 @@ function CheckoutContent() {
             </motion.a>
           )}
 
-          <motion.a
-            href="/"
+          <motion.button
+            type="button"
+            onClick={handleCloseConfirmation}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
             className="inline-block w-full py-4 bg-[#d4a017] hover:bg-[#b8891a] text-[#1a1a1a] rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
           >
             Continuar Comprando
-          </motion.a>
+          </motion.button>
         </motion.div>
       </div>
     );
