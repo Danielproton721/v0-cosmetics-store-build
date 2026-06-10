@@ -11,11 +11,8 @@ export const metadata: Metadata = {
   title: 'Fio Nobre | Enxovais com Curadoria Premium',
   description: 'Especialistas em enxovais para sua casa. Conforto, estilo e qualidade para o seu dia a dia.',
   generator: 'v0.app',
-  icons: {
-    icon: { url: '/icon.svg', type: 'image/svg+xml' },
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
-  },
+  // Favicons servidos pela convenção do Next: app/favicon.ico, app/icon.png,
+  // app/apple-icon.png (as tags <link> são geradas automaticamente).
 }
 
 export const viewport: Viewport = {
