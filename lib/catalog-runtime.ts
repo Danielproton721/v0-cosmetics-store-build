@@ -68,6 +68,22 @@ async function readOverlay(): Promise<Overlay> {
   }
 }
 
+// Mescla um override sobre o produto base, DESCARTANDO valores inválidos
+// (null/undefined ou número não-finito). Blindagem: um override mal gravado
+// — ex.: preço digitado com vírgula virou NaN/null no KV — nunca substitui um
+// campo bom por lixo, então o site não quebra (ex.: price.toFixed em null).
+function mergeOverride<T extends { id: number }>(item: T, ov: Partial<Product> | undefined): T {
+  if (!ov) return item
+  const merged = { ...item } as Record<string, unknown>
+  for (const [key, value] of Object.entries(ov)) {
+    if (value === null || value === undefined) continue
+    if (typeof value === "number" && !Number.isFinite(value)) continue
+    merged[key] = value
+  }
+  merged.id = item.id
+  return merged as T
+}
+
 // Aplica o overlay numa lista de produtos (edições + remove deletados).
 export async function applyOverlay<T extends { id: number }>(items: T[]): Promise<T[]> {
   const { overrides, deleted } = await readOverlay()
@@ -77,8 +93,7 @@ export async function applyOverlay<T extends { id: number }>(items: T[]): Promis
   for (const item of items) {
     const key = String(item.id)
     if (del.has(key)) continue
-    const ov = overrides[key]
-    out.push(ov ? ({ ...item, ...ov, id: item.id } as T) : item)
+    out.push(mergeOverride(item, overrides[key]))
   }
   return out
 }
@@ -90,6 +105,5 @@ export async function applyOverlayOne<T extends { id: number }>(
   if (!item) return null
   const { overrides, deleted } = await readOverlay()
   if (deleted.includes(String(item.id))) return null
-  const ov = overrides[String(item.id)]
-  return ov ? ({ ...item, ...ov, id: item.id } as T) : item
+  return mergeOverride(item, overrides[String(item.id)])
 }

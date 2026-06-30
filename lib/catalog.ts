@@ -59,6 +59,19 @@ function productToRow(p: Product): ProductRow {
   }
 }
 
+// Converte um número digitado no painel, tolerando formato brasileiro:
+//  "99,90" → 99.9 ; "1.299,90" → 1299.9 ; "199.90" → 199.9 ; "1299" → 1299.
+// Retorna undefined se vazio ou inválido — NUNCA NaN (que viraria null no JSON
+// e quebraria o site no price.toFixed()).
+function parseNum(raw: string | undefined): number | undefined {
+  if (raw === undefined) return undefined
+  let s = String(raw).trim()
+  if (s === "") return undefined
+  if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".") // ponto = milhar, vírgula = decimal
+  const n = Number(s)
+  return Number.isFinite(n) ? n : undefined
+}
+
 function rowToPartial(row: ProductRow): Partial<Product> {
   const out: Partial<Product> = {}
   if (row.name !== undefined) out.name = row.name
@@ -66,12 +79,21 @@ function rowToPartial(row: ProductRow): Partial<Product> {
   if (row.category !== undefined) out.category = row.category
   if (row.slug !== undefined) out.slug = row.slug
   if (row.description !== undefined) out.description = row.description
-  if (row.price !== undefined && row.price.trim() !== "") out.price = Number(row.price)
-  if (row.rating !== undefined && row.rating.trim() !== "") out.rating = Number(row.rating)
-  if (row.reviews !== undefined && row.reviews.trim() !== "") out.reviews = Number(row.reviews)
+
+  const price = parseNum(row.price)
+  if (price !== undefined) out.price = price
+  const rating = parseNum(row.rating)
+  if (rating !== undefined) out.rating = rating
+  const reviews = parseNum(row.reviews)
+  if (reviews !== undefined) out.reviews = reviews
+
   if (row.compareAtPrice !== undefined) {
-    const v = row.compareAtPrice.trim()
-    out.compareAtPrice = v === "" ? undefined : Number(v)
+    const t = row.compareAtPrice.trim()
+    if (t === "") out.compareAtPrice = undefined // intenção de limpar
+    else {
+      const cap = parseNum(t)
+      if (cap !== undefined) out.compareAtPrice = cap // só grava se for número válido
+    }
   }
   return out
 }
