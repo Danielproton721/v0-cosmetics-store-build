@@ -1,8 +1,14 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Download, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react"
 import type { Catalog, ProductRow } from "@/lib/catalog"
+
+const brl = (v: string | number) => {
+  const n = Number(v)
+  if (!Number.isFinite(n) || n === 0) return ""
+  return `R$ ${n.toFixed(2).replace(".", ",")}`
+}
 
 export function ProductsPanel({
   initialCatalog,
@@ -26,7 +32,17 @@ export function ProductsPanel({
   const idHeader = columns.id
   const headers = catalog.headers
 
-  // Colunas mostradas na tabela (resumo). O editor mostra todos os campos.
+  // Trava o scroll do fundo enquanto o editor (modal) está aberto.
+  useEffect(() => {
+    if (!editing) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [editing])
+
+  // Colunas mostradas na tabela do desktop (o editor mostra todos os campos).
   const displayCols = useMemo(() => {
     const order = ["id", "name", "price", "compareAtPrice", "category", "slug"]
     return order.map((k) => columns[k]).filter((h) => h && headers.includes(h))
@@ -43,6 +59,8 @@ export function ProductsPanel({
         .some((v) => String(v).toLowerCase().includes(q)),
     )
   }, [catalog.rows, query, columns, idHeader])
+
+  const visibleRows = rows.slice(0, 300)
 
   async function refresh() {
     const r = await fetch("/api/admin/products", { cache: "no-store" })
@@ -139,43 +157,45 @@ export function ProductsPanel({
   return (
     <div>
       {/* Barra de ações */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="text-sm text-muted-foreground">
-          {rows.length} de {catalog.rows.length} produto(s)
-          {pending > 0 && (
-            <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">
-              {pending} mudança(s) pendente(s)
-            </span>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por nome, id, categoria…"
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
-          />
-          <button
-            onClick={startNew}
-            disabled={!kvOk || busy}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground disabled:opacity-50"
-          >
-            <Plus className="h-4 w-4" /> Adicionar
-          </button>
-          <a
-            href="/api/admin/products/export"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-foreground hover:bg-muted"
-          >
-            <Download className="h-4 w-4" /> Exportar products.ts
-          </a>
-          <button
-            onClick={resetOverlay}
-            disabled={!kvOk || busy || pending === 0}
-            title="Zerar mudanças pendentes (use após commitar o products.ts exportado)"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground hover:bg-muted disabled:opacity-50"
-          >
-            <RotateCcw className="h-4 w-4" /> Zerar overlay
-          </button>
+      <div className="mb-4 space-y-3">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Buscar por nome, id, categoria…"
+          className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+        />
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="text-xs text-muted-foreground sm:text-sm">
+            {rows.length} de {catalog.rows.length} produto(s)
+            {pending > 0 && (
+              <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">
+                {pending} pendente(s)
+              </span>
+            )}
+          </div>
+          <div className="flex flex-1 flex-wrap justify-end gap-2 sm:flex-none">
+            <button
+              onClick={startNew}
+              disabled={!kvOk || busy}
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground disabled:opacity-50 sm:flex-none"
+            >
+              <Plus className="h-4 w-4" /> Adicionar
+            </button>
+            <a
+              href="/api/admin/products/export"
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-foreground hover:bg-muted sm:flex-none"
+            >
+              <Download className="h-4 w-4" /> Exportar<span className="hidden sm:inline">&nbsp;products.ts</span>
+            </a>
+            <button
+              onClick={resetOverlay}
+              disabled={!kvOk || busy || pending === 0}
+              title="Zerar mudanças pendentes (use após commitar o products.ts exportado)"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground hover:bg-muted disabled:opacity-50"
+            >
+              <RotateCcw className="h-4 w-4" /> <span className="hidden sm:inline">Zerar overlay</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -197,128 +217,234 @@ export function ProductsPanel({
         <p className={`mb-3 text-sm ${msg.ok ? "text-emerald-700" : "text-red-600"}`}>{msg.text}</p>
       )}
 
-      {/* Editor (inline) */}
-      {editing && (
-        <div className="mb-4 rounded-xl border border-primary/30 bg-card p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="font-bold text-foreground">{isNew ? "Novo produto" : "Editar produto"}</h3>
-            <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {headers.map((h) => (
-              <label
-                key={h}
-                className={`text-xs font-semibold text-muted-foreground ${longFields.has(h) ? "sm:col-span-2" : ""}`}
-              >
-                {h}
-                {h === idHeader && !isNew ? " (chave)" : ""}
-                {longFields.has(h) ? (
-                  <textarea
-                    value={editing[h] ?? ""}
-                    onChange={(e) => setEditing({ ...editing, [h]: e.target.value })}
-                    rows={3}
-                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-primary/40"
-                  />
-                ) : (
-                  <input
-                    value={editing[h] ?? ""}
-                    onChange={(e) => setEditing({ ...editing, [h]: e.target.value })}
-                    disabled={h === idHeader && !isNew}
-                    className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
-                  />
-                )}
-              </label>
-            ))}
-          </div>
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={save}
-              disabled={busy}
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-50"
-            >
-              {busy ? "Salvando…" : "Salvar"}
-            </button>
-            <button
-              onClick={() => setEditing(null)}
-              className="rounded-lg border border-border px-4 py-2 text-sm font-bold text-muted-foreground hover:bg-muted"
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Tabela de produtos */}
-      {rows.length === 0 ? (
+      {/* Lista vazia */}
+      {visibleRows.length === 0 ? (
         <div className="rounded-xl border border-border bg-card p-10 text-center text-sm text-muted-foreground">
           {catalog.rows.length === 0
             ? "Nenhum produto encontrado no catálogo."
             : "Nenhum produto bate com a busca."}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-border bg-card">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
-                {imageHeader && <th className="px-4 py-3 font-semibold">Img</th>}
-                {displayCols.map((h) => (
-                  <th key={h} className="px-4 py-3 font-semibold">{h}</th>
-                ))}
-                <th className="px-4 py-3 font-semibold text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice(0, 300).map((row) => {
-                const id = row[idHeader]
-                return (
-                  <tr key={id} className="border-b border-border/60 last:border-0">
-                    {imageHeader && (
-                      <td className="px-4 py-2">
-                        {row[imageHeader] ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={row[imageHeader]} alt="" className="h-10 w-10 rounded object-cover" />
-                        ) : (
-                          <div className="h-10 w-10 rounded bg-muted" />
-                        )}
-                      </td>
-                    )}
-                    {displayCols.map((h) => (
-                      <td key={h} className="px-4 py-2 text-foreground">
-                        <div className="max-w-[220px] truncate">{row[h]}</div>
-                      </td>
-                    ))}
-                    <td className="px-4 py-2">
-                      <div className="flex justify-end gap-1">
-                        <button
-                          onClick={() => startEdit(row)}
-                          disabled={!kvOk}
-                          title="Editar"
-                          className="rounded-lg border border-border p-1.5 text-muted-foreground hover:bg-muted disabled:opacity-40"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          onClick={() => remove(id)}
-                          disabled={!kvOk}
-                          title="Excluir"
-                          className="rounded-lg border border-border p-1.5 text-red-600 hover:bg-red-50 disabled:opacity-40"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
+        <>
+          {/* Mobile: cards */}
+          <div className="space-y-2 md:hidden">
+            {visibleRows.map((row) => {
+              const id = row[idHeader]
+              const price = brl(row[columns.price])
+              const compareRaw = Number(row[columns.compareAtPrice])
+              const showCompare =
+                Number.isFinite(compareRaw) && compareRaw > Number(row[columns.price])
+              return (
+                <div key={id} className="rounded-xl border border-border bg-card p-3">
+                  <div className="flex gap-3">
+                    {imageHeader &&
+                      (row[imageHeader] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={row[imageHeader]}
+                          alt=""
+                          className="h-16 w-16 shrink-0 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className="h-16 w-16 shrink-0 rounded-lg bg-muted" />
+                      ))}
+                    <div className="min-w-0 flex-1">
+                      <div className="line-clamp-2 text-sm font-semibold text-foreground">
+                        {row[columns.name] || "—"}
                       </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        #{id}
+                        {row[columns.category] ? ` · ${row[columns.category]}` : ""}
+                      </div>
+                      {price && (
+                        <div className="mt-1 flex items-baseline gap-2">
+                          <span className="font-bold text-foreground">{price}</span>
+                          {showCompare && (
+                            <span className="text-xs text-muted-foreground line-through">
+                              {brl(compareRaw)}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-2 flex justify-end gap-2 border-t border-border/60 pt-2">
+                    <button
+                      onClick={() => startEdit(row)}
+                      disabled={!kvOk}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-foreground hover:bg-muted disabled:opacity-40"
+                    >
+                      <Pencil className="h-3.5 w-3.5" /> Editar
+                    </button>
+                    <button
+                      onClick={() => remove(id)}
+                      disabled={!kvOk}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 disabled:opacity-40"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Excluir
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Desktop: tabela */}
+          <div className="hidden overflow-x-auto rounded-xl border border-border bg-card md:block">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
+                  {imageHeader && <th className="px-4 py-3 font-semibold">Img</th>}
+                  {displayCols.map((h) => (
+                    <th key={h} className="px-4 py-3 font-semibold">{h}</th>
+                  ))}
+                  <th className="px-4 py-3 font-semibold text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleRows.map((row) => {
+                  const id = row[idHeader]
+                  return (
+                    <tr key={id} className="border-b border-border/60 last:border-0">
+                      {imageHeader && (
+                        <td className="px-4 py-2">
+                          {row[imageHeader] ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={row[imageHeader]} alt="" className="h-10 w-10 rounded object-cover" />
+                          ) : (
+                            <div className="h-10 w-10 rounded bg-muted" />
+                          )}
+                        </td>
+                      )}
+                      {displayCols.map((h) => (
+                        <td key={h} className="px-4 py-2 text-foreground">
+                          <div className="max-w-[220px] truncate">{row[h]}</div>
+                        </td>
+                      ))}
+                      <td className="px-4 py-2">
+                        <div className="flex justify-end gap-1">
+                          <button
+                            onClick={() => startEdit(row)}
+                            disabled={!kvOk}
+                            title="Editar"
+                            className="rounded-lg border border-border p-1.5 text-muted-foreground hover:bg-muted disabled:opacity-40"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            onClick={() => remove(id)}
+                            disabled={!kvOk}
+                            title="Excluir"
+                            className="rounded-lg border border-border p-1.5 text-red-600 hover:bg-red-50 disabled:opacity-40"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
           {rows.length > 300 && (
-            <div className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground">
+            <div className="mt-3 rounded-xl border border-border bg-card px-4 py-3 text-center text-xs text-muted-foreground">
               Mostrando 300 de {rows.length}. Use a busca pra filtrar.
             </div>
           )}
+        </>
+      )}
+
+      {/* Editor — bottom-sheet no mobile, modal centralizado no desktop.
+          Abre sobreposto onde você estiver na lista; Salvar fica fixo no rodapé. */}
+      {editing && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
+          onClick={() => !busy && setEditing(null)}
+        >
+          <div
+            className="flex max-h-[92vh] w-full flex-col rounded-t-2xl border border-border bg-card shadow-xl sm:max-h-[88vh] sm:max-w-2xl sm:rounded-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header fixo */}
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <h3 className="font-bold text-foreground">{isNew ? "Novo produto" : "Editar produto"}</h3>
+              <button
+                onClick={() => setEditing(null)}
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label="Fechar"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Corpo com scroll */}
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              {imageHeader && editing[imageHeader] ? (
+                <div className="mb-4 flex justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={editing[imageHeader]}
+                    alt=""
+                    className="h-28 w-28 rounded-xl border border-border object-cover"
+                  />
+                </div>
+              ) : null}
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {headers.map((h) => (
+                  <label
+                    key={h}
+                    className={`text-xs font-semibold text-muted-foreground ${longFields.has(h) ? "sm:col-span-2" : ""}`}
+                  >
+                    {h}
+                    {h === idHeader && !isNew ? " (chave)" : ""}
+                    {longFields.has(h) ? (
+                      <textarea
+                        value={editing[h] ?? ""}
+                        onChange={(e) => setEditing({ ...editing, [h]: e.target.value })}
+                        rows={3}
+                        className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                    ) : (
+                      <input
+                        value={editing[h] ?? ""}
+                        onChange={(e) => setEditing({ ...editing, [h]: e.target.value })}
+                        disabled={h === idHeader && !isNew}
+                        inputMode={
+                          [columns.price, columns.compareAtPrice, columns.rating, columns.reviews].includes(h)
+                            ? "decimal"
+                            : undefined
+                        }
+                        className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                      />
+                    )}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer fixo com Salvar */}
+            <div
+              className="flex gap-2 border-t border-border bg-card px-4 py-3"
+              style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+            >
+              <button
+                onClick={save}
+                disabled={busy}
+                className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground disabled:opacity-50 sm:flex-none"
+              >
+                {busy ? "Salvando…" : "Salvar"}
+              </button>
+              <button
+                onClick={() => setEditing(null)}
+                disabled={busy}
+                className="rounded-lg border border-border px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-muted disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

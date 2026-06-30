@@ -41,7 +41,7 @@ export function AdminShell({
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-6xl mx-auto px-3 py-4 sm:px-4 sm:py-6">
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-bold text-foreground">Painel · {brand}</h1>
@@ -58,7 +58,7 @@ export function AdminShell({
         </div>
 
         {tabs.length > 1 && (
-          <div className="mb-5 inline-flex rounded-xl border border-border bg-card p-1">
+          <div className="mb-5 flex w-full rounded-xl border border-border bg-card p-1 sm:inline-flex sm:w-auto">
             {modules.orders && (
               <TabButton active={tab === "orders"} onClick={() => setTab("orders")} icon={<ShoppingBag className="h-4 w-4" />}>
                 Pedidos
@@ -100,7 +100,7 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
+      className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-bold transition-colors sm:flex-none ${
         active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
       }`}
     >
