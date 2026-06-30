@@ -21,12 +21,10 @@ import { promises as fs } from "fs"
 import path from "path"
 import { products, type Product } from "@/lib/products"
 import { kvConfigured, kvGetJSON, kvSetJSON } from "./kv-store"
+import { OVERRIDES_KEY, DELETED_KEY } from "./catalog-keys"
 
 export type ProductRow = Record<string, string>
 export type Catalog = { headers: string[]; rows: ProductRow[] }
-
-const OVERRIDES_KEY = "catalog:overrides" // { [id]: Partial<Product> | Product(novo) }
-const DELETED_KEY = "catalog:deleted" //     string[] (ids removidos)
 
 // Campos escalares editáveis no painel (a ordem vira a ordem das colunas).
 const EDITABLE_HEADERS = [

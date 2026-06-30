@@ -4,6 +4,7 @@ import {
   getCollectionBySlug,
   getProductsByCollection,
 } from "@/lib/products"
+import { applyOverlay } from "@/lib/catalog-runtime"
 import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { CollectionProducts } from "@/components/store/collection-products"
@@ -31,7 +32,7 @@ export default async function CollectionPage({ params }: PageProps) {
   const collection = getCollectionBySlug(slug)
   if (!collection) notFound()
 
-  const collectionProducts = getProductsByCollection(slug)
+  const collectionProducts = await applyOverlay(getProductsByCollection(slug))
 
   const serializedProducts = collectionProducts.map((p) => ({
     id: p.id,

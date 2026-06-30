@@ -67,11 +67,6 @@ export function AdminShell({
             {modules.products && (
               <TabButton active={tab === "products"} onClick={() => setTab("products")} icon={<Package className="h-4 w-4" />}>
                 Produtos
-                {pending > 0 && (
-                  <span className="ml-1 rounded-full bg-amber-100 px-1.5 text-[10px] font-bold text-amber-700">
-                    {pending}
-                  </span>
-                )}
               </TabButton>
             )}
           </div>

@@ -4,6 +4,7 @@ import { Footer } from "@/components/store/footer"
 import { ProductPage } from "@/components/store/product-page"
 import { PageTransition } from "@/components/store/page-transition"
 import { getProductBySlug, getProductsByCategory, products } from "@/lib/products"
+import { applyOverlay, applyOverlayOne } from "@/lib/catalog-runtime"
 import type { Metadata } from "next"
 
 interface PageProps {
@@ -18,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const product = getProductBySlug(slug)
+  const product = await applyOverlayOne(getProductBySlug(slug))
 
   if (!product) {
     return { title: "Produto não encontrado | Fio Nobre" }
@@ -32,13 +33,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const product = getProductBySlug(slug)
+  const product = await applyOverlayOne(getProductBySlug(slug))
 
   if (!product) {
     notFound()
   }
 
-  const relatedProducts = getProductsByCategory(product.category).filter(p => p.id !== product.id).slice(0, 4)
+  const relatedProducts = (await applyOverlay(getProductsByCategory(product.category)))
+    .filter((p) => p.id !== product.id)
+    .slice(0, 4)
 
   return (
     <main className="min-h-screen bg-[#ffffff]">

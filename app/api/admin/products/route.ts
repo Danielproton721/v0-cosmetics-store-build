@@ -7,6 +7,7 @@ import {
   pendingChangesCount,
   upsertProduct,
 } from "@/lib/catalog"
+import { revalidateCatalog } from "@/lib/catalog-runtime"
 
 export const dynamic = "force-dynamic"
 
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   }
   try {
     await upsertProduct(row)
+    revalidateCatalog(typeof row?.slug === "string" ? row.slug : undefined)
     return NextResponse.json({ ok: true })
   } catch (e: any) {
     const status = e instanceof CatalogReadonlyError ? 409 : 400
@@ -55,6 +57,7 @@ export async function DELETE(request: Request) {
   }
   try {
     await deleteProduct(id)
+    revalidateCatalog()
     return NextResponse.json({ ok: true })
   } catch (e: any) {
     const status = e instanceof CatalogReadonlyError ? 409 : 400

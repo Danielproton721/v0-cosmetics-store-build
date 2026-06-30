@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Download, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react"
+import { Download, Pencil, Plus, Trash2, X } from "lucide-react"
 import type { Catalog, ProductRow } from "@/lib/catalog"
 
 const brl = (v: string | number) => {
@@ -135,22 +135,6 @@ export function ProductsPanel({
     }
   }
 
-  async function resetOverlay() {
-    if (!confirm("Zerar as mudanças pendentes? Faça isso só DEPOIS de exportar o products.ts e commitar no código.")) return
-    setBusy(true)
-    setMsg(null)
-    try {
-      const r = await fetch("/api/admin/products/reset", { method: "POST" })
-      if (!r.ok) throw new Error("Erro ao zerar.")
-      await refresh()
-      setMsg({ ok: true, text: "Overlay zerado — agora a base é só o lib/products.ts." })
-    } catch (e: any) {
-      setMsg({ ok: false, text: e?.message || "Erro ao zerar." })
-    } finally {
-      setBusy(false)
-    }
-  }
-
   // Campos longos viram textarea no editor.
   const longFields = new Set([columns.description].filter(Boolean))
 
@@ -167,11 +151,6 @@ export function ProductsPanel({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-xs text-muted-foreground sm:text-sm">
             {rows.length} de {catalog.rows.length} produto(s)
-            {pending > 0 && (
-              <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">
-                {pending} pendente(s)
-              </span>
-            )}
           </div>
           <div className="flex flex-1 flex-wrap justify-end gap-2 sm:flex-none">
             <button
@@ -179,22 +158,15 @@ export function ProductsPanel({
               disabled={!kvOk || busy}
               className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground disabled:opacity-50 sm:flex-none"
             >
-              <Plus className="h-4 w-4" /> Adicionar
+              <Plus className="h-4 w-4" /> Adicionar produto
             </button>
             <a
               href="/api/admin/products/export"
-              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-foreground hover:bg-muted sm:flex-none"
+              title="Baixar uma cópia .ts do catálogo (backup opcional)"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground hover:bg-muted"
             >
-              <Download className="h-4 w-4" /> Exportar<span className="hidden sm:inline">&nbsp;products.ts</span>
+              <Download className="h-4 w-4" /> <span className="hidden sm:inline">Backup</span>
             </a>
-            <button
-              onClick={resetOverlay}
-              disabled={!kvOk || busy || pending === 0}
-              title="Zerar mudanças pendentes (use após commitar o products.ts exportado)"
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-bold text-muted-foreground hover:bg-muted disabled:opacity-50"
-            >
-              <RotateCcw className="h-4 w-4" /> <span className="hidden sm:inline">Zerar overlay</span>
-            </button>
           </div>
         </div>
       </div>
@@ -207,10 +179,9 @@ export function ProductsPanel({
       )}
 
       <div className="mb-4 rounded-lg border border-border bg-card p-3 text-xs text-muted-foreground">
-        As edições ficam num overlay temporário (KV) e <strong>não aparecem no site</strong> até você clicar em{" "}
-        <strong>Exportar products.ts</strong>, substituir o arquivo no código, commitar e dar deploy. Depois disso,
-        clique em <strong>Zerar overlay</strong>. Campos ricos (variantes, galeria, avaliações) são preservados no
-        export — aqui você edita só os campos principais.
+        Edite preço, nome, imagem e descrição — as mudanças <strong>aparecem no site em alguns segundos</strong>.
+        Variantes, galeria e avaliações não são editadas aqui e ficam preservadas. Produtos{" "}
+        <strong>novos</strong> só entram no site após um novo deploy.
       </div>
 
       {msg && (

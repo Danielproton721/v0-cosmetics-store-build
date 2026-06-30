@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { isAuthed } from "@/lib/admin-auth"
 import { CatalogReadonlyError, resetOverlay } from "@/lib/catalog"
+import { revalidateCatalog } from "@/lib/catalog-runtime"
 
 export const dynamic = "force-dynamic"
 
@@ -11,6 +12,7 @@ export async function POST() {
   }
   try {
     await resetOverlay()
+    revalidateCatalog()
     return NextResponse.json({ ok: true })
   } catch (e: any) {
     const status = e instanceof CatalogReadonlyError ? 409 : 400

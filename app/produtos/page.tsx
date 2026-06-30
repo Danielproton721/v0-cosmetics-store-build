@@ -2,14 +2,15 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { CollectionProducts } from "@/components/store/collection-products"
 import { products } from "@/lib/products"
+import { applyOverlay } from "@/lib/catalog-runtime"
 
 export const metadata = {
   title: "Todos os Produtos | Fio Nobre",
   description: "Veja todos os produtos disponíveis na Fio Nobre.",
 }
 
-export default function ProdutosPage() {
-  const serializedProducts = products.map((product) => ({
+export default async function ProdutosPage() {
+  const serializedProducts = (await applyOverlay(products)).map((product) => ({
     id: product.id,
     name: product.name,
     price: product.price,

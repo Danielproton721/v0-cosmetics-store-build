@@ -6,6 +6,7 @@ import { ProductSection } from "@/components/store/product-section"
 import { Footer } from "@/components/store/footer"
 import { TrustStrip } from "@/components/store/trust-strip"
 import { getProductsByCategory, type Product } from "@/lib/products"
+import { applyOverlay } from "@/lib/catalog-runtime"
 
 const homeProductLimit = 8
 
@@ -99,12 +100,12 @@ function getHomeProducts(products: Product[]) {
   return [...uniqueProducts, ...repeatedProducts].slice(0, homeProductLimit)
 }
 
-const roupas365Products = getHomeProducts(getProductsByCategory("Roupas de Cama 365"))
-const maisVendidosProducts = getHomeProducts(getProductsByCategory("Mais Vendidos"))
-const novidadesProducts = getHomeProducts(getProductsByCategory("Novidades"))
-const jogosLencolProducts = getHomeProducts(getProductsByCategory("Jogos de Lençol"))
+export default async function Home() {
+  const roupas365Products = getHomeProducts(await applyOverlay(getProductsByCategory("Roupas de Cama 365")))
+  const maisVendidosProducts = getHomeProducts(await applyOverlay(getProductsByCategory("Mais Vendidos")))
+  const novidadesProducts = getHomeProducts(await applyOverlay(getProductsByCategory("Novidades")))
+  const jogosLencolProducts = getHomeProducts(await applyOverlay(getProductsByCategory("Jogos de Lençol")))
 
-export default function Home() {
   return (
     <main className="min-h-screen bg-[#ffffff]">
       <Header />
