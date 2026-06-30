@@ -101,3 +101,84 @@ export async function kvDel(key: string): Promise<void> {
   }
   await command(["DEL", key]);
 }
+
+// ===========================================================================
+//  Helpers extras usados pelo painel /admin (pedidos, presença, catálogo).
+//  São ADIÇÕES — não alteram o comportamento de kvGet/kvSet/kvSetNx/kvDel de
+//  que o fluxo de PIX/e-mail depende. Tudo degrada gracioso sem Upstash.
+// ===========================================================================
+
+export function kvConfigured(): boolean {
+  return isKvConfigured;
+}
+
+// JSON por cima do GET/SET existentes (herdam o fallback em memória).
+export async function kvSetJSON(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
+  await kvSet(key, JSON.stringify(value), ttlSeconds);
+}
+
+export async function kvGetJSON<T = unknown>(key: string): Promise<T | null> {
+  const raw = await kvGet(key);
+  if (raw === null) return null;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
+
+// --- Sorted sets (indexa pedidos por data; conta presença ao vivo) ----------
+// Fallback em memória pra dev local: Map<key, Map<member, score>>.
+const memZ =
+  (globalForKv as typeof globalForKv & { __fionobreKvZ?: Map<string, Map<string, number>> })
+    .__fionobreKvZ ?? new Map<string, Map<string, number>>();
+(globalForKv as typeof globalForKv & { __fionobreKvZ?: Map<string, Map<string, number>> }).__fionobreKvZ = memZ;
+
+function memZSet(key: string) {
+  let set = memZ.get(key);
+  if (!set) {
+    set = new Map();
+    memZ.set(key, set);
+  }
+  return set;
+}
+
+export async function kvZAdd(key: string, score: number, member: string): Promise<void> {
+  if (!isKvConfigured) {
+    memZSet(key).set(member, score);
+    return;
+  }
+  await command(["ZADD", key, score, member]);
+}
+
+export async function kvZRevRange(key: string, start: number, stop: number): Promise<string[]> {
+  if (!isKvConfigured) {
+    const ordered = [...memZSet(key).entries()].sort((a, b) => b[1] - a[1]).map(([m]) => m);
+    const end = stop < 0 ? ordered.length + stop + 1 : stop + 1;
+    return ordered.slice(start, end);
+  }
+  const res = await command(["ZREVRANGE", key, start, stop]);
+  return Array.isArray(res) ? res.map(String) : [];
+}
+
+export async function kvZRemRangeByScore(key: string, min: number, max: number): Promise<number> {
+  if (!isKvConfigured) {
+    const set = memZSet(key);
+    let removed = 0;
+    for (const [member, score] of set) {
+      if (score >= min && score <= max) {
+        set.delete(member);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+  const res = await command(["ZREMRANGEBYSCORE", key, min, max]);
+  return typeof res === "number" ? res : Number(res) || 0;
+}
+
+export async function kvZCard(key: string): Promise<number> {
+  if (!isKvConfigured) return memZSet(key).size;
+  const res = await command(["ZCARD", key]);
+  return typeof res === "number" ? res : Number(res) || 0;
+}

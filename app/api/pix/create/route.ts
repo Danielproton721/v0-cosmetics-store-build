@@ -8,6 +8,7 @@ import {
 } from "@/lib/checkout-security";
 import { buildOrderCode } from "@/lib/order-code";
 import { saveOrder } from "@/lib/order-store";
+import { indexOrder } from "@/lib/orders";
 import type { OrderEmailItem } from "@/lib/order-email";
 
 export const dynamic = "force-dynamic";
@@ -266,6 +267,9 @@ export async function POST(request: Request) {
           shipping: Number(orderInput.shipping ?? 0),
           total: Number(value),
         });
+
+        // Indexa o pedido pro painel /admin listar os mais recentes (best-effort).
+        await indexOrder(String(txid), Date.now());
       } catch (err) {
         // Não bloqueia o pagamento; apenas o e-mail server-side pode não sair.
         console.error("[PIX API] Falha ao persistir pedido no KV:", err);

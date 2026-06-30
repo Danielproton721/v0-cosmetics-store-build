@@ -5,6 +5,7 @@ import { CartProvider } from '@/lib/cart-context'
 import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
 import { CookieConsent } from '@/components/store/cookie-consent'
+import { PresenceBeacon } from '@/components/store/presence-beacon'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -49,6 +50,7 @@ export default function RootLayout({
             {children}
             <CartDrawer />
             <CookieConsent />
+            <PresenceBeacon />
           </MenuProvider>
         </CartProvider>
         <Analytics />

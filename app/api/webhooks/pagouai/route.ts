@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { recordPaymentStatus, isGatewayPaidStatus } from "@/lib/payment-status"
 import { getOrder } from "@/lib/order-store"
 import { dispatchOrderEmailOnce } from "@/lib/send-order-email"
+import { markOrderPaid } from "@/lib/orders"
 
 export const dynamic = "force-dynamic"
 
@@ -80,6 +81,13 @@ export async function POST(request: Request) {
     // KV quando o PIX foi criado. A trava de idempotência impede duplicidade
     // caso o front também dispare o e-mail.
     if (isGatewayPaidStatus(status)) {
+      // Marca o pedido como pago pro painel /admin (best-effort, não interfere no e-mail).
+      try {
+        await markOrderPaid(txid)
+      } catch (err) {
+        console.error("[PAGOUAI WEBHOOK] erro ao marcar pago no painel:", err)
+      }
+
       try {
         const order = await getOrder(txid)
         if (order) {
