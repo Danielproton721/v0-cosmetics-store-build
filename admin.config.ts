@@ -19,6 +19,9 @@ export const adminConfig = {
   modules: {
     orders: true,
     products: true,
+    // Relay/fachada: esta loja repassa webhooks de pagamento pra outras lojas
+    // (que ficam ocultas do gateway). Gerenciado na aba "Relay" do painel.
+    relay: true,
   },
 
   // ------------------------------------------------------------------------

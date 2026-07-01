@@ -1,16 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { Package, ShoppingBag } from "lucide-react"
+import { Package, ShoppingBag, Waypoints } from "lucide-react"
 import type { AdminOrder } from "@/lib/orders"
 import type { Catalog } from "@/lib/catalog"
 import { LogoutButton } from "./logout-button"
 import { OnlineCount } from "./online-count"
 import { OrdersPanel } from "./orders-panel"
 import { ProductsPanel } from "./products-panel"
+import { RelayPanel } from "./relay-panel"
 
-type Modules = { orders: boolean; products: boolean }
-type Tab = "orders" | "products"
+type Modules = { orders: boolean; products: boolean; relay?: boolean }
+type Tab = "orders" | "products" | "relay"
 
 export function AdminShell({
   brand,
@@ -32,6 +33,7 @@ export function AdminShell({
   const tabs = [
     modules.orders ? ("orders" as const) : null,
     modules.products ? ("products" as const) : null,
+    modules.relay ? ("relay" as const) : null,
   ].filter(Boolean) as Tab[]
 
   const [tab, setTab] = useState<Tab>(tabs[0] ?? "orders")
@@ -69,6 +71,11 @@ export function AdminShell({
                 Produtos
               </TabButton>
             )}
+            {modules.relay && (
+              <TabButton active={tab === "relay"} onClick={() => setTab("relay")} icon={<Waypoints className="h-4 w-4" />}>
+                Relay
+              </TabButton>
+            )}
           </div>
         )}
 
@@ -76,6 +83,7 @@ export function AdminShell({
         {tab === "products" && modules.products && (
           <ProductsPanel initialCatalog={catalog} columns={columns} kvOk={kvOk} initialPending={pending} />
         )}
+        {tab === "relay" && modules.relay && <RelayPanel />}
       </div>
     </div>
   )
