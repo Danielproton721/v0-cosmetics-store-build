@@ -98,3 +98,13 @@ export async function kvDel(key: string): Promise<void> {
   if (!useSeparate) return mainKv.kvDel(key)
   await command(["DEL", key])
 }
+
+// SET NX — grava só se a chave não existia. Retorna true se gravou (evento novo)
+// ou false se já existia (duplicado). Usado pra de-duplicar o log.
+export async function kvSetNx(key: string, value: string, ttlSeconds?: number): Promise<boolean> {
+  if (!useSeparate) return mainKv.kvSetNx(key, value, ttlSeconds)
+  const args: (string | number)[] = ["SET", key, value, "NX"]
+  if (ttlSeconds) args.push("EX", ttlSeconds)
+  const res = await command(args)
+  return res === "OK"
+}

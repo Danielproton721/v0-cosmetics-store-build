@@ -20,6 +20,7 @@ import {
   kvDel,
   kvGetJSON,
   kvSetJSON,
+  kvSetNx,
   kvZAdd,
   kvZRevRange,
   kvZRemRangeByScore,
@@ -124,10 +125,19 @@ export async function removeTarget(key: string): Promise<void> {
 export async function logEvent(entry: Omit<RelayEvent, "id" | "ts"> & { ts?: number }): Promise<void> {
   if (!kvConfigured()) return
   const ts = entry.ts ?? Date.now()
-  const id = `${ts}-${randomBytes(4).toString("hex")}`
   try {
+    // De-DUP: o gateway re-tenta o mesmo webhook várias vezes (ainda mais quando
+    // dá erro tipo 401), e sem isso cada re-tentativa gravava na KV e queimava
+    // comandos. Só grava o PRIMEIRO evento com essa combinação (loja+txid+status
+    // +resultado); repetições dentro de 1h são ignoradas.
+    const dedupKey = `relaylog:seen:${entry.key}:${entry.txid ?? "?"}:${entry.status ?? "?"}:${entry.forwardStatus ?? (entry.forwarded ? "ok" : "err")}`
+    const fresh = await kvSetNx(dedupKey, "1", 3600)
+    if (!fresh) return // re-tentativa idêntica — não gasta a KV
+
+    const id = `${ts}-${randomBytes(4).toString("hex")}`
     await kvZAdd(LOG_KEY, ts, JSON.stringify({ ...entry, id, ts }))
-    await kvZRemRangeByScore(LOG_KEY, 0, ts - LOG_MAX_AGE_MS)
+    // Poda só de vez em quando (não a cada evento) pra economizar comandos.
+    if (ts % 20 === 0) await kvZRemRangeByScore(LOG_KEY, 0, ts - LOG_MAX_AGE_MS)
   } catch {
     // log é best-effort — nunca derruba o repasse do webhook.
   }

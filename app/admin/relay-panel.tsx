@@ -223,7 +223,9 @@ export function RelayPanel() {
 
   useEffect(() => {
     load()
-    const t = setInterval(load, 8000)
+    // 30s: o painel lê a KV só enquanto está aberto; intervalo maior = menos
+    // comandos gastos. Use o botão "Atualizar" pra ver na hora.
+    const t = setInterval(load, 30000)
     return () => clearInterval(t)
   }, [load])
 
