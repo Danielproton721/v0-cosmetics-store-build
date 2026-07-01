@@ -21,6 +21,14 @@ type Data = { kvOk: boolean; targets: Record<string, RelayTarget>; log: RelayEve
 
 const brl = (v?: number) => (v ? `R$ ${(v / 100).toFixed(2).replace(".", ",")}` : "—")
 const fmt = (ts: number) => new Date(ts).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+const pretty = (s?: string) => {
+  if (!s) return ""
+  try {
+    return JSON.stringify(JSON.parse(s), null, 2)
+  } catch {
+    return s
+  }
+}
 
 // Prompt pronto pra colar no agente (Claude Code/Cursor) da OUTRA loja: ensina a
 // integrar com o relay e a devolver o webhook pra registrar aqui.
@@ -174,6 +182,7 @@ export function RelayPanel() {
   const [name, setName] = useState("")
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
+  const [expanded, setExpanded] = useState<string | null>(null)
 
   useEffect(() => {
     setOrigin(window.location.origin)
@@ -288,32 +297,63 @@ export function RelayPanel() {
           </div>
         ) : (
           <div className="space-y-2">
-            {log.map((e) => (
-              <div key={e.id} className="rounded-lg border border-border bg-card p-3 text-xs">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-foreground">{e.name}</span>
-                  <span className="text-muted-foreground">{fmt(e.ts)}</span>
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">
-                  {e.status && <span>status: <strong className="text-foreground">{e.status}</strong></span>}
-                  {e.amount ? <span>{brl(e.amount)}</span> : null}
-                  {e.txid && <span className="break-all">txid: {String(e.txid).slice(0, 16)}…</span>}
-                  {e.forwarded ? (
-                    <span
-                      className={`rounded-full px-2 py-0.5 font-bold ${
-                        e.forwardStatus && e.forwardStatus < 300 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                      }`}
-                    >
-                      entregue {e.forwardStatus}
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-red-100 px-2 py-0.5 font-bold text-red-700">
-                      falhou{e.error ? ` · ${e.error}` : ""}
-                    </span>
+            {log.map((e) => {
+              const open = expanded === e.id
+              return (
+                <div key={e.id} className="rounded-lg border border-border bg-card text-xs">
+                  <button
+                    onClick={() => setExpanded(open ? null : e.id)}
+                    className="w-full p-3 text-left"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-foreground">{e.name}</span>
+                      <span className="text-muted-foreground">{fmt(e.ts)}</span>
+                    </div>
+                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">
+                      {e.status && <span>status: <strong className="text-foreground">{e.status}</strong></span>}
+                      {e.amount ? <span>{brl(e.amount)}</span> : null}
+                      {e.txid && <span className="break-all">txid: {String(e.txid).slice(0, 16)}…</span>}
+                      {e.forwarded ? (
+                        <span
+                          className={`rounded-full px-2 py-0.5 font-bold ${
+                            e.forwardStatus && e.forwardStatus < 300 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          entregue {e.forwardStatus}
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-red-100 px-2 py-0.5 font-bold text-red-700">
+                          falhou{e.error ? ` · ${e.error}` : ""}
+                        </span>
+                      )}
+                      <span className="ml-auto text-[10px] text-muted-foreground">{open ? "▲ fechar" : "▼ ver payload"}</span>
+                    </div>
+                  </button>
+                  {open && (
+                    <div className="space-y-2 border-t border-border px-3 pb-3 pt-2">
+                      <div>
+                        <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                          Payload recebido do gateway
+                        </div>
+                        <pre className="max-h-64 overflow-auto rounded-md bg-muted p-2 font-mono text-[11px] leading-relaxed text-foreground">
+                          {pretty(e.payload) || "(não capturado)"}
+                        </pre>
+                      </div>
+                      {e.response !== undefined && (
+                        <div>
+                          <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            Resposta da loja de trás
+                          </div>
+                          <pre className="max-h-40 overflow-auto rounded-md bg-muted p-2 font-mono text-[11px] leading-relaxed text-foreground">
+                            {pretty(e.response) || "(vazia)"}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </section>

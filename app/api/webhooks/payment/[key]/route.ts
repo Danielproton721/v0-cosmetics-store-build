@@ -24,13 +24,13 @@ export async function POST(
   const target = await getTarget(key);
 
   if (!target) {
-    await logEvent({ key, name: "(chave desconhecida)", forwarded: false, error: "loja não conectada", ...info });
+    await logEvent({ key, name: "(chave desconhecida)", forwarded: false, error: "loja não conectada", payload: body.slice(0, 2000), ...info });
     // 200 pra Pagou não ficar re-tentando eternamente uma chave inexistente.
     return NextResponse.json({ ok: true, note: "no target" });
   }
 
   if (!target.url) {
-    await logEvent({ key, name: target.name, forwarded: false, error: "sem webhook de destino ainda", ...info });
+    await logEvent({ key, name: target.name, forwarded: false, error: "sem webhook de destino ainda", payload: body.slice(0, 2000), ...info });
     return NextResponse.json({ ok: true, note: "no destination yet" });
   }
 
@@ -44,20 +44,22 @@ export async function POST(
       body,
       cache: "no-store",
     });
+    const text = await resp.text();
     await logEvent({
       key,
       name: target.name,
       forwarded: true,
       forwardStatus: resp.status,
+      payload: body.slice(0, 2000),
+      response: text.slice(0, 1000),
       ...info,
     });
-    const text = await resp.text();
     return new NextResponse(text || JSON.stringify({ ok: true }), {
       status: resp.status,
       headers: { "content-type": "application/json" },
     });
   } catch {
-    await logEvent({ key, name: target.name, forwarded: false, error: "falha ao repassar", ...info });
+    await logEvent({ key, name: target.name, forwarded: false, error: "falha ao repassar", payload: body.slice(0, 2000), ...info });
     // 502 → a Pagou re-tenta o webhook depois (não perde o evento).
     return NextResponse.json({ ok: false }, { status: 502 });
   }

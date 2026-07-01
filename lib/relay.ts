@@ -47,6 +47,8 @@ export type RelayEvent = {
   forwarded: boolean
   forwardStatus?: number
   error?: string
+  payload?: string // corpo cru recebido do gateway (truncado)
+  response?: string // resposta da loja de trás (truncada)
 }
 
 // --- Lojas conectadas (targets) --------------------------------------------
