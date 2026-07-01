@@ -35,8 +35,16 @@ export async function POST(request: Request) {
   if (url && !/^https?:\/\/.+/i.test(url)) {
     return NextResponse.json({ error: "URL de destino inválida (use https://...)." }, { status: 400 });
   }
-  const target = await addTarget(name, url);
-  return NextResponse.json({ ok: true, target });
+  try {
+    const target = await addTarget(name, url);
+    return NextResponse.json({ ok: true, target });
+  } catch (e: any) {
+    // Causa comum: token Read-Only do Upstash bloqueia a escrita.
+    return NextResponse.json(
+      { error: `Falha ao gravar no KV: ${e?.message || "erro"}. Se o token do Upstash for Read-Only, troque pelo token completo.` },
+      { status: 502 },
+    );
+  }
 }
 
 // Edita apelido/webhook de destino de uma loja já conectada.
