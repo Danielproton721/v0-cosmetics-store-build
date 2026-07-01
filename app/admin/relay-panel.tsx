@@ -21,6 +21,7 @@ type Data = {
   kvOk: boolean
   separateKv?: boolean
   env?: { urlSet: boolean; tokenSet: boolean }
+  globalSecret?: string | null
   targets: Record<string, RelayTarget>
   log: RelayEvent[]
 }
@@ -39,27 +40,31 @@ const pretty = (s?: string) => {
 // Prompt pronto pra colar no agente (Claude Code/Cursor) da OUTRA loja: ensina a
 // integrar com o relay e a devolver o webhook pra registrar aqui.
 function buildAgentPrompt(notifyUrl: string, secret: string) {
-  return `Configure ESTA loja pra usar um relay de webhook de pagamento externo, pra o gateway (Pagou.ai) NUNCA receber o dominio real desta loja. Um relay intermediario ja existe e vai receber o webhook do gateway e repassar pra ca.
+  return `Configure ESTA loja pra receber os pagamentos atraves de um relay externo (uma loja-fachada), pra o gateway (Pagou.ai) NUNCA ver o dominio real desta loja. O relay recebe o webhook do gateway e repassa pra ca com o mesmo corpo.
 
-CONTRATO (faca exatamente isto, adaptando a estrutura desta loja):
+=== O CONTRATO (faca exatamente isto, adaptando a stack desta loja) ===
 
-1) notify_url: ao criar QUALQUER cobranca (PIX/cartao) no gateway, o campo notify_url/callback desta loja deve ser:
-   ${notifyUrl}
-   Deixe isso configuravel pela env NOTIFY_URL_OVERRIDE e use-a quando estiver definida (senao, o dominio proprio da loja).
+1) NOTIFY/CALLBACK: ao criar QUALQUER cobranca (PIX/cartao) no gateway, o notify_url desta loja deve apontar pro relay, nao pro dominio proprio. Deixe isso na env NOTIFY_URL_OVERRIDE e use-a quando existir.
 
-2) Validacao de entrada: o webhook desta loja (o endpoint que recebe o gateway, ex.: /api/webhooks/pagouai) vai passar a receber um header "x-relay-secret". Valide contra a env RELAY_SECRET:
-   - se RELAY_SECRET estiver definida e o header NAO bater => responda 401;
-   - se nao estiver definida => aceite normalmente (nao quebre nada).
+2) VALIDACAO DE ENTRADA: o webhook desta loja (endpoint que recebe o gateway, ex.: /api/webhooks/pagouai) passa a receber o header "x-relay-secret". Valide contra a env RELAY_SECRET:
+   - RELAY_SECRET definido e header != valor  => responda 401
+   - RELAY_SECRET nao definido                => aceite (nao quebre nada)
+   COMPARE DE FORMA EXATA: de trim nos dois lados e NAO deixe aspas/espacos entrarem no valor. (Erro comum: o valor entrar com aspas ou espaco e dar 401.)
 
-3) NAO altere a logica de processar o pagamento (e-mail, marcar pago, etc.). O corpo do webhook chega identico ao do gateway; so muda de onde ele vem.
+3) NAO altere a logica de pagamento (marcar pago, e-mail, liberar a pagina de obrigado/rastreio). O corpo do webhook chega IDENTICO ao do gateway; so muda de onde ele vem.
 
-4) Defina no ambiente de producao desta loja:
-   NOTIFY_URL_OVERRIDE=${notifyUrl}
-   RELAY_SECRET=${secret}
+=== VARIAVEIS PRA DEFINIR NA VERCEL DESTA LOJA (Production) ===
+Cole exatamente estas duas (sem aspas):
+NOTIFY_URL_OVERRIDE=${notifyUrl}
+RELAY_SECRET=${secret}
 
-5) IMPORTANTE: ao terminar, me DEVOLVA a URL publica do webhook desta loja (ex.: https://SEU-DOMINIO/api/webhooks/pagouai), pra eu registrar no relay como destino.
+=== ME DEVOLVA AO FINAL ===
+A URL publica do webhook desta loja (ex.: https://SEU-DOMINIO/api/webhooks/pagouai), pra eu cadastrar como "destino" no relay.
 
-Antes de editar, investigue onde a loja monta o notify_url ao criar a cobranca e onde esta o handler do webhook do gateway. Se for Next.js, aplique via env. Se for outra estrutura, adapte mantendo o contrato acima. Nada pode dar erro por falta das envs (degrade gracioso).`
+=== TELA DE CONFERENCIA (crie, ajuda muito) ===
+Uma pagina admin PROTEGIDA POR SENHA que mostre, com botao Copiar em cada campo: a URL de destino (o webhook desta loja), o RELAY_SECRET atual e o NOTIFY_URL_OVERRIDE atual. Serve pra conferir a qualquer momento se os valores batem com o relay.
+
+Antes de editar, investigue onde a loja monta o notify_url e onde esta o handler do webhook. Se for Next.js, aplique via env. Se for outra stack, adapte mantendo o contrato. Nada pode dar erro por falta das envs (degrade gracioso).`
 }
 
 function CopyBtn({ text, label = "Copiar" }: { text: string; label?: string }) {
@@ -100,13 +105,18 @@ function Field({ label, value, small }: { label: string; value: string; small?: 
 function TargetCard({
   target,
   notifyUrl,
+  globalSecret,
   onChanged,
 }: {
   target: RelayTarget
   notifyUrl: string
+  globalSecret?: string | null
   onChanged: () => void
 }) {
   const [url, setUrl] = useState(target.url)
+  // Segredo que o relay realmente manda: o global (se houver) ou o da loja.
+  const effectiveSecret = globalSecret || target.secret
+  const envBlock = `NOTIFY_URL_OVERRIDE=${notifyUrl}\nRELAY_SECRET=${effectiveSecret}`
   const [saving, setSaving] = useState(false)
   const dirty = url.trim() !== target.url
 
@@ -146,16 +156,25 @@ function TargetCard({
         </button>
       </div>
 
+      {/* Bloco .env pronto: cole ISTO nas variáveis da Vercel da loja de trás.
+          Vem os dois valores juntos e corretos — sem risco de misturar. */}
       <div className="mt-3">
-        <CopyBtn text={buildAgentPrompt(notifyUrl, target.secret)} label="Copiar prompt pro agente da loja" />
-        <p className="mt-1 text-[11px] text-muted-foreground">
-          Cole no agente (Claude Code/Cursor) da outra loja — ele configura tudo e te devolve o webhook.
-        </p>
+        <div className="mb-1 flex items-center justify-between">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            Cole na Vercel da loja de trás (Environment Variables)
+          </span>
+          <CopyBtn text={envBlock} label="Copiar .env" />
+        </div>
+        <pre className="overflow-x-auto rounded-md bg-muted p-2 font-mono text-[11px] leading-relaxed text-foreground">
+          {envBlock}
+        </pre>
       </div>
 
-      <div className="mt-3 space-y-1.5">
-        <Field label="notify URL (vai no checkout da loja)" value={notifyUrl} small />
-        <Field label="segredo (RELAY_SECRET da loja)" value={target.secret} small />
+      <div className="mt-3">
+        <CopyBtn text={buildAgentPrompt(notifyUrl, effectiveSecret)} label="Copiar prompt pro agente da loja" />
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          Cole no agente (Claude Code/Cursor) da outra loja — ele configura o código e te devolve o webhook.
+        </p>
       </div>
 
       <div className="mt-3">
@@ -288,6 +307,23 @@ export function RelayPanel() {
         configura a loja e te devolve o webhook → cole o webhook no card. Pronto: o gateway só vê o domínio desta loja.
       </div>
 
+      {/* Segredo único do relay */}
+      {data && data.kvOk && (
+        <div className="text-xs">
+          {data.globalSecret ? (
+            <span className="text-muted-foreground">
+              🔑 Segredo único ativo — <strong className="text-foreground">todas as lojas</strong> usam o mesmo{" "}
+              <code className="font-mono">RELAY_SECRET</code>. Só a chave (na URL) muda por loja.
+            </span>
+          ) : (
+            <span className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-amber-800">
+              💡 Dica: defina <code className="font-mono">RELAY_FORWARD_SECRET</code> nas variáveis do relay pra usar{" "}
+              <strong>um segredo só</strong> em todas as lojas (nunca mais desalinha). Sem ele, cada loja tem um segredo próprio.
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Criar loja */}
       <section>
         <h3 className="mb-2 text-sm font-bold text-foreground">Nova loja mascarada</h3>
@@ -342,7 +378,13 @@ export function RelayPanel() {
         ) : (
           <div className="space-y-2">
             {targets.map((t) => (
-              <TargetCard key={t.key} target={t} notifyUrl={notifyUrl(t.key)} onChanged={load} />
+              <TargetCard
+                key={t.key}
+                target={t}
+                notifyUrl={notifyUrl(t.key)}
+                globalSecret={data?.globalSecret}
+                onChanged={load}
+              />
             ))}
           </div>
         )}

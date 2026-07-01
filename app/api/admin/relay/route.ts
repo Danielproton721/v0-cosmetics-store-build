@@ -11,7 +11,15 @@ export async function GET() {
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
   }
   const [targets, log] = await Promise.all([getTargets(), getLog(60)]);
-  return NextResponse.json({ kvOk: kvConfigured(), separateKv: usingSeparateKv(), env: relayKvDiag(), targets, log });
+  const globalSecret = (process.env.RELAY_FORWARD_SECRET || "").trim() || null;
+  return NextResponse.json({
+    kvOk: kvConfigured(),
+    separateKv: usingSeparateKv(),
+    env: relayKvDiag(),
+    globalSecret,
+    targets,
+    log,
+  });
 }
 
 // Conecta uma loja nova: recebe { name, url } e devolve a chave + segredo gerados.

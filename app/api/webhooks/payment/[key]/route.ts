@@ -47,7 +47,11 @@ export async function POST(
       fwdHeaders.set(name, value);
     });
     if (!fwdHeaders.has("content-type")) fwdHeaders.set("content-type", "application/json");
-    fwdHeaders.set("x-relay-secret", target.secret);
+    // Segredo GLOBAL do relay (RELAY_FORWARD_SECRET) tem prioridade: o mesmo pra
+    // todas as lojas, definido uma vez, sem sincronizar por loja. Se não houver,
+    // cai no segredo por-loja (compatibilidade).
+    const forwardSecret = (process.env.RELAY_FORWARD_SECRET || "").trim() || target.secret;
+    fwdHeaders.set("x-relay-secret", forwardSecret);
 
     const resp = await fetch(target.url, {
       method: "POST",
