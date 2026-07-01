@@ -17,6 +17,7 @@ import { randomBytes } from "crypto"
 // Upstash do e-mail/PIX.
 import {
   kvConfigured,
+  kvDel,
   kvGetJSON,
   kvSetJSON,
   kvZAdd,
@@ -122,6 +123,11 @@ export async function logEvent(entry: Omit<RelayEvent, "id" | "ts"> & { ts?: num
   } catch {
     // log é best-effort — nunca derruba o repasse do webhook.
   }
+}
+
+export async function clearLog(): Promise<void> {
+  if (!kvConfigured()) return
+  await kvDel(LOG_KEY)
 }
 
 export async function getLog(limit = 60): Promise<RelayEvent[]> {

@@ -287,9 +287,23 @@ export function RelayPanel() {
       <section>
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-sm font-bold text-foreground">Tráfego recente</h3>
-          <button onClick={load} className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-foreground">
-            <RefreshCw className="h-3 w-3" /> Atualizar
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={load} className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-foreground">
+              <RefreshCw className="h-3 w-3" /> Atualizar
+            </button>
+            {log.length > 0 && (
+              <button
+                onClick={async () => {
+                  if (!confirm("Limpar todo o log de tráfego?")) return
+                  await fetch("/api/admin/relay?clear=log", { method: "DELETE" })
+                  await load()
+                }}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700"
+              >
+                <Trash2 className="h-3 w-3" /> Limpar
+              </button>
+            )}
+          </div>
         </div>
         {log.length === 0 ? (
           <div className="rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground">

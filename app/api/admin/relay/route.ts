@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { addTarget, getLog, getTargets, removeTarget, updateTarget, kvConfigured } from "@/lib/relay";
+import { addTarget, clearLog, getLog, getTargets, removeTarget, updateTarget, kvConfigured } from "@/lib/relay";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +74,13 @@ export async function DELETE(request: Request) {
   if (!(await isAuthed())) {
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
   }
-  const key = new URL(request.url).searchParams.get("key") || "";
+  const params = new URL(request.url).searchParams;
+  // Limpar o log de tráfego (zera a lista de eventos).
+  if (params.get("clear") === "log") {
+    await clearLog();
+    return NextResponse.json({ ok: true });
+  }
+  const key = params.get("key") || "";
   if (!key) {
     return NextResponse.json({ error: "chave obrigatória." }, { status: 400 });
   }

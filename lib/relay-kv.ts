@@ -80,3 +80,8 @@ export async function kvZRemRangeByScore(key: string, min: number, max: number):
   const res = await command(["ZREMRANGEBYSCORE", key, min, max])
   return typeof res === "number" ? res : Number(res) || 0
 }
+
+export async function kvDel(key: string): Promise<void> {
+  if (!useSeparate) return mainKv.kvDel(key)
+  await command(["DEL", key])
+}
