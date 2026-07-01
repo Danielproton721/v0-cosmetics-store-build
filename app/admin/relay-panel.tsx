@@ -186,6 +186,8 @@ export function RelayPanel() {
   const [data, setData] = useState<Data | null>(null)
   const [origin, setOrigin] = useState("")
   const [name, setName] = useState("")
+  const [keyInput, setKeyInput] = useState("")
+  const [secretInput, setSecretInput] = useState("")
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -219,11 +221,17 @@ export function RelayPanel() {
       const r = await fetch("/api/admin/relay", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({
+          name,
+          key: keyInput.trim() || undefined,
+          secret: secretInput.trim() || undefined,
+        }),
       })
       const d = await r.json().catch(() => ({}))
       if (!r.ok) throw new Error(d?.error || "Erro ao conectar.")
       setName("")
+      setKeyInput("")
+      setSecretInput("")
       await load()
       setMsg({ ok: true, text: "Loja criada. Copie o prompt no card dela e cole no agente da outra loja." })
     } catch (e: any) {
@@ -298,6 +306,27 @@ export function RelayPanel() {
             <Plus className="h-4 w-4" /> Criar
           </button>
         </div>
+        <details className="mt-2">
+          <summary className="cursor-pointer text-xs text-muted-foreground">Restaurar loja existente (chave + segredo)</summary>
+          <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <input
+              value={keyInput}
+              onChange={(e) => setKeyInput(e.target.value)}
+              placeholder="Chave (ex: 7f18efeb2875)"
+              className="rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-primary/40"
+            />
+            <input
+              value={secretInput}
+              onChange={(e) => setSecretInput(e.target.value)}
+              placeholder="Segredo (o RELAY_SECRET que a loja já usa)"
+              className="rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </div>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Preencha pra recriar a loja com a MESMA chave/segredo que a loja de trás já usa — sem precisar mexer nela.
+            Deixe vazio pra gerar novos.
+          </p>
+        </details>
         {msg && <p className={`mt-2 text-sm ${msg.ok ? "text-emerald-700" : "text-red-600"}`}>{msg.text}</p>}
       </section>
 

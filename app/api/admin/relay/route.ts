@@ -35,8 +35,10 @@ export async function POST(request: Request) {
   if (url && !/^https?:\/\/.+/i.test(url)) {
     return NextResponse.json({ error: "URL de destino inválida (use https://...)." }, { status: 400 });
   }
+  const key = body?.key ? String(body.key) : undefined;
+  const secret = body?.secret ? String(body.secret) : undefined;
   try {
-    const target = await addTarget(name, url);
+    const target = await addTarget(name, url, key, secret);
     return NextResponse.json({ ok: true, target });
   } catch (e: any) {
     // Causa comum: token Read-Only do Upstash bloqueia a escrita.

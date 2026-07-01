@@ -67,22 +67,30 @@ export async function getTarget(key: string): Promise<RelayTarget | null> {
   return targets[key] ?? null
 }
 
-// url é opcional: dá pra conectar a loja só com o apelido (gera chave + segredo
-// na hora, pro prompt do agente) e preencher o webhook de destino depois, quando
-// o agente da outra loja reportar.
-export async function addTarget(name: string, url = ""): Promise<RelayTarget> {
+// url/key/secret são opcionais:
+//  • sem key/secret → gera novos (loja nova).
+//  • com key/secret → "restaura" uma loja com a MESMA chave/segredo que a loja
+//    de trás já usa (ex.: depois de trocar de banco KV). Assim não precisa
+//    reconfigurar a loja de trás.
+export async function addTarget(
+  name: string,
+  url = "",
+  key?: string,
+  secret?: string,
+): Promise<RelayTarget> {
   if (!kvConfigured()) throw new Error("KV (Upstash) não configurado.")
   const targets = await getTargets()
-  const key = randomBytes(6).toString("hex") // 12 chars, o identificador na URL
-  const secret = randomBytes(24).toString("base64url")
+  const cleanKey = (key || "").trim().replace(/[^a-zA-Z0-9_-]/g, "")
+  const finalKey = cleanKey || randomBytes(6).toString("hex") // identificador na URL
+  const finalSecret = (secret || "").trim() || randomBytes(24).toString("base64url")
   const target: RelayTarget = {
-    key,
-    name: (name || "").trim() || key,
+    key: finalKey,
+    name: (name || "").trim() || finalKey,
     url: (url || "").trim(),
-    secret,
+    secret: finalSecret,
     createdAt: new Date().toISOString(),
   }
-  targets[key] = target
+  targets[finalKey] = target
   await kvSetJSON(TARGETS_KEY, targets)
   return target
 }
