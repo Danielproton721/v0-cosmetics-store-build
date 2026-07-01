@@ -14,6 +14,12 @@ import type { OrderEmailItem } from "@/lib/order-email";
 export const dynamic = "force-dynamic";
 
 function getPublicNotifyUrl(request: Request) {
+  // Relay opcional: se NOTIFY_URL_OVERRIDE estiver definida, o notify_url aponta
+  // pra ela (o relay num domínio neutro), sem revelar o domínio da loja ao
+  // gateway. Sem a env, mantém o comportamento original (domínio da própria loja).
+  const override = process.env.NOTIFY_URL_OVERRIDE?.trim();
+  if (override) return override;
+
   const url = new URL(request.url);
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
   const hostname = host.split(":")[0]?.toLowerCase() || "";

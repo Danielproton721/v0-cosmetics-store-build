@@ -24,6 +24,14 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Se a loja usa o relay (RELAY_SECRET definido), só aceita webhooks que
+  // passaram por ele — o relay envia o header x-relay-secret. Opt-in: sem a env,
+  // o webhook aceita como antes (não derruba o fluxo até o relay estar no ar).
+  const relaySecret = process.env.RELAY_SECRET?.trim()
+  if (relaySecret && request.headers.get("x-relay-secret") !== relaySecret) {
+    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 })
+  }
+
   const rawBody = await request.text()
   let payload: any = {}
 
