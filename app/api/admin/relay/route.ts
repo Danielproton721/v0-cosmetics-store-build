@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { addTarget, getLog, getTargets, removeTarget, kvConfigured } from "@/lib/relay";
+import { addTarget, getLog, getTargets, removeTarget, updateTarget, kvConfigured } from "@/lib/relay";
 
 export const dynamic = "force-dynamic";
 
@@ -29,10 +29,43 @@ export async function POST(request: Request) {
   }
   const name = String(body?.name ?? "");
   const url = String(body?.url ?? "").trim();
-  if (!/^https?:\/\/.+/i.test(url)) {
+  // url é OPCIONAL aqui: dá pra conectar só com o apelido (pra gerar o prompt do
+  // agente) e preencher o webhook de destino depois. Se vier, valida o formato.
+  if (url && !/^https?:\/\/.+/i.test(url)) {
     return NextResponse.json({ error: "URL de destino inválida (use https://...)." }, { status: 400 });
   }
   const target = await addTarget(name, url);
+  return NextResponse.json({ ok: true, target });
+}
+
+// Edita apelido/webhook de destino de uma loja já conectada.
+export async function PUT(request: Request) {
+  if (!(await isAuthed())) {
+    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+  }
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    body = {};
+  }
+  const key = String(body?.key ?? "").trim();
+  if (!key) {
+    return NextResponse.json({ error: "chave obrigatória." }, { status: 400 });
+  }
+  const patch: { name?: string; url?: string } = {};
+  if (body?.name !== undefined) patch.name = String(body.name);
+  if (body?.url !== undefined) {
+    const url = String(body.url).trim();
+    if (url && !/^https?:\/\/.+/i.test(url)) {
+      return NextResponse.json({ error: "URL de destino inválida (use https://...)." }, { status: 400 });
+    }
+    patch.url = url;
+  }
+  const target = await updateTarget(key, patch);
+  if (!target) {
+    return NextResponse.json({ error: "loja não encontrada." }, { status: 404 });
+  }
   return NextResponse.json({ ok: true, target });
 }
 

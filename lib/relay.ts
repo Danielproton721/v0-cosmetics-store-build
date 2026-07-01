@@ -61,7 +61,10 @@ export async function getTarget(key: string): Promise<RelayTarget | null> {
   return targets[key] ?? null
 }
 
-export async function addTarget(name: string, url: string): Promise<RelayTarget> {
+// url é opcional: dá pra conectar a loja só com o apelido (gera chave + segredo
+// na hora, pro prompt do agente) e preencher o webhook de destino depois, quando
+// o agente da outra loja reportar.
+export async function addTarget(name: string, url = ""): Promise<RelayTarget> {
   if (!kvConfigured()) throw new Error("KV (Upstash) não configurado.")
   const targets = await getTargets()
   const key = randomBytes(6).toString("hex") // 12 chars, o identificador na URL
@@ -69,13 +72,29 @@ export async function addTarget(name: string, url: string): Promise<RelayTarget>
   const target: RelayTarget = {
     key,
     name: (name || "").trim() || key,
-    url: url.trim(),
+    url: (url || "").trim(),
     secret,
     createdAt: new Date().toISOString(),
   }
   targets[key] = target
   await kvSetJSON(TARGETS_KEY, targets)
   return target
+}
+
+// Edita apelido e/ou webhook de destino de uma loja já conectada.
+export async function updateTarget(
+  key: string,
+  patch: { name?: string; url?: string },
+): Promise<RelayTarget | null> {
+  if (!kvConfigured() || !key) return null
+  const targets = await getTargets()
+  const current = targets[key]
+  if (!current) return null
+  if (patch.name !== undefined) current.name = patch.name.trim() || current.key
+  if (patch.url !== undefined) current.url = patch.url.trim()
+  targets[key] = current
+  await kvSetJSON(TARGETS_KEY, targets)
+  return current
 }
 
 export async function removeTarget(key: string): Promise<void> {

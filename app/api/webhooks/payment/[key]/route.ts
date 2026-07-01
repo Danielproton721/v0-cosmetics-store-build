@@ -29,6 +29,11 @@ export async function POST(
     return NextResponse.json({ ok: true, note: "no target" });
   }
 
+  if (!target.url) {
+    await logEvent({ key, name: target.name, forwarded: false, error: "sem webhook de destino ainda", ...info });
+    return NextResponse.json({ ok: true, note: "no destination yet" });
+  }
+
   try {
     const resp = await fetch(target.url, {
       method: "POST",
