@@ -67,6 +67,28 @@ Uma pagina admin PROTEGIDA POR SENHA que mostre, com botao Copiar em cada campo:
 Antes de editar, investigue onde a loja monta o notify_url e onde esta o handler do webhook. Se for Next.js, aplique via env. Se for outra stack, adapte mantendo o contrato. Nada pode dar erro por falta das envs (degrade gracioso).`
 }
 
+// Prompt de CONEXAO (auto-registro): cole no agente da loja NOVA. Ele configura
+// a loja e a registra sozinho no relay — a loja aparece no painel ja conectada.
+function buildOnboardPrompt(origin: string, secret: string) {
+  return `Voce vai conectar ESTA loja a um relay de pagamento (uma loja-fachada), pra o gateway (Pagou.ai) NUNCA ver o dominio real desta loja. Faca, adaptando a stack desta loja:
+
+1) VALIDACAO DE ENTRADA: no webhook desta loja (endpoint que recebe o gateway, ex.: /api/webhooks/pagouai), valide o header "x-relay-secret" contra a env RELAY_SECRET, comparando EXATO (de trim nos dois, sem aspas). Se nao bater => responda 401. NAO altere a logica de pagamento (marcar pago, e-mail, liberar pagina de obrigado/rastreio).
+
+2) NOTIFY: deixe o notify_url do gateway configuravel pela env NOTIFY_URL_OVERRIDE e use-a quando existir.
+
+3) AUTO-REGISTRO NO RELAY: rode este comando (troque SEU-DOMINIO pela URL publica REAL desta loja e NOME DA LOJA por um apelido):
+   curl -X POST "${origin}/api/relay/register" -H "x-relay-secret: ${secret}" -H "content-type: application/json" -d "{\\"name\\":\\"NOME DA LOJA\\",\\"url\\":\\"https://SEU-DOMINIO/api/webhooks/pagouai\\"}"
+   A resposta traz um campo "notifyUrl". GUARDE ele.
+
+4) DEFINA na Vercel desta loja (Production) e faca redeploy:
+   NOTIFY_URL_OVERRIDE=<o notifyUrl que voltou no passo 3>
+   RELAY_SECRET=${secret}
+
+5) TELA DE CONFERENCIA (crie, PROTEGIDA POR SENHA): mostre com botao Copiar em cada campo — o webhook desta loja, o RELAY_SECRET e o NOTIFY_URL_OVERRIDE atuais.
+
+Pronto: apos o registro, esta loja aparece SOZINHA no painel do relay, ja conectada. Nada pode dar erro por falta de env (degrade gracioso).`
+}
+
 function CopyBtn({ text, label = "Copiar" }: { text: string; label?: string }) {
   const [done, setDone] = useState(false)
   return (
@@ -383,9 +405,27 @@ export function RelayPanel() {
       {/* Segredo único do relay — definido aqui, guardado no banco, sem env */}
       {data && data.kvOk && <GlobalSecretBox current={data.globalSecret || ""} onSaved={load} />}
 
-      {/* Criar loja */}
+      {/* Conectar loja */}
       <section>
-        <h3 className="mb-2 text-sm font-bold text-foreground">Nova loja mascarada</h3>
+        <h3 className="mb-2 text-sm font-bold text-foreground">Conectar loja nova</h3>
+
+        {/* Jeito fácil: auto-registro via prompt */}
+        <div className="mb-3 rounded-lg border border-primary/30 bg-primary/5 p-3">
+          <div className="mb-1 text-xs font-bold text-foreground">✨ Jeito fácil (recomendado)</div>
+          <p className="mb-2 text-[11px] text-muted-foreground">
+            Cole este prompt no agente (Claude Code/Cursor) da loja nova — ele configura a loja e a{" "}
+            <strong>registra sozinho</strong> no relay. Ela aparece aqui já conectada, sem você mexer no painel.
+          </p>
+          {origin && data?.globalSecret ? (
+            <CopyBtn text={buildOnboardPrompt(origin, data.globalSecret)} label="Copiar prompt de conexão" />
+          ) : (
+            <span className="text-[11px] font-semibold text-amber-700">
+              Defina o Segredo único acima primeiro — o auto-registro usa ele.
+            </span>
+          )}
+        </div>
+
+        <p className="mb-1 text-xs font-semibold text-muted-foreground">Ou crie manualmente:</p>
         <div className="flex flex-wrap gap-2">
           <input
             value={name}
