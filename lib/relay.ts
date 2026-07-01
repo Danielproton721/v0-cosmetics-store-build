@@ -12,6 +12,9 @@
 // ============================================================================
 
 import { randomBytes } from "crypto"
+// KV do relay: usa um banco Upstash SEPARADO quando RELAY_KV_* está definido,
+// senão cai no KV principal (ver lib/relay-kv.ts). Isola o consumo do relay do
+// Upstash do e-mail/PIX.
 import {
   kvConfigured,
   kvGetJSON,
@@ -19,7 +22,7 @@ import {
   kvZAdd,
   kvZRevRange,
   kvZRemRangeByScore,
-} from "./kv-store"
+} from "./relay-kv"
 
 export { kvConfigured }
 
