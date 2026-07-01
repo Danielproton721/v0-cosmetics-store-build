@@ -17,7 +17,13 @@ type RelayEvent = {
   forwardStatus?: number
   error?: string
 }
-type Data = { kvOk: boolean; targets: Record<string, RelayTarget>; log: RelayEvent[] }
+type Data = {
+  kvOk: boolean
+  separateKv?: boolean
+  env?: { urlSet: boolean; tokenSet: boolean }
+  targets: Record<string, RelayTarget>
+  log: RelayEvent[]
+}
 
 const brl = (v?: number) => (v ? `R$ ${(v / 100).toFixed(2).replace(".", ",")}` : "—")
 const fmt = (ts: number) => new Date(ts).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
@@ -235,6 +241,36 @@ export function RelayPanel() {
       {data && !data.kvOk && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
           KV (Upstash) não configurado — sem relay. Provisione o Upstash na Vercel pra conectar lojas.
+        </div>
+      )}
+
+      {data && data.kvOk && (
+        <div className="space-y-1 text-xs text-muted-foreground">
+          <div>
+            Banco do relay:{" "}
+            {data.separateKv ? (
+              <span className="rounded-full bg-emerald-100 px-2 py-0.5 font-bold text-emerald-700">separado (conta nova) ✓</span>
+            ) : (
+              <span className="rounded-full bg-amber-100 px-2 py-0.5 font-bold text-amber-700">principal (o mesmo do e-mail)</span>
+            )}
+          </div>
+          {!data.separateKv && data.env && (
+            <div className="rounded-lg border border-border bg-card p-2 font-mono text-[11px]">
+              <div>
+                <code>RELAY_KV_REST_API_URL</code>:{" "}
+                {data.env.urlSet ? <span className="text-emerald-700">✓ chegou</span> : <span className="text-red-600">✗ vazia/faltando</span>}
+              </div>
+              <div>
+                <code>RELAY_KV_REST_API_TOKEN</code>:{" "}
+                {data.env.tokenSet ? <span className="text-emerald-700">✓ chegou</span> : <span className="text-red-600">✗ vazia/faltando</span>}
+              </div>
+              <div className="mt-1 font-sans text-muted-foreground">
+                {data.env.urlSet && data.env.tokenSet
+                  ? "As duas chegaram mas ainda está no principal — force um Redeploy (sem cache)."
+                  : "Env faltando: confira o NOME exato na Vercel (Production) e dê Redeploy."}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

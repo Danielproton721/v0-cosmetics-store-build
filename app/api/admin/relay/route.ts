@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
 import { addTarget, clearLog, getLog, getTargets, removeTarget, updateTarget, kvConfigured } from "@/lib/relay";
+import { usingSeparateKv, relayKvDiag } from "@/lib/relay-kv";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ export async function GET() {
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
   }
   const [targets, log] = await Promise.all([getTargets(), getLog(60)]);
-  return NextResponse.json({ kvOk: kvConfigured(), targets, log });
+  return NextResponse.json({ kvOk: kvConfigured(), separateKv: usingSeparateKv(), env: relayKvDiag(), targets, log });
 }
 
 // Conecta uma loja nova: recebe { name, url } e devolve a chave + segredo gerados.

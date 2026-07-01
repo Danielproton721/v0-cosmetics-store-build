@@ -16,13 +16,20 @@
 
 import * as mainKv from "./kv-store"
 
-const REST_URL =
-  process.env.RELAY_KV_REST_API_URL || process.env.RELAY_UPSTASH_REDIS_REST_URL || ""
-const REST_TOKEN =
-  process.env.RELAY_KV_REST_API_TOKEN || process.env.RELAY_UPSTASH_REDIS_REST_TOKEN || ""
+// Limpa espaços e aspas acidentais (o Upstash mostra os valores entre aspas —
+// se copiar com elas, a env fica com aspas literais e quebra).
+const clean = (v?: string) => (v || "").trim().replace(/^["']+|["']+$/g, "")
+
+const REST_URL = clean(process.env.RELAY_KV_REST_API_URL || process.env.RELAY_UPSTASH_REDIS_REST_URL)
+const REST_TOKEN = clean(process.env.RELAY_KV_REST_API_TOKEN || process.env.RELAY_UPSTASH_REDIS_REST_TOKEN)
 
 // Usa o banco separado só quando as duas envs do relay estão presentes.
 const useSeparate = Boolean(REST_URL && REST_TOKEN)
+
+// Diagnóstico pro painel: quais das duas envs chegaram (sem revelar valores).
+export function relayKvDiag(): { urlSet: boolean; tokenSet: boolean } {
+  return { urlSet: Boolean(REST_URL), tokenSet: Boolean(REST_TOKEN) }
+}
 
 async function command(args: (string | number)[]): Promise<any> {
   const res = await fetch(REST_URL, {
@@ -44,6 +51,12 @@ async function command(args: (string | number)[]): Promise<any> {
 
 export function kvConfigured(): boolean {
   return useSeparate ? true : mainKv.kvConfigured()
+}
+
+// true = relay usando o banco Upstash SEPARADO (RELAY_KV_*); false = caiu no
+// KV principal (o mesmo do e-mail). Serve pro painel confirmar a migração.
+export function usingSeparateKv(): boolean {
+  return useSeparate
 }
 
 export async function kvGetJSON<T = unknown>(key: string): Promise<T | null> {
