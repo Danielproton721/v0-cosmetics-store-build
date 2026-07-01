@@ -35,12 +35,23 @@ export async function POST(
   }
 
   try {
+    // Repassa os cabeçalhos originais do gateway (ex.: a assinatura do webhook)
+    // pra a loja de trás validar como se recebesse direto. Só removemos os que
+    // não fazem sentido repassar (host/tamanho/hop-by-hop) e injetamos o
+    // x-relay-secret. Assim funciona tanto se a loja valida a assinatura da
+    // Pagou quanto se valida só o x-relay-secret.
+    const fwdHeaders = new Headers();
+    request.headers.forEach((value, name) => {
+      const n = name.toLowerCase();
+      if (["host", "content-length", "connection", "transfer-encoding", "keep-alive"].includes(n)) return;
+      fwdHeaders.set(name, value);
+    });
+    if (!fwdHeaders.has("content-type")) fwdHeaders.set("content-type", "application/json");
+    fwdHeaders.set("x-relay-secret", target.secret);
+
     const resp = await fetch(target.url, {
       method: "POST",
-      headers: {
-        "content-type": request.headers.get("content-type") || "application/json",
-        "x-relay-secret": target.secret,
-      },
+      headers: fwdHeaders,
       body,
       cache: "no-store",
     });
