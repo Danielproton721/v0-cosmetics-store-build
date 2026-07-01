@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { addTarget, clearLog, getLog, getTargets, removeTarget, updateTarget, kvConfigured } from "@/lib/relay";
+import {
+  addTarget,
+  clearLog,
+  getGlobalSecret,
+  getLog,
+  getTargets,
+  removeTarget,
+  setGlobalSecret,
+  updateTarget,
+  kvConfigured,
+} from "@/lib/relay";
 import { usingSeparateKv, relayKvDiag } from "@/lib/relay-kv";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +21,7 @@ export async function GET() {
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
   }
   const [targets, log] = await Promise.all([getTargets(), getLog(60)]);
-  const globalSecret = (process.env.RELAY_FORWARD_SECRET || "").trim() || null;
+  const globalSecret = (await getGlobalSecret()) || null;
   return NextResponse.json({
     kvOk: kvConfigured(),
     separateKv: usingSeparateKv(),
@@ -67,6 +77,15 @@ export async function PUT(request: Request) {
     body = await request.json();
   } catch {
     body = {};
+  }
+  // Definir o segredo único do relay (guardado no KV, sem env).
+  if (body?.globalSecret !== undefined) {
+    try {
+      await setGlobalSecret(String(body.globalSecret));
+      return NextResponse.json({ ok: true, globalSecret: (await getGlobalSecret()) || null });
+    } catch (e: any) {
+      return NextResponse.json({ error: e?.message || "Erro ao salvar o segredo." }, { status: 409 });
+    }
   }
   const key = String(body?.key ?? "").trim();
   if (!key) {

@@ -30,7 +30,23 @@ export { kvConfigured }
 
 const TARGETS_KEY = "relay:targets"
 const LOG_KEY = "relay:log"
+const GLOBAL_SECRET_KEY = "relay:global-secret"
 const LOG_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 7 // guarda 7 dias de histórico
+
+// Segredo único do relay: definido no PAINEL (guardado no KV), sem env. Se
+// existir, é o x-relay-secret usado pra TODAS as lojas. A env
+// RELAY_FORWARD_SECRET continua funcionando como override, mas é opcional.
+export async function getGlobalSecret(): Promise<string> {
+  const fromEnv = (process.env.RELAY_FORWARD_SECRET || "").trim()
+  if (fromEnv) return fromEnv
+  if (!kvConfigured()) return ""
+  return ((await kvGetJSON<string>(GLOBAL_SECRET_KEY)) ?? "").trim()
+}
+
+export async function setGlobalSecret(value: string): Promise<void> {
+  if (!kvConfigured()) throw new Error("KV (Upstash) não configurado.")
+  await kvSetJSON(GLOBAL_SECRET_KEY, (value || "").trim())
+}
 
 export type RelayTarget = {
   key: string

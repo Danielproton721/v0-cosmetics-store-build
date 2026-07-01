@@ -201,6 +201,77 @@ function TargetCard({
   )
 }
 
+function genSecret() {
+  const a = new Uint8Array(24)
+  crypto.getRandomValues(a)
+  return btoa(String.fromCharCode(...a)).replace(/[+/=]/g, "").slice(0, 28)
+}
+
+function GlobalSecretBox({ current, onSaved }: { current: string; onSaved: () => void }) {
+  const [value, setValue] = useState(current)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    setValue(current)
+  }, [current])
+
+  async function save() {
+    setSaving(true)
+    setSaved(false)
+    try {
+      await fetch("/api/admin/relay", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ globalSecret: value.trim() }),
+      })
+      setSaved(true)
+      onSaved()
+      setTimeout(() => setSaved(false), 2000)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="rounded-lg border border-border bg-card p-3">
+      <div className="mb-1 flex items-center gap-1.5 text-xs font-bold text-foreground">
+        🔑 Segredo único (usado por TODAS as lojas)
+      </div>
+      <p className="mb-2 text-[11px] text-muted-foreground">
+        Defina uma vez aqui — todas as lojas de trás usam este mesmo valor no <code className="font-mono">RELAY_SECRET</code>,
+        então nunca mais desalinha. Sem variável de ambiente nenhuma.
+        {current ? (
+          <span className="ml-1 font-bold text-emerald-700">Ativo ✓</span>
+        ) : (
+          <span className="ml-1 text-amber-700">Vazio — cada loja usa um segredo próprio (mais chato).</span>
+        )}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="cole o segredo (ex: o que a loja de trás já usa) ou gere um"
+          className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-primary/40"
+        />
+        <button
+          onClick={() => setValue(genSecret())}
+          className="rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:bg-muted"
+        >
+          Gerar
+        </button>
+        <button
+          onClick={save}
+          disabled={saving}
+          className="rounded-lg bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50"
+        >
+          {saving ? "…" : saved ? "Salvo ✓" : "Salvar"}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function RelayPanel() {
   const [data, setData] = useState<Data | null>(null)
   const [origin, setOrigin] = useState("")
@@ -309,22 +380,8 @@ export function RelayPanel() {
         configura a loja e te devolve o webhook → cole o webhook no card. Pronto: o gateway só vê o domínio desta loja.
       </div>
 
-      {/* Segredo único do relay */}
-      {data && data.kvOk && (
-        <div className="text-xs">
-          {data.globalSecret ? (
-            <span className="text-muted-foreground">
-              🔑 Segredo único ativo — <strong className="text-foreground">todas as lojas</strong> usam o mesmo{" "}
-              <code className="font-mono">RELAY_SECRET</code>. Só a chave (na URL) muda por loja.
-            </span>
-          ) : (
-            <span className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-amber-800">
-              💡 Dica: defina <code className="font-mono">RELAY_FORWARD_SECRET</code> nas variáveis do relay pra usar{" "}
-              <strong>um segredo só</strong> em todas as lojas (nunca mais desalinha). Sem ele, cada loja tem um segredo próprio.
-            </span>
-          )}
-        </div>
-      )}
+      {/* Segredo único do relay — definido aqui, guardado no banco, sem env */}
+      {data && data.kvOk && <GlobalSecretBox current={data.globalSecret || ""} onSaved={load} />}
 
       {/* Criar loja */}
       <section>

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getTarget, logEvent, summarizePayload } from "@/lib/relay";
+import { getGlobalSecret, getTarget, logEvent, summarizePayload } from "@/lib/relay";
 
 // ============================================================================
 //  HUB DE RELAY (por loja) — a Pagou chama /api/webhooks/payment/<chave> e o
@@ -47,10 +47,10 @@ export async function POST(
       fwdHeaders.set(name, value);
     });
     if (!fwdHeaders.has("content-type")) fwdHeaders.set("content-type", "application/json");
-    // Segredo GLOBAL do relay (RELAY_FORWARD_SECRET) tem prioridade: o mesmo pra
-    // todas as lojas, definido uma vez, sem sincronizar por loja. Se não houver,
-    // cai no segredo por-loja (compatibilidade).
-    const forwardSecret = (process.env.RELAY_FORWARD_SECRET || "").trim() || target.secret;
+    // Segredo GLOBAL do relay (definido no painel, guardado no KV): o mesmo pra
+    // todas as lojas, sem sincronizar por loja. Se não houver, cai no segredo
+    // por-loja (compatibilidade).
+    const forwardSecret = (await getGlobalSecret()) || target.secret;
     fwdHeaders.set("x-relay-secret", forwardSecret);
 
     const resp = await fetch(target.url, {
