@@ -21,6 +21,7 @@ export function AdminShell({
   orders,
   catalog,
   pending,
+  gatewaySwitch,
 }: {
   brand: string
   modules: Modules
@@ -29,6 +30,7 @@ export function AdminShell({
   orders: AdminOrder[]
   catalog: Catalog
   pending: number
+  gatewaySwitch?: React.ReactNode
 }) {
   const tabs = [
     modules.orders ? ("orders" as const) : null,
@@ -58,6 +60,8 @@ export function AdminShell({
             <LogoutButton />
           </div>
         </div>
+
+        {gatewaySwitch}
 
         {tabs.length > 1 && (
           <div className="mb-5 flex w-full rounded-xl border border-border bg-card p-1 sm:inline-flex sm:w-auto">

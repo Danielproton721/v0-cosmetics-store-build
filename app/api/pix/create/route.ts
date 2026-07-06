@@ -10,8 +10,48 @@ import { buildOrderCode } from "@/lib/order-code";
 import { saveOrder } from "@/lib/order-store";
 import { indexOrder } from "@/lib/orders";
 import type { OrderEmailItem } from "@/lib/order-email";
+import { getActiveGateway, markTxGateway } from "@/lib/gateways/active";
+import { createPixMedusa, medusaConfigured } from "@/lib/gateways/medusa";
+import { createPixCenturion, centurionConfigured } from "@/lib/gateways/centurion";
 
 export const dynamic = "force-dynamic";
+
+// Persiste o pedido no KV (snapshot pro e-mail/painel) e indexa. Compartilhado
+// pelos gateways Medusa/Centurion. Espelha a persistência do fluxo Pagou abaixo.
+async function persistNewOrder(
+  txid: string,
+  order: any,
+  value: number,
+  customer: { name: string; email: string; phone: string; cpf: string }
+): Promise<string> {
+  const orderCode = buildOrderCode(txid);
+  try {
+    await saveOrder(txid, {
+      txid,
+      createdAt: new Date().toISOString(),
+      orderCode,
+      paymentMethod: "pix",
+      customer,
+      address: {
+        cep: String(order?.address?.cep ?? "").trim(),
+        street: String(order?.address?.street ?? "").trim(),
+        number: String(order?.address?.number ?? "").trim(),
+        complement: order?.address?.complement ? String(order.address.complement).trim() : undefined,
+        neighborhood: String(order?.address?.neighborhood ?? "").trim(),
+        city: String(order?.address?.city ?? "").trim(),
+        stateUF: String(order?.address?.stateUF ?? "").trim().toUpperCase(),
+      },
+      items: Array.isArray(order?.items) ? (order.items as OrderEmailItem[]) : [],
+      subtotal: Number(order?.subtotal ?? value),
+      shipping: Number(order?.shipping ?? 0),
+      total: Number(value),
+    });
+    await indexOrder(txid, Date.now());
+  } catch (err) {
+    console.error("[PIX API] Falha ao persistir pedido no KV:", err);
+  }
+  return orderCode;
+}
 
 function getPublicNotifyUrl(request: Request) {
   // Relay opcional: se NOTIFY_URL_OVERRIDE estiver definida, o notify_url aponta
@@ -101,6 +141,139 @@ export async function POST(request: Request) {
     );
   }
 
+  // IP do comprador (os gateways exigem em todos os métodos). Em local/dev cai
+  // num IP público BR. Calculado aqui em cima pra servir os 3 gateways.
+  const isPrivateIp = (v: string) =>
+    !v ||
+    v === "unknown" ||
+    v === "127.0.0.1" ||
+    v === "::1" ||
+    v === "0.0.0.0" ||
+    v.startsWith("192.168.") ||
+    v.startsWith("10.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(v);
+  const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
+
+  // ── Multi-gateway: se o admin escolheu Medusa/Centurion, despacha pra lá.
+  // O caminho Pagou.ai (default) segue idêntico abaixo, com o relay dele. ──
+  const activeGateway = await getActiveGateway();
+  const appBaseUrl = (process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/$/, "");
+
+  if (activeGateway === "medusa") {
+    if (!medusaConfigured()) {
+      console.error("[PIX API] MEDUSAPAY_SECRET_KEY ausente no ambiente.");
+      return NextResponse.json({ error: "Erro interno: MedusaPay não configurada." }, { status: 500 });
+    }
+    // SEM relay: postback direto no domínio da loja.
+    const postbackUrl = appBaseUrl ? `${appBaseUrl}/api/webhooks/medusa` : undefined;
+    const result = await createPixMedusa({
+      amountCents,
+      name: name.trim(),
+      email: email.trim(),
+      cpfDigits,
+      phoneDigits,
+      ip: buyerIp,
+      title: title || "Combo Enxoval",
+      postbackUrl,
+    });
+    if (!result.ok) {
+      console.error(`[PIX/Medusa] Erro (${result.status}):`, result.error);
+      if (result.status === 401) {
+        return NextResponse.json({ error: "Chave de autenticação inválida na MedusaPay." }, { status: 401 });
+      }
+      return NextResponse.json({ error: result.error || "Falha na MedusaPay.", gateway: result.raw }, { status: 502 });
+    }
+    if (!result.qrCode) {
+      return NextResponse.json({ error: "MedusaPay não retornou QR Code PIX válido." }, { status: 502 });
+    }
+    const txid = result.txid ?? null;
+    let orderCode: string | null = null;
+    if (txid) {
+      orderCode = await persistNewOrder(String(txid), body?.order ?? {}, Number(value), {
+        name: name.trim(),
+        email: email.trim(),
+        phone: phoneDigits,
+        cpf: cpfDigits,
+      });
+      await markTxGateway(String(txid), "medusa");
+    }
+    return NextResponse.json({
+      txid,
+      orderCode,
+      qrCode: result.qrCode,
+      qrCodeImage: result.qrCodeImage ?? null,
+      expiresAt: result.expiresAt ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      status: result.paymentStatus ?? "pending",
+      amount: value,
+      phone: phoneDigits,
+    });
+  }
+
+  if (activeGateway === "centurion") {
+    if (!centurionConfigured()) {
+      console.error("[PIX API] CENTURION_API_KEY ausente no ambiente.");
+      return NextResponse.json({ error: "Erro interno: CenturionPay não configurada." }, { status: 500 });
+    }
+    // SEM relay: postback direto no domínio da loja.
+    const postbackUrl = appBaseUrl ? `${appBaseUrl}/api/webhooks/centurion` : undefined;
+    const a = body?.order?.address;
+    const address =
+      a && a.cep
+        ? {
+            cep: String(a.cep || ""),
+            street: String(a.street || ""),
+            number: String(a.number || ""),
+            complement: a.complement ? String(a.complement) : undefined,
+            neighborhood: String(a.neighborhood || ""),
+            city: String(a.city || ""),
+            stateUF: String(a.stateUF || ""),
+          }
+        : undefined;
+    const result = await createPixCenturion({
+      amountCents,
+      name: name.trim(),
+      email: email.trim(),
+      cpfDigits,
+      phoneDigits,
+      ip: buyerIp,
+      title: title || "Combo Enxoval",
+      postbackUrl,
+      address,
+    });
+    if (!result.ok) {
+      console.error(`[PIX/Centurion] Erro (${result.status}):`, result.error);
+      if (result.status === 401) {
+        return NextResponse.json({ error: "Chave de autenticação inválida na CenturionPay." }, { status: 401 });
+      }
+      return NextResponse.json({ error: result.error || "Falha na CenturionPay.", gateway: result.raw }, { status: 502 });
+    }
+    if (!result.qrCode) {
+      return NextResponse.json({ error: "CenturionPay não retornou QR Code PIX válido." }, { status: 502 });
+    }
+    const txid = result.txid ?? null;
+    let orderCode: string | null = null;
+    if (txid) {
+      orderCode = await persistNewOrder(String(txid), body?.order ?? {}, Number(value), {
+        name: name.trim(),
+        email: email.trim(),
+        phone: phoneDigits,
+        cpf: cpfDigits,
+      });
+      await markTxGateway(String(txid), "centurion");
+    }
+    return NextResponse.json({
+      txid,
+      orderCode,
+      qrCode: result.qrCode,
+      qrCodeImage: result.qrCodeImage ?? null,
+      expiresAt: result.expiresAt ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      status: result.paymentStatus ?? "pending",
+      amount: value,
+      phone: phoneDigits,
+    });
+  }
+
+  // ── Pagou.ai (gateway padrão — inalterado, com o relay dele) ──
   const rawKey = process.env.PAGOUAI_SECRET_KEY;
   if (!rawKey) {
     console.error("[PIX API] Chave PAGOUAI_SECRET_KEY ausente no ambiente.");
@@ -111,19 +284,7 @@ export async function POST(request: Request) {
   const endpoint = "https://api.pagou.ai/v2/transactions";
   const externalRef = `order_${Date.now()}_${hashRateLimitValue(`${cpfDigits}|${amountCents}|${email}`).slice(0, 8)}`;
 
-  // Pagou.ai v2 hoje exige IP do comprador em todos os métodos. Caímos
-  // em IP brasileiro público quando estamos em local/dev.
-  const isPrivateIp = (value: string) =>
-    !value ||
-    value === "unknown" ||
-    value === "127.0.0.1" ||
-    value === "::1" ||
-    value === "0.0.0.0" ||
-    value.startsWith("192.168.") ||
-    value.startsWith("10.") ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(value);
-  const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip;
-
+  // buyerIp já calculado no topo (serve os 3 gateways).
   const payload: Record<string, any> = {
     external_ref: externalRef,
     amount: amountCents,
