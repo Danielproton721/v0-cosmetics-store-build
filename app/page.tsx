@@ -3,6 +3,7 @@ import { Header } from "@/components/store/header"
 import { AnnouncementBar } from "@/components/store/announcement-bar"
 import { Hero } from "@/components/store/hero"
 import { CollectionBubbleMenu } from "@/components/store/collection-bubble-menu"
+import { OfferCountdown } from "@/components/store/offer-countdown"
 import { ProductSection } from "@/components/store/product-section"
 import { Footer } from "@/components/store/footer"
 import { TrustStrip } from "@/components/store/trust-strip"
@@ -121,6 +122,8 @@ export default async function Home() {
       <TrustStrip />
 
       <CollectionBubbleMenu />
+
+      <OfferCountdown />
 
       <ProductSection
         title="Novidades"
