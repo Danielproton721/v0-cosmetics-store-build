@@ -330,8 +330,8 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
           <div className="flex flex-col">
             <div className="px-4 md:px-0 pt-4 md:pt-0">
               <div className="flex gap-2 mb-3">
-                <span className="bg-[#fff9e6] text-[#d4a017] text-xs font-semibold px-2.5 py-1 rounded-full">Manta Flannel</span>
-                <span className="bg-[#fff9e6] text-[#d4a017] text-xs font-semibold px-2.5 py-1 rounded-full">Toque Macio</span>
+                <span className="bg-[#ffe3b3] text-[#c91e5a] text-xs font-bold px-2.5 py-1 rounded-full">Manta Flannel</span>
+                <span className="bg-[#ffe3b3] text-[#c91e5a] text-xs font-bold px-2.5 py-1 rounded-full">Toque Macio</span>
               </div>
 
               <h1 className="text-xl md:text-2xl font-bold text-[#1a1a1a] leading-tight text-balance mb-3">
@@ -361,7 +361,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-red-100">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-orange-500 to-red-500"
+                      className="h-full rounded-full bg-gradient-to-r from-[#ff5252] to-[#c91e5a]"
                       style={{ width: `${Math.max(12, stockLeft * 6)}%` }}
                     />
                   </div>
@@ -380,7 +380,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                     R$ {activePrice.toFixed(2).replace(".", ",")} <span className="text-lg font-bold">no Pix</span>
                   </span>
                   {activeDiscountPercentage > 0 && (
-                    <span className="bg-[#00c9a7] text-white text-xs font-bold px-2 py-1 rounded-full">
+                    <span className="bg-[#c91e5a] text-white text-xs font-bold px-2 py-1 rounded-full">
                       -{activeDiscountPercentage}%
                     </span>
                   )}
@@ -508,7 +508,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   onClick={handleAddToCart}
                   className={`flex-1 text-sm font-bold h-12 rounded-md uppercase tracking-wider active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${added
                     ? "bg-[#1a1a1a] text-[#ffffff]"
-                    : "bg-[#15803d] text-[#ffffff] hover:bg-[#166534]"
+                    : "bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white hover:brightness-110"
                     }`}
                 >
                   {added ? (
