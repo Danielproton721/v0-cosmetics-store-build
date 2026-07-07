@@ -26,15 +26,15 @@ function FooterAccordion({ title, children }: FooterAccordionProps) {
   const [open, setOpen] = useState(true)
 
   return (
-    <div className="border-b border-white/10">
+    <div className="border-b border-[#e5e5e5]">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-4 py-4"
       >
-        <span className="text-sm font-medium text-white">{title}</span>
+        <span className="text-sm font-medium text-[#1a1a1a]">{title}</span>
         <ChevronDown
           size={18}
-          className={`text-white/50 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`text-[#737373] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && (
@@ -48,11 +48,11 @@ function FooterAccordion({ title, children }: FooterAccordionProps) {
 
 export function Footer() {
   return (
-    <footer className="bg-[#1a1a1a] text-white pb-24">
+    <footer className="bg-[#ffffff] border-t border-[#e5e5e5] pb-24">
 
       {/* Sessão 1 — Sobre a Empresa */}
       <FooterAccordion title="Fio Nobre">
-        <p className="text-sm text-white/60 leading-relaxed">
+        <p className="text-sm text-[#737373] leading-relaxed">
           Enxovais, conforto e bem-estar para o lar. Curadoria premium em cortinas, jogos de cama,
           tapetes e almofadas com foco em qualidade e requinte.
         </p>
@@ -60,34 +60,34 @@ export function Footer() {
 
       {/* Sessão 2 — Dados Fiscais */}
       <FooterAccordion title="EMPRESA">
-        <p className="text-sm text-white/60 leading-relaxed">
+        <p className="text-sm text-[#737373] leading-relaxed">
           Marca operada por C ALVES FRANCA LTDA
         </p>
-        <p className="text-sm text-white/60">
-          <span className="font-medium text-white">CNPJ:</span> 64.846.844/0001-30
+        <p className="text-sm text-[#737373]">
+          <span className="font-medium text-[#1a1a1a]">CNPJ:</span> 64.846.844/0001-30
         </p>
-        <p className="text-sm text-white/60">
-          <span className="font-medium text-white">Endereço:</span> Rua Eduardo Gomes, 428 — Jardim Tropical — Capitão Poço, PA — CEP 68.650-000
+        <p className="text-sm text-[#737373]">
+          <span className="font-medium text-[#1a1a1a]">Endereço:</span> Rua Eduardo Gomes, 428 — Jardim Tropical — Capitão Poço, PA — CEP 68.650-000
         </p>
       </FooterAccordion>
 
       {/* Sessão 3 — Institucional */}
       <FooterAccordion title="INSTITUCIONAL">
-        <Link href="/politica-de-privacidade" className="text-sm text-white/60 hover:text-white transition-colors">
+        <Link href="/politica-de-privacidade" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Política de Privacidade
         </Link>
-        <Link href="/termos-de-uso" className="text-sm text-white/60 hover:text-white transition-colors">
+        <Link href="/termos-de-uso" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Termos de Uso
         </Link>
-        <Link href="/trocas-e-devolucoes" className="text-sm text-white/60 hover:text-white transition-colors">
+        <Link href="/trocas-e-devolucoes" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Trocas e Devoluções
         </Link>
-        <Link href="/contato-e-catalogo" className="text-sm text-white/60 hover:text-white transition-colors">
+        <Link href="/contato-e-catalogo" className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors">
           Contato e Catálogo
         </Link>
         <a
           href="mailto:suporte@fionobres.shop"
-          className="text-sm text-white/60 hover:text-white transition-colors inline-flex items-center gap-2"
+          className="text-sm text-[#737373] hover:text-[#1a1a1a] transition-colors inline-flex items-center gap-2"
         >
           <Mail size={14} />
           suporte@fionobres.shop
@@ -96,7 +96,7 @@ export function Footer() {
 
       {/* Sessão 4 — Formas de pagamento */}
       <FooterAccordion title="FORMAS DE PAGAMENTO">
-        <p className="text-xs text-white/60 leading-relaxed">
+        <p className="text-xs text-[#737373] leading-relaxed">
           Aceitamos Pix e cartões de crédito das principais bandeiras.
         </p>
         <div className="flex flex-wrap items-center gap-1.5 mt-1">
@@ -108,25 +108,26 @@ export function Footer() {
               width={32}
               height={22}
               loading="lazy"
-              className="rounded bg-white"
             />
           ))}
         </div>
       </FooterAccordion>
 
-      {/* Selos de reputação */}
-      <div className="border-t border-white/10 px-4 py-6">
-        <ReputationSeals />
-      </div>
+      {/* Dos selos pra baixo: fundo escuro */}
+      <div className="bg-[#1a1a1a] text-white">
+        <div className="px-4 py-6">
+          <ReputationSeals />
+        </div>
 
-      {/* Copyright — Bottom bar */}
-      <div className="px-4 pt-6 pb-6 border-t border-white/10 flex flex-col items-center gap-1 text-center mt-4">
-        <p className="text-[11px] text-white/50 uppercase tracking-wide">
-          © 2026 FIO NOBRE. TODOS OS DIREITOS RESERVADOS.
-        </p>
-        <p className="text-[11px] text-white/30 uppercase tracking-wide">
-          DESIGN DE INTERIORES &amp; BEM-ESTAR
-        </p>
+        {/* Copyright */}
+        <div className="px-4 pt-6 pb-6 border-t border-white/10 flex flex-col items-center gap-1 text-center">
+          <p className="text-[11px] text-white/50 uppercase tracking-wide">
+            © 2026 FIO NOBRE. TODOS OS DIREITOS RESERVADOS.
+          </p>
+          <p className="text-[11px] text-white/30 uppercase tracking-wide">
+            DESIGN DE INTERIORES &amp; BEM-ESTAR
+          </p>
+        </div>
       </div>
     </footer>
   )
