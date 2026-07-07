@@ -25,7 +25,7 @@ function Sequence() {
 
 export function AnnouncementBar() {
   return (
-    <div className="overflow-hidden bg-gradient-to-r from-orange-500 to-red-500 py-2 text-white">
+    <div className="overflow-hidden bg-gradient-to-r from-[#ff5252] to-[#c91e5a] py-2 text-white">
       <div className="flex w-max animate-marquee whitespace-nowrap will-change-transform">
         {/* Duas cópias em sequência = loop contínuo sem emenda */}
         <Sequence />

@@ -53,7 +53,7 @@ export function ProductCard({ name, price, compareAtPrice, image, rating, review
       <div className="relative aspect-square bg-[#f7f4ef] p-3">
         {/* Selo de desconto — gatilho de urgência */}
         {hasDiscount && (
-          <span className="absolute left-2 top-2 z-10 flex items-center gap-0.5 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-2 py-1 text-[11px] font-black text-white shadow-md shadow-red-500/30">
+          <span className="absolute left-2 top-2 z-10 flex items-center gap-0.5 rounded-full bg-[#c91e5a] px-2 py-1 text-[11px] font-black text-white shadow-md shadow-[#c91e5a]/30">
             <Zap size={11} className="fill-white" />
             {discountPct}% OFF
           </span>
@@ -133,7 +133,7 @@ export function ProductCard({ name, price, compareAtPrice, image, rating, review
           className={`mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-bold uppercase tracking-wide text-white transition-all duration-200 active:scale-95 ${
             added
               ? "bg-emerald-500 shadow-lg shadow-emerald-500/30"
-              : "bg-gradient-to-r from-orange-500 to-red-500 shadow-lg shadow-orange-500/30 hover:brightness-110 hover:shadow-orange-500/50"
+              : "bg-gradient-to-r from-[#ff5252] to-[#c91e5a] shadow-lg shadow-[#ff5252]/30 hover:brightness-110 hover:shadow-[#ff5252]/50"
           }`}
         >
           {added ? (
