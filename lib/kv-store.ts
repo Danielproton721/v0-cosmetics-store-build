@@ -182,3 +182,39 @@ export async function kvZCard(key: string): Promise<number> {
   const res = await command(["ZCARD", key]);
   return typeof res === "number" ? res : Number(res) || 0;
 }
+
+// --- HyperLogLog (visitantes únicos por dia) --------------------------------
+// Conta únicos aproximados com memória ~fixa e barata (1 comando por add/leitura).
+// Fallback dev: um Set por chave (exato em memória).
+const memHll =
+  (globalForKv as typeof globalForKv & { __fionobreKvHll?: Map<string, Set<string>> })
+    .__fionobreKvHll ?? new Map<string, Set<string>>();
+(globalForKv as typeof globalForKv & { __fionobreKvHll?: Map<string, Set<string>> }).__fionobreKvHll = memHll;
+
+function memHllSet(key: string) {
+  let set = memHll.get(key);
+  if (!set) {
+    set = new Set();
+    memHll.set(key, set);
+  }
+  return set;
+}
+
+export async function kvPfAdd(key: string, member: string): Promise<void> {
+  if (!isKvConfigured) {
+    memHllSet(key).add(member);
+    return;
+  }
+  await command(["PFADD", key, member]);
+}
+
+export async function kvPfCount(key: string): Promise<number> {
+  if (!isKvConfigured) return memHllSet(key).size;
+  const res = await command(["PFCOUNT", key]);
+  return typeof res === "number" ? res : Number(res) || 0;
+}
+
+export async function kvExpire(key: string, seconds: number): Promise<void> {
+  if (!isKvConfigured) return; // fallback em memória não expira (some no restart)
+  await command(["EXPIRE", key, seconds]);
+}

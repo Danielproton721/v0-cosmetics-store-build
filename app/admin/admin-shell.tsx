@@ -6,6 +6,7 @@ import type { AdminOrder } from "@/lib/orders"
 import type { Catalog } from "@/lib/catalog"
 import { LogoutButton } from "./logout-button"
 import { OnlineCount } from "./online-count"
+import { VisitorsHistory } from "./visitors-history"
 import { OrdersPanel } from "./orders-panel"
 import { ProductsPanel } from "./products-panel"
 import { RelayPanel } from "./relay-panel"
@@ -60,6 +61,8 @@ export function AdminShell({
             <LogoutButton />
           </div>
         </div>
+
+        {modules.orders && <VisitorsHistory />}
 
         {gatewaySwitch}
 
