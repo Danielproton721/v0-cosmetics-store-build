@@ -145,7 +145,7 @@ export default async function Home() {
       <ProductSection
         title="Roupas de Cama 365"
         products={roupas365Products}
-        bgClass="bg-[#f5f5f5]"
+        bgClass="bg-surface-warm"
         collectionHref="/colecoes/roupas-de-cama-365"
       />
 
@@ -180,7 +180,7 @@ export default async function Home() {
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
               Sobre nós
             </p>
-            <h2 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
+            <h2 className="mt-3 font-serif text-[28px] font-medium leading-tight tracking-tight text-[#1a1a1a] md:text-[42px]">
               Conforto escolhido para a rotina da sua casa
             </h2>
             <p className="mt-4 text-sm leading-7 text-[#5f5f5f] md:text-base">

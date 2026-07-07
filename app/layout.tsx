@@ -1,7 +1,23 @@
 import type { Metadata, Viewport } from 'next'
+import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import { CartProvider } from '@/lib/cart-context'
+
+// Tipografia da marca: serifada editorial (Fraunces) nos títulos + sans premium
+// (Plus Jakarta Sans) no corpo/UI. Carregadas de verdade via next/font (antes o
+// site caía no fallback de sistema — Arial/Helvetica).
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
+  display: 'swap',
+})
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  display: 'swap',
+  axes: ['opsz'],
+})
 import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
 import { CookieConsent } from '@/components/store/cookie-consent'
@@ -28,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={`${jakarta.variable} ${fraunces.variable}`}>
       <head>
         {/* Google tag (gtag.js) — Google Ads (conta Fio Nobre) */}
         <Script

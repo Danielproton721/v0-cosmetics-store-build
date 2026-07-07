@@ -72,9 +72,12 @@ export function ProductSection({
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-xl font-bold text-[#1a1a1a] text-center mb-5 uppercase tracking-wide">
-          {title}
-        </h2>
+        <div className="mb-6 text-center">
+          <h2 className="font-serif text-[26px] font-medium leading-tight tracking-tight text-[#1a1a1a] md:text-[32px]">
+            {title}
+          </h2>
+          <span className="mx-auto mt-3 block h-px w-10 bg-[#d4a017]/70" />
+        </div>
       </motion.div>
 
       {categories && categories.length > 0 && (
