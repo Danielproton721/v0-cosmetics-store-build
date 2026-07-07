@@ -3,11 +3,12 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import { Check, X } from "lucide-react"
+import { Check, X, Flame } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { useMenu } from "@/lib/menu-context"
 import { ProductGallery } from "./product-gallery"
+import { OfferCountdown } from "./offer-countdown"
 import { ShippingCalculator } from "./shipping-calculator"
 import { AccordionSection } from "./accordion-section"
 import { RelatedProducts } from "./related-products"
@@ -289,6 +290,14 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
   const variantSiblings = useMemo(() => getVariantSiblings(product.slug), [product.slug])
   const sizeSiblings = useMemo(() => getSizeSiblings(product.slug), [product.slug])
 
+  // Escassez: nº "restam X" estável por produto (hash do slug — não muda a cada
+  // refresh, senão fica óbvio que é fake). Baixo de propósito, pra criar urgência.
+  const stockLeft = useMemo(() => {
+    let h = 0
+    for (const ch of product.slug) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+    return 3 + (h % 9) // 3..11
+  }, [product.slug])
+
   const handleAddToCart = useCallback(() => {
 
     const variantSuffix = selectedVariant ? ` - ${selectedVariant.label}` : ""
@@ -339,6 +348,26 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
             </div>
 
             <div className="bg-[#f9f9f9] rounded-2xl p-4 md:p-6 mb-8 mx-4 md:mx-0">
+              {/* Urgência: timer de oferta + escassez de estoque */}
+              <div className="mb-5 space-y-3">
+                <OfferCountdown durationMinutes={20} className="rounded-xl" />
+                <div className="rounded-xl border border-red-100 bg-red-50 px-3 py-2.5">
+                  <div className="mb-1.5 flex items-center justify-between text-xs font-bold text-red-600">
+                    <span className="flex items-center gap-1">
+                      <Flame size={13} className="fill-red-500" />
+                      Últimas {stockLeft} unidades!
+                    </span>
+                    <span className="text-red-400">estoque baixo</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-red-100">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-orange-500 to-red-500"
+                      style={{ width: `${Math.max(12, stockLeft * 6)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Price section */}
               <div className="mb-6">
                 {hasActiveDiscount && activeCompareAtPrice && (
