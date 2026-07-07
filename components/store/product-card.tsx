@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { Heart, Star, Check } from "lucide-react"
+import { Heart, Star, Check, ShoppingCart, Zap } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
 interface ProductCardProps {
@@ -17,12 +16,20 @@ interface ProductCardProps {
   isTest?: boolean
 }
 
+const brl = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`
+
 export function ProductCard({ name, price, compareAtPrice, image, rating, reviews, slug, isTest }: ProductCardProps) {
   const [liked, setLiked] = useState(false)
   const [added, setAdded] = useState(false)
   const { addItem } = useCart()
 
   const productHref = slug ? `/product/${slug}` : "#"
+
+  const hasDiscount = !!compareAtPrice && compareAtPrice > price
+  const discountPct = hasDiscount ? Math.round((1 - price / (compareAtPrice as number)) * 100) : 0
+  const economia = hasDiscount ? (compareAtPrice as number) - price : 0
+  // Parcelamento padrão do varejo BR: até 12x. O cliente decide pela parcela.
+  const parcela = price / 12
 
   const handleAddToCart = useCallback(() => {
     const itemId = slug
@@ -41,93 +48,104 @@ export function ProductCard({ name, price, compareAtPrice, image, rating, review
   }, [addItem, slug, name, price, compareAtPrice, image])
 
   return (
-    <div className="group bg-[#ffffff] rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col h-full">
+    <div className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10">
       {/* Image area */}
-      <div className="relative aspect-square bg-[#f5f5f5] p-3">
+      <div className="relative aspect-square bg-[#f7f4ef] p-3">
+        {/* Selo de desconto — gatilho de urgência */}
+        {hasDiscount && (
+          <span className="absolute left-2 top-2 z-10 flex items-center gap-0.5 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-2 py-1 text-[11px] font-black text-white shadow-md shadow-red-500/30">
+            <Zap size={11} className="fill-white" />
+            {discountPct}% OFF
+          </span>
+        )}
         {isTest && (
-          <span className="absolute top-2 left-2 z-10 bg-[#ef4444] text-[#ffffff] text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+          <span className="absolute left-2 top-11 z-10 rounded bg-[#1a1a1a] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
             Teste
           </span>
         )}
         <button
           onClick={() => setLiked(!liked)}
-          className="absolute top-2 right-2 z-10 p-1.5 rounded-full hover:bg-[#1a1a1a]/5 transition-colors"
+          className="absolute right-2 top-2 z-10 rounded-full bg-white/80 p-1.5 backdrop-blur transition-colors hover:bg-white"
           aria-label={liked ? "Remover dos favoritos" : "Adicionar aos favoritos"}
         >
           <Heart
             size={18}
-            className={
-              liked
-                ? "fill-red-500 text-red-500"
-                : "text-[#737373] hover:text-[#1a1a1a]"
-            }
+            className={liked ? "fill-red-500 text-red-500" : "text-[#737373] hover:text-[#1a1a1a]"}
           />
         </button>
-        <Link href={productHref} prefetch={true} className="relative w-full h-full block">
+        <Link href={productHref} prefetch={true} className="relative block h-full w-full">
           <img
             src={image}
             alt={name}
-            className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            className="absolute inset-0 h-full w-full object-contain transition-transform duration-500 group-hover:scale-110"
           />
         </Link>
       </div>
 
       {/* Info area */}
-      <div className="p-3 flex flex-col flex-grow">
+      <div className="flex flex-grow flex-col p-3">
         <Link href={productHref} prefetch={true}>
-          <h3 className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight min-h-[2rem] hover:text-[#d4a017] transition-colors">
+          <h3 className="line-clamp-2 min-h-[2rem] text-xs font-semibold leading-tight text-[#1a1a1a] transition-colors hover:text-[#d4a017]">
             {name}
           </h3>
         </Link>
 
-        {/* Star rating */}
-        <div className="flex items-center gap-0.5 mt-1.5 mb-auto">
+        {/* Star rating + prova social */}
+        <div className="mb-auto mt-1.5 flex items-center gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
               size={12}
-              className={
-                i < Math.round(rating)
-                  ? "fill-[#d4a017] text-[#d4a017]"
-                  : "text-[#e5e5e5] fill-[#e5e5e5]"
-              }
+              className={i < Math.round(rating) ? "fill-[#f5b400] text-[#f5b400]" : "fill-[#e5e5e5] text-[#e5e5e5]"}
             />
           ))}
-          <span className="text-[10px] text-[#737373] ml-1 font-medium">
+          <span className="ml-1 text-[10px] font-medium text-[#737373]">
             {rating.toFixed(1)} ({reviews})
           </span>
         </div>
 
-        {/* Price */}
-        <div className="flex flex-col mt-2">
-          {compareAtPrice && compareAtPrice > price ? (
-            <p className="text-[11px] font-medium text-[#a3a3a3] line-through leading-none mb-0.5">
-              R$ {compareAtPrice.toFixed(2).replace(".", ",")}
+        {/* Price block — gatilhos: de/por, parcela, economia */}
+        <div className="mt-2">
+          {hasDiscount ? (
+            <p className="mb-0.5 text-[11px] font-medium leading-none text-[#a3a3a3] line-through">
+              de {brl(compareAtPrice as number)}
             </p>
           ) : (
-            <div className="h-[11px] mb-0.5" />
+            <div className="mb-0.5 h-[11px]" />
           )}
-          <p className="text-lg font-extrabold text-green-700 leading-none">
-            R$ {price.toFixed(2).replace(".", ",")}
+          <div className="flex items-end gap-1.5">
+            <p className="text-xl font-black leading-none text-emerald-600">{brl(price)}</p>
+            <span className="pb-0.5 text-[10px] font-bold text-emerald-700">à vista</span>
+          </div>
+          <p className="mt-1 text-[11px] font-medium text-[#5f5f5f]">
+            ou <span className="font-bold text-[#1a1a1a]">12x</span> de {brl(parcela)}
           </p>
+          {economia > 0 && (
+            <span className="mt-1.5 inline-block rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">
+              Economize {brl(economia)}
+            </span>
+          )}
         </div>
 
-        {/* Add button */}
+        {/* CTA chamativo */}
         <button
           onClick={handleAddToCart}
-          className={`w-full mt-2.5 text-xs font-semibold py-2.5 rounded-full active:scale-[0.98] transition-all duration-150 uppercase tracking-wider flex items-center justify-center gap-1.5 ${
+          className={`mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-bold uppercase tracking-wide text-white transition-all duration-200 active:scale-95 ${
             added
-              ? "bg-[#22c55e] text-[#ffffff]"
-              : "bg-[#1a1a1a] text-[#ffffff] hover:bg-[#1a1a1a]/85"
+              ? "bg-emerald-500 shadow-lg shadow-emerald-500/30"
+              : "bg-gradient-to-r from-orange-500 to-red-500 shadow-lg shadow-orange-500/30 hover:brightness-110 hover:shadow-orange-500/50"
           }`}
         >
           {added ? (
             <>
-              <Check size={14} />
-              Adicionado
+              <Check size={15} />
+              Adicionado!
             </>
           ) : (
-            "Adicionar"
+            <>
+              <ShoppingCart size={15} />
+              Comprar
+            </>
           )}
         </button>
       </div>
