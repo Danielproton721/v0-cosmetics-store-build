@@ -112,8 +112,8 @@ export default async function Home() {
     <main className="min-h-screen bg-[#ffffff]">
       <Header />
 
-      {/* Spacer for fixed header */}
-      <div className="h-14" />
+      {/* Spacer for fixed header (altura real do header = 71px) */}
+      <div className="h-[72px]" />
 
       <AnnouncementBar />
 
