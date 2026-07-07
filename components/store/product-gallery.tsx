@@ -71,16 +71,15 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
         ))}
       </div>
 
-      <div className="md:hidden">
-        {/* Image counter */}
-        <div className="flex items-center justify-center gap-1 py-3 text-xs text-[#737373]">
-          <span>{currentIndex + 1}</span>
-          <span>/</span>
-          <span>{images.length}</span>
-        </div>
+      {/* Contador + dots: só quando há mais de uma imagem (evita "1/1" e vazio) */}
+      {images.length > 1 && (
+        <div className="md:hidden">
+          <div className="flex items-center justify-center gap-1 py-3 text-xs text-[#737373]">
+            <span>{currentIndex + 1}</span>
+            <span>/</span>
+            <span>{images.length}</span>
+          </div>
 
-        {/* Thumbnail dots */}
-        {images.length > 1 && (
           <div className="flex items-center justify-center gap-2 pb-4">
             {images.map((_, i) => (
               <button
@@ -92,8 +91,8 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
               />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
