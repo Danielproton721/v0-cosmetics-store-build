@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Header } from "@/components/store/header"
+import { AnnouncementBar } from "@/components/store/announcement-bar"
 import { Hero } from "@/components/store/hero"
 import { CollectionBubbleMenu } from "@/components/store/collection-bubble-menu"
 import { ProductSection } from "@/components/store/product-section"
@@ -112,6 +113,8 @@ export default async function Home() {
 
       {/* Spacer for fixed header */}
       <div className="h-14" />
+
+      <AnnouncementBar />
 
       <Hero />
 

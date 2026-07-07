@@ -128,6 +128,27 @@
   }
 }
 
+/* Faixa de gatilhos rolando (announcement marquee) */
+@keyframes fn-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: fn-marquee 22s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
 /* Hide scrollbar for category filter */
 .scrollbar-hide {
   -ms-overflow-style: none;
