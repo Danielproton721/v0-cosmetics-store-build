@@ -4,7 +4,6 @@ import React, { useState, useEffect, Suspense, useCallback, useRef } from 'react
 import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck, Upload, FileCheck2, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
-import { SecuritySeals } from '@/components/store/security-seals';
 import { ReputationSeals } from '@/components/store/reputation-seals';
 import { useCart } from '@/lib/cart-context';
 
@@ -1518,9 +1517,8 @@ function CheckoutContent() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mb-5 space-y-4">
+                <div className="mb-5">
                   <ReputationSeals />
-                  <SecuritySeals compact />
                 </div>
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   <button 

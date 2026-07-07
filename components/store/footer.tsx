@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ChevronDown, Mail } from "lucide-react"
-import { SecuritySeals } from "./security-seals"
 import { ReputationSeals } from "./reputation-seals"
 
 const PAYMENT_ICONS = [
@@ -114,10 +113,9 @@ export function Footer() {
         </div>
       </FooterAccordion>
 
-      {/* Selos de reputação + segurança — fundo escuro único p/ os selos não sumirem */}
-      <div className="border-t border-[#e5e5e5] bg-[#1a1a1a] px-4 py-6 space-y-5">
+      {/* Selos de reputação (fundo escuro único p/ o "Loja Protegida" não sumir) */}
+      <div className="border-t border-[#e5e5e5] bg-[#1a1a1a] px-4 py-6">
         <ReputationSeals />
-        <SecuritySeals />
       </div>
 
       {/* Copyright — Bottom bar */}
