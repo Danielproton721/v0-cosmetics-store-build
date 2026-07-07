@@ -114,9 +114,9 @@ export function Footer() {
         </div>
       </FooterAccordion>
 
-      {/* Selos de reputação + segurança */}
-      <div className="border-t border-[#e5e5e5] px-4 py-6 space-y-5">
-        <ReputationSeals />
+      {/* Selos de reputação + segurança — fundo escuro único p/ os selos não sumirem */}
+      <div className="border-t border-[#e5e5e5] bg-[#1a1a1a] px-4 py-6 space-y-5">
+        <ReputationSeals onDark />
         <SecuritySeals />
       </div>
 

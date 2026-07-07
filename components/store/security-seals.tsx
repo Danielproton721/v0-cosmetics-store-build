@@ -18,7 +18,7 @@ export function SecuritySeals({ compact = false }: { compact?: boolean }) {
       {SEALS.map(({ Icon, title, sub }) => (
         <div
           key={title}
-          className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50/60 px-3 py-2.5"
+          className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2.5"
         >
           <Icon className="h-5 w-5 shrink-0 text-emerald-600" strokeWidth={2.2} />
           <div className="leading-tight">
