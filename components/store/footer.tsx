@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ChevronDown, Mail } from "lucide-react"
 import { SecuritySeals } from "./security-seals"
+import { ReputationSeals } from "./reputation-seals"
 
 const PAYMENT_ICONS = [
   { alt: "Amex", src: "https://icons.yampi.me/svg/card-amex.svg" },
@@ -113,8 +114,9 @@ export function Footer() {
         </div>
       </FooterAccordion>
 
-      {/* Selos de segurança */}
-      <div className="border-t border-[#e5e5e5] px-4 py-6">
+      {/* Selos de reputação + segurança */}
+      <div className="border-t border-[#e5e5e5] px-4 py-6 space-y-5">
+        <ReputationSeals />
         <SecuritySeals />
       </div>
 

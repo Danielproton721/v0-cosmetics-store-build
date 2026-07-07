@@ -5,6 +5,7 @@ import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, Pack
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { SecuritySeals } from '@/components/store/security-seals';
+import { ReputationSeals } from '@/components/store/reputation-seals';
 import { useCart } from '@/lib/cart-context';
 
 const ORDER_LOOKUP_STORAGE_KEY = 'fio-nobre-order-lookup-v1';
@@ -1517,7 +1518,8 @@ function CheckoutContent() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mb-5">
+                <div className="mb-5 space-y-4">
+                  <ReputationSeals />
                   <SecuritySeals compact />
                 </div>
                 <div className="grid grid-cols-2 gap-3 mb-5">
