@@ -1,11 +1,12 @@
 // Selos de reputação REAIS da loja (Loja Protegida + RA1000 no Reclame Aqui),
-// cada um centralizado na sua caixa. object-contain + w-auto garantem que a
-// imagem NUNCA estica/deforma — só ajusta pela altura, respeitando a proporção.
-// O "Loja Protegida" tem letra branca → caixa escura; os verdes → caixa branca.
+// cada um centralizado na sua caixa ESCURA (fundo do rodapé é escuro).
+// object-contain + w-auto garantem que a imagem NUNCA estica/deforma.
+const BOX = "flex items-center justify-center rounded-xl border border-white/10 bg-[#232323] px-3 py-4"
+
 export function ReputationSeals({ className = "" }: { className?: string }) {
   return (
     <div className={`grid grid-cols-3 gap-2 ${className}`}>
-      <div className="flex items-center justify-center rounded-xl border border-white/10 bg-[#1a1a1a] px-3 py-4">
+      <div className={BOX}>
         <img
           src="/selos/loja-protegida.png"
           alt="Loja Protegida — Compra 100% Segura"
@@ -15,7 +16,7 @@ export function ReputationSeals({ className = "" }: { className?: string }) {
           loading="lazy"
         />
       </div>
-      <div className="flex items-center justify-center rounded-xl border border-emerald-100 bg-white px-3 py-4">
+      <div className={BOX}>
         <img
           src="/selos/ra1000.png"
           alt="Selo RA1000 — melhor reputação no Reclame Aqui"
@@ -25,7 +26,7 @@ export function ReputationSeals({ className = "" }: { className?: string }) {
           loading="lazy"
         />
       </div>
-      <div className="flex items-center justify-center rounded-xl border border-emerald-100 bg-white px-3 py-4">
+      <div className={BOX}>
         <img
           src="/selos/reclame-aqui.png"
           alt="Reclame Aqui"
