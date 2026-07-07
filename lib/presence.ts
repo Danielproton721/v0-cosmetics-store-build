@@ -17,6 +17,7 @@ import {
   kvZRemRangeByScore,
   kvPfAdd,
   kvPfCount,
+  kvPfCountUnion,
   kvExpire,
 } from "./kv-store"
 
@@ -72,4 +73,47 @@ export async function dailyHistory(
     out.push({ date: day, count })
   }
   return out
+}
+
+// Retenção máxima do histórico (alinhada ao EXPIRE das chaves diárias).
+export const MAX_HISTORY_DAYS = 45
+
+// Lista os dias (YYYY-MM-DD, fuso BR) entre `from` e `to` inclusive, cortada à
+// janela de retenção. Aceita as datas em qualquer ordem.
+function daysBetween(from: string, to: string, nowMs: number): string[] {
+  const oldest = dayKey(nowMs - (MAX_HISTORY_DAYS - 1) * 24 * 60 * 60 * 1000)
+  const today = dayKey(nowMs)
+  let a = from < to ? from : to
+  let b = from < to ? to : from
+  if (a < oldest) a = oldest
+  if (b > today) b = today
+  const out: string[] = []
+  // Itera por data ISO usando UTC pra não escorregar no fuso local.
+  const [ay, am, ad] = a.split("-").map(Number)
+  const [by, bm, bd] = b.split("-").map(Number)
+  if (!ay || !by) return out
+  let cur = Date.UTC(ay, am - 1, ad)
+  const end = Date.UTC(by, bm - 1, bd)
+  const DAY = 24 * 60 * 60 * 1000
+  while (cur <= end && out.length <= MAX_HISTORY_DAYS) {
+    out.push(new Date(cur).toISOString().slice(0, 10))
+    cur += DAY
+  }
+  return out
+}
+
+// Relatório de um intervalo: breakdown por dia (N comandos) + total de únicos do
+// período (1 comando, união dos HLLs — pessoa que voltou em vários dias conta 1x).
+export async function rangeReport(
+  from: string,
+  to: string,
+  nowMs: number,
+): Promise<{ days: { date: string; count: number }[]; total: number }> {
+  if (!kvConfigured()) return { days: [], total: 0 }
+  const dates = daysBetween(from, to, nowMs)
+  const keys = dates.map(visitorsKey)
+  const counts = await Promise.all(keys.map((k) => kvPfCount(k)))
+  const days = dates.map((date, i) => ({ date, count: counts[i] }))
+  const total = await kvPfCountUnion(keys)
+  return { days, total }
 }

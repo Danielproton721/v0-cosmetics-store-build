@@ -3,6 +3,7 @@ import {
   countOnline,
   countToday,
   dailyHistory,
+  rangeReport,
   recordDailyVisit,
   recordHeartbeat,
 } from "@/lib/presence"
@@ -47,11 +48,20 @@ export async function POST(request: Request) {
 }
 
 // GET padrão → { online, today } (usado no poll ao vivo do painel).
-// GET ?range=N → { days: [{date,count}...] } (histórico, buscado 1x ao abrir).
+// GET ?from=AAAA-MM-DD&to=AAAA-MM-DD → { days: [...], total } (relatório do período).
+// GET ?range=N → { days: [...] } (compat: últimos N dias).
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 export async function GET(request: Request) {
-  const range = Number(new URL(request.url).searchParams.get("range") || 0)
+  const params = new URL(request.url).searchParams
+  const from = params.get("from") || ""
+  const to = params.get("to") || ""
+  const range = Number(params.get("range") || 0)
   const now = Date.now()
   try {
+    if (ISO_DATE.test(from) && ISO_DATE.test(to)) {
+      const report = await rangeReport(from, to, now)
+      return NextResponse.json(report)
+    }
     if (range > 0) {
       const days = await dailyHistory(now, Math.min(range, 31))
       return NextResponse.json({ days })
@@ -59,8 +69,8 @@ export async function GET(request: Request) {
     const [online, today] = await Promise.all([countOnline(now), countToday(now)])
     return NextResponse.json({ online, today })
   } catch {
-    return range > 0
-      ? NextResponse.json({ days: [] })
-      : NextResponse.json({ online: 0, today: 0 })
+    if (ISO_DATE.test(from) && ISO_DATE.test(to)) return NextResponse.json({ days: [], total: 0 })
+    if (range > 0) return NextResponse.json({ days: [] })
+    return NextResponse.json({ online: 0, today: 0 })
   }
 }

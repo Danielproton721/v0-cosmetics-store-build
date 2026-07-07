@@ -214,6 +214,19 @@ export async function kvPfCount(key: string): Promise<number> {
   return typeof res === "number" ? res : Number(res) || 0;
 }
 
+// Cardinalidade da UNIÃO de vários HLLs em 1 comando (PFCOUNT k1 k2 ...).
+// Serve pra "quantos únicos no período" sem somar dias (pessoa repetida conta 1x).
+export async function kvPfCountUnion(keys: string[]): Promise<number> {
+  if (keys.length === 0) return 0;
+  if (!isKvConfigured) {
+    const union = new Set<string>();
+    for (const k of keys) for (const m of memHllSet(k)) union.add(m);
+    return union.size;
+  }
+  const res = await command(["PFCOUNT", ...keys]);
+  return typeof res === "number" ? res : Number(res) || 0;
+}
+
 export async function kvExpire(key: string, seconds: number): Promise<void> {
   if (!isKvConfigured) return; // fallback em memória não expira (some no restart)
   await command(["EXPIRE", key, seconds]);
