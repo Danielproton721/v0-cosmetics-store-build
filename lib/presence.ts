@@ -102,18 +102,37 @@ function daysBetween(from: string, to: string, nowMs: number): string[] {
   return out
 }
 
+// Gera as N chaves diárias imediatamente ANTES de `fromISO` (mesma duração),
+// pra comparar o período com o anterior. Não corta na retenção — chaves fora
+// da janela simplesmente não existem no KV (contam 0).
+function prevKeys(fromISO: string, nDays: number): string[] {
+  const [y, m, d] = fromISO.split("-").map(Number)
+  if (!y || nDays <= 0) return []
+  const DAY = 24 * 60 * 60 * 1000
+  const start = Date.UTC(y, m - 1, d) - nDays * DAY // primeiro dia do período anterior
+  const out: string[] = []
+  for (let i = 0; i < nDays; i++) {
+    out.push(visitorsKey(new Date(start + i * DAY).toISOString().slice(0, 10)))
+  }
+  return out
+}
+
 // Relatório de um intervalo: breakdown por dia (N comandos) + total de únicos do
-// período (1 comando, união dos HLLs — pessoa que voltou em vários dias conta 1x).
+// período (1 comando, união dos HLLs — pessoa que voltou em vários dias conta 1x)
+// + total do período anterior de mesma duração (1 comando, pra variação %).
 export async function rangeReport(
   from: string,
   to: string,
   nowMs: number,
-): Promise<{ days: { date: string; count: number }[]; total: number }> {
-  if (!kvConfigured()) return { days: [], total: 0 }
+): Promise<{ days: { date: string; count: number }[]; total: number; prevTotal: number }> {
+  if (!kvConfigured()) return { days: [], total: 0, prevTotal: 0 }
   const dates = daysBetween(from, to, nowMs)
   const keys = dates.map(visitorsKey)
   const counts = await Promise.all(keys.map((k) => kvPfCount(k)))
   const days = dates.map((date, i) => ({ date, count: counts[i] }))
-  const total = await kvPfCountUnion(keys)
-  return { days, total }
+  const [total, prevTotal] = await Promise.all([
+    kvPfCountUnion(keys),
+    kvPfCountUnion(prevKeys(dates[0] ?? from, dates.length)),
+  ])
+  return { days, total, prevTotal }
 }
