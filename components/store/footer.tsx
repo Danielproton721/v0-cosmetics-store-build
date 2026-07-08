@@ -48,7 +48,7 @@ function FooterAccordion({ title, children }: FooterAccordionProps) {
 
 export function Footer() {
   return (
-    <footer className="bg-[#ffffff] border-t border-[#e5e5e5] pb-24">
+    <footer className="bg-[#ffffff] border-t border-[#e5e5e5]">
 
       {/* Sessão 1 — Sobre a Empresa */}
       <FooterAccordion title="Fio Nobre">
