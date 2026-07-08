@@ -143,7 +143,7 @@ export function Header() {
           <div className="ml-auto flex items-center gap-1">
             <Link
               href="/rastreio-de-pedido"
-              className="hidden min-[420px]:inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#ff5252]/35 bg-[#ffe3b3] px-3 text-[11px] font-black uppercase tracking-[0.08em] text-[#1a1a1a] transition-all hover:border-[#ff5252] hover:bg-[#ff5252] hover:text-white"
+              className="hidden min-[420px]:inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#ff5252] to-[#c91e5a] px-3 text-[11px] font-black uppercase tracking-[0.08em] text-white shadow-md shadow-[#ff5252]/25 transition-all hover:brightness-110"
               aria-label="Rastrear pedido"
             >
               <Truck size={15} />

@@ -134,7 +134,7 @@ export function CartDrawer() {
             <Link
               href="/"
               onClick={handleCloseCart}
-              className="bg-[#1a1a1a] text-[#ffffff] text-xs font-semibold px-6 py-2.5 rounded-full hover:bg-[#1a1a1a]/85 transition-colors uppercase tracking-wider"
+              className="bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-[#ffffff] text-xs font-semibold px-6 py-2.5 rounded-full hover:brightness-110 transition-all uppercase tracking-wider"
             >
               Ver Produtos
             </Link>
@@ -255,7 +255,7 @@ export function CartDrawer() {
               type="button"
               onClick={handleStartCheckout}
               disabled={isStartingCheckout}
-              className="w-full bg-[#22c55e] disabled:bg-[#86efac] text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider hover:bg-[#16a34a] active:scale-[0.98] transition-all text-center block"
+              className="w-full bg-gradient-to-r from-[#ff5252] to-[#c91e5a] disabled:opacity-60 text-[#ffffff] text-sm font-bold py-3.5 rounded-full uppercase tracking-wider shadow-lg shadow-[#ff5252]/30 hover:brightness-110 active:scale-[0.98] transition-all text-center block"
             >
               {isStartingCheckout ? "Iniciando..." : "Finalizar Compra"}
             </button>

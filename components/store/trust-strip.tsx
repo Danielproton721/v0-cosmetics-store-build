@@ -28,7 +28,7 @@ function TrustItem({ item }: { item: (typeof TRUST_ITEMS)[number] }) {
     <div className="flex items-center justify-center gap-3">
       <Icon className="h-8 w-8 shrink-0 stroke-[1.8] text-[#ff5252]" />
       <p className="text-sm font-semibold leading-tight text-[#1a1a1a]">
-        <span className="block text-[#8a6410]">{item.title}</span>
+        <span className="block text-[#c91e5a]">{item.title}</span>
         {item.description}
       </p>
     </div>
@@ -47,8 +47,8 @@ export function TrustStrip() {
   }, [])
 
   return (
-    <section className="border-b border-[#f1e6d0] bg-[#ffffff]">
-      <div className="h-1 w-full bg-gradient-to-r from-[#ff5252] via-[#ffe3b3] to-[#1a1a1a]" />
+    <section className="border-b border-[#ffe3b3] bg-[#ffffff]">
+      <div className="h-1 w-full bg-gradient-to-r from-[#ff5252] via-[#ffe3b3] to-[#c91e5a]" />
 
       <div className="mx-auto max-w-5xl px-4 py-5 md:py-6">
         <div className="md:hidden">
@@ -75,7 +75,7 @@ export function TrustStrip() {
                 className={`h-2.5 rounded-full transition-all ${
                   activeIndex === index
                     ? "w-6 bg-[#ff5252]"
-                    : "w-2.5 bg-[#e8dcc5]"
+                    : "w-2.5 bg-[#ffe3b3]"
                 }`}
               />
             ))}

@@ -35,7 +35,7 @@ function pad(n: number) {
 
 function Box({ value }: { value: string }) {
   return (
-    <span className="min-w-[38px] rounded-lg bg-white px-2 py-1.5 text-center text-lg font-black tabular-nums text-[#1a1a1a] shadow-sm">
+    <span className="min-w-[38px] rounded-lg bg-white px-2 py-1.5 text-center text-lg font-black tabular-nums text-[#c91e5a] shadow-sm">
       {value}
     </span>
   )
@@ -56,7 +56,7 @@ export function OfferCountdown({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-2.5 bg-[#1a1a1a] px-4 py-3.5 text-white sm:flex-row sm:gap-4 ${className}`}
+      className={`flex flex-col items-center justify-center gap-2.5 bg-gradient-to-r from-[#ff5252] to-[#c91e5a] px-4 py-3.5 text-white sm:flex-row sm:gap-4 ${className}`}
     >
       <div className="flex items-center gap-2">
         <Zap size={18} className="fill-yellow-400 text-yellow-400" />

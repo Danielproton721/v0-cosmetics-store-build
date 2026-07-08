@@ -1055,7 +1055,7 @@ function CheckoutContent() {
         <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
         <h2 className="text-xl font-bold text-gray-900 mb-2">Seu carrinho está vazio</h2>
         <p className="text-gray-500 mb-6">Adicione produtos para finalizar sua compra.</p>
-        <a href="/" className="bg-[#ff5252] text-white font-bold px-8 py-3 rounded-full uppercase tracking-wider">Voltar para a loja</a>
+        <a href="/" className="bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white font-bold px-8 py-3 rounded-full uppercase tracking-wider">Voltar para a loja</a>
       </div>
     );
   }
@@ -1255,7 +1255,7 @@ function CheckoutContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="inline-block w-full py-4 bg-[#ff5252] hover:bg-[#c91e5a] text-white rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
+            className="inline-block w-full py-4 bg-gradient-to-r from-[#ff5252] to-[#c91e5a] hover:brightness-110 text-white rounded-xl font-black text-sm uppercase tracking-wide shadow-lg shadow-[#ff5252]/30 transition-all hover:-translate-y-0.5"
           >
             Continuar Comprando
           </motion.button>
@@ -1329,7 +1329,7 @@ function CheckoutContent() {
       </div>
 
       {/* Timer Bar */}
-      <div className="bg-[#1a1a1a] text-[#ff5252] text-center py-2.5 font-bold text-sm shadow-md">
+      <div className="bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white text-center py-2.5 font-bold text-sm shadow-md">
         ⏰ Oferta expira em <strong className="font-black tabular-nums tracking-wider">{minutes}:{seconds}</strong> — finalize seu pedido agora
       </div>
 
@@ -1379,7 +1379,7 @@ function CheckoutContent() {
                   </div>
                 </div>
                 {formError && <motion.p initial={{opacity:0}} animate={{opacity:1}} className="text-red-500 text-sm font-bold text-center pt-2">{formError}</motion.p>}
-                <button onClick={handleNextToStep2} className="w-full mt-2 py-3.5 bg-[#1a1a1a] text-white font-bold rounded-xl hover:bg-black transition-all">
+                <button onClick={handleNextToStep2} className="w-full mt-2 py-3.5 bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white font-bold rounded-xl shadow-lg shadow-[#ff5252]/25 hover:brightness-110 transition-all">
                   Continuar para Entrega
                 </button>
               </motion.div>
@@ -1494,7 +1494,7 @@ function CheckoutContent() {
                   </div>
                 </div>
                 {formError && <motion.p initial={{opacity:0}} animate={{opacity:1}} className="text-red-500 text-sm font-bold text-center pt-2">{formError}</motion.p>}
-                <button onClick={handleNextToStep3} className="w-full mt-2 py-3.5 bg-[#1a1a1a] text-white font-bold rounded-xl hover:bg-black transition-all">
+                <button onClick={handleNextToStep3} className="w-full mt-2 py-3.5 bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white font-bold rounded-xl shadow-lg shadow-[#ff5252]/25 hover:brightness-110 transition-all">
                   Ir para Pagamento
                 </button>
               </motion.div>
@@ -1634,7 +1634,7 @@ function CheckoutContent() {
                           <button
                             type="button"
                             onClick={retryCardForm}
-                            className="w-full py-3 rounded-xl bg-[#ff5252] text-white font-bold text-sm hover:bg-[#c91e5a] transition-colors"
+                            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#ff5252] to-[#c91e5a] text-white font-bold text-sm hover:brightness-110 transition-all"
                           >
                             Tentar com outro cartão
                           </button>

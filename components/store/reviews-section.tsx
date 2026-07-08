@@ -174,7 +174,7 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
                 className="rounded-2xl border border-[#eeeeee] bg-[#ffffff] p-4 shadow-sm md:p-5"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#fff4d8] text-sm font-bold text-[#8a6410] ring-2 ring-[#ffe3b3]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#ffe3b3] text-sm font-bold text-[#c91e5a] ring-2 ring-[#ff5252]/30">
                     {getAuthorInitials(review.author)}
                   </div>
                   <div className="min-w-0 flex-1">
