@@ -20,6 +20,7 @@ const fraunces = Fraunces({
 })
 import { MenuProvider } from '@/lib/menu-context'
 import { CartDrawer } from '@/components/store/cart-drawer'
+import { CouponPopup } from '@/components/store/coupon-popup'
 import { CookieConsent } from '@/components/store/cookie-consent'
 import { PresenceBeacon } from '@/components/store/presence-beacon'
 import './globals.css'
@@ -65,6 +66,7 @@ export default function RootLayout({
           <MenuProvider>
             {children}
             <CartDrawer />
+            <CouponPopup />
             <CookieConsent />
             <PresenceBeacon />
           </MenuProvider>

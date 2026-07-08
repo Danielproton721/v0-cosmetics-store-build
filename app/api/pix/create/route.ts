@@ -44,6 +44,8 @@ async function persistNewOrder(
       items: Array.isArray(order?.items) ? (order.items as OrderEmailItem[]) : [],
       subtotal: Number(order?.subtotal ?? value),
       shipping: Number(order?.shipping ?? 0),
+      discount: Number(order?.discount ?? 0) > 0 ? Number(order.discount) : undefined,
+      coupon: order?.coupon ? String(order.coupon) : undefined,
       total: Number(value),
     });
     await indexOrder(txid, Date.now());
@@ -405,6 +407,8 @@ export async function POST(request: Request) {
           items?: OrderEmailItem[];
           subtotal?: number;
           shipping?: number;
+          discount?: number;
+          coupon?: string;
         };
 
         await saveOrder(String(txid), {
@@ -432,6 +436,8 @@ export async function POST(request: Request) {
           items: Array.isArray(orderInput.items) ? orderInput.items : [],
           subtotal: Number(orderInput.subtotal ?? value),
           shipping: Number(orderInput.shipping ?? 0),
+          discount: Number(orderInput.discount ?? 0) > 0 ? Number(orderInput.discount) : undefined,
+          coupon: orderInput.coupon ? String(orderInput.coupon) : undefined,
           total: Number(value),
         });
 

@@ -20,6 +20,12 @@ interface CartContextType {
   totalPrice: number
   totalCompareAtPrice: number
   totalSavings: number
+  couponApplied: boolean
+  couponCode: string
+  couponPct: number
+  couponDiscount: number
+  applyCoupon: () => void
+  removeCoupon: () => void
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void
   removeItem: (id: number) => void
   updateQuantity: (id: number, quantity: number) => void
@@ -32,6 +38,11 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null)
 
 const STORAGE_KEY = "gota-dourada-cart"
+// Cupom do popup de boas-vindas. Aplicado aqui, o desconto flui pro carrinho,
+// checkout e valor cobrado no gateway (tudo deriva do totalPrice do contexto).
+export const COUPON_CODE = "BEMVINDO5"
+export const COUPON_PCT = 5
+const COUPON_KEY = "fn_coupon_applied"
 
 function getValidCompareAtPrice(item: Pick<CartItem, "price" | "compareAtPrice">) {
   return item.compareAtPrice && item.compareAtPrice > item.price
@@ -74,9 +85,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [couponApplied, setCouponApplied] = useState(false)
 
   useEffect(() => {
     setItems(loadCart())
+    try {
+      setCouponApplied(localStorage.getItem(COUPON_KEY) === "1")
+    } catch {
+      // silent fail
+    }
     setMounted(true)
   }, [])
 
@@ -93,6 +110,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     0
   )
   const totalSavings = Math.max(0, totalCompareAtPrice - totalPrice)
+  // Arredondado pro centavo — este valor é descontado do total cobrado no gateway.
+  const couponDiscount = couponApplied ? Math.round(totalPrice * COUPON_PCT) / 100 : 0
+
+  const applyCoupon = useCallback(() => {
+    setCouponApplied(true)
+    try {
+      localStorage.setItem(COUPON_KEY, "1")
+    } catch {
+      // silent fail
+    }
+  }, [])
+
+  const removeCoupon = useCallback(() => {
+    setCouponApplied(false)
+    try {
+      localStorage.removeItem(COUPON_KEY)
+    } catch {
+      // silent fail
+    }
+  }, [])
 
   const addItem = useCallback((newItem: Omit<CartItem, "quantity">, quantity = 1) => {
     setItems((prev) => {
@@ -144,6 +181,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         totalPrice,
         totalCompareAtPrice,
         totalSavings,
+        couponApplied,
+        couponCode: COUPON_CODE,
+        couponPct: COUPON_PCT,
+        couponDiscount,
+        applyCoupon,
+        removeCoupon,
         addItem,
         removeItem,
         updateQuantity,

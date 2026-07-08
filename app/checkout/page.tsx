@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, useCallback, useRef } from 'react';
-import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck, Upload, FileCheck2, Truck } from 'lucide-react';
+import { Lock, CreditCard, ShieldCheck, Mail, Trash2, ShoppingBag, X, Copy, PackageCheck, Upload, FileCheck2, Truck, TicketPercent } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/payment-icons';
 import { ReputationSeals } from '@/components/store/reputation-seals';
@@ -236,7 +236,7 @@ function formatProofSize(size: number) {
 }
 
 function CheckoutContent() {
-  const { items, totalPrice, removeItem, updateQuantity, clearCart } = useCart();
+  const { items, totalPrice, couponApplied, couponCode, couponPct, couponDiscount, removeItem, updateQuantity, clearCart } = useCart();
 
   const [isMounted, setIsMounted] = useState(false);
   const [showExitWarning, setShowExitWarning] = useState(false);
@@ -319,7 +319,9 @@ function CheckoutContent() {
 
   const selectedShipping = SHIPPING_OPTIONS.find((option) => option.id === shippingOptionId) ?? SHIPPING_OPTIONS[0];
   const shippingPrice = selectedShipping.price;
-  const checkoutTotal = totalPrice + shippingPrice;
+  // O cupom (cart-context) desconta AQUI — deste valor derivam o resumo, o
+  // parcelamento, a conversão do Google Ads e o valor cobrado no gateway.
+  const checkoutTotal = Math.max(0, totalPrice - couponDiscount) + shippingPrice;
 
   // Conversao de compra (Google Ads) — dispara apenas quando o pagamento foi
   // confirmado, enviando o valor real e o id unico do pedido.
@@ -496,6 +498,8 @@ function CheckoutContent() {
             })),
             subtotal: totalPrice,
             shipping: shippingPrice,
+            discount: couponDiscount,
+            coupon: couponApplied ? couponCode : undefined,
             total: checkoutTotal,
             paymentMethod: method,
           }),
@@ -508,6 +512,7 @@ function CheckoutContent() {
     [
       cep, city, complement, cpf, email, items, name, neighborhood, number,
       phone, shippingPrice, stateUF, street, totalPrice, checkoutTotal,
+      couponApplied, couponCode, couponDiscount,
     ],
   );
 
@@ -677,6 +682,8 @@ function CheckoutContent() {
             })),
             subtotal: totalPrice,
             shipping: shippingPrice,
+            discount: couponDiscount,
+            coupon: couponApplied ? couponCode : undefined,
           },
         })
       });
@@ -1758,6 +1765,15 @@ function CheckoutContent() {
                 <span>Subtotal</span>
                 <span>R$ {totalPrice.toFixed(2).replace('.', ',')}</span>
               </div>
+              {couponApplied && couponDiscount > 0 && (
+                <div className="flex justify-between items-center rounded-lg bg-[#ffe3b3]/50 px-2.5 py-1.5 text-xs font-bold text-[#c91e5a]">
+                  <span className="flex items-center gap-1.5">
+                    <TicketPercent size={14} />
+                    Cupom {couponCode} (-{couponPct}%)
+                  </span>
+                  <span>-R$ {couponDiscount.toFixed(2).replace('.', ',')}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm font-bold text-gray-500">
                 <span>Frete</span>
                 <span className={shippingPrice === 0 ? 'text-emerald-600' : 'text-gray-800'}>

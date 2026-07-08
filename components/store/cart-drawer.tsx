@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, useState } from "react"
 import Link from "next/link"
-import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
+import { X, Minus, Plus, Trash2, ShoppingBag, TicketPercent } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 
 function formatCurrency(value: number) {
@@ -27,7 +27,7 @@ function getCartItemDiscount(item: {
 }
 
 export function CartDrawer() {
-  const { items, isOpen, totalItems, totalPrice, totalSavings, removeItem, updateQuantity, closeCart } = useCart()
+  const { items, isOpen, totalItems, totalPrice, totalSavings, couponApplied, couponCode, couponPct, couponDiscount, removeItem, updateQuantity, closeCart } = useCart()
   const [isStartingCheckout, setIsStartingCheckout] = useState(false)
   const [checkoutError, setCheckoutError] = useState("")
   const handleCloseCart = useCallback(() => {
@@ -236,6 +236,27 @@ export function CartDrawer() {
                 {formatCurrency(totalPrice)}
               </span>
             </div>
+
+            {couponApplied && couponDiscount > 0 && (
+              <div className="flex items-center justify-between rounded-lg bg-[#ffe3b3]/50 px-3 py-2">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-[#c91e5a]">
+                  <TicketPercent size={14} />
+                  Cupom {couponCode} (-{couponPct}%)
+                </span>
+                <span className="text-xs font-extrabold text-[#c91e5a]">
+                  -{formatCurrency(couponDiscount)}
+                </span>
+              </div>
+            )}
+
+            {couponApplied && couponDiscount > 0 && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-[#1a1a1a]">Total</span>
+                <span className="text-base font-black text-[#1a1a1a]">
+                  {formatCurrency(totalPrice - couponDiscount)}
+                </span>
+              </div>
+            )}
 
             {totalSavings > 0 && (
               <div className="flex items-center justify-between rounded-lg bg-[#f0fdf4] px-3 py-2">

@@ -29,6 +29,10 @@ export type OrderEmailInput = {
   items: OrderEmailItem[];
   subtotal: number;
   shipping: number;
+  // Cupom de desconto (opcional) — quando presente, aparece como linha própria
+  // no bloco de totais para a conta fechar (subtotal - desconto + frete = total).
+  discount?: number;
+  coupon?: string;
   total: number;
   paymentMethod: "pix" | "card";
 };
@@ -214,6 +218,14 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
               <td style="padding:10px 0;color:${C.muted};font-size:12px;">Subtotal</td>
               <td align="right" style="padding:10px 0;color:${C.text};font-size:12px;font-weight:600;">${formatBRL(order.subtotal)}</td>
             </tr>
+            ${
+              order.discount && order.discount > 0
+                ? `<tr>
+              <td style="padding:0 0 10px;color:${C.green};font-size:12px;font-weight:700;">Cupom${order.coupon ? ` ${order.coupon}` : ""}</td>
+              <td align="right" style="padding:0 0 10px;color:${C.green};font-size:12px;font-weight:700;">-${formatBRL(order.discount)}</td>
+            </tr>`
+                : ""
+            }
             <tr>
               <td style="padding:0 0 10px;color:${C.muted};font-size:12px;">Frete</td>
               <td align="right" style="padding:0 0 10px;color:${C.text};font-size:12px;font-weight:600;">${order.shipping > 0 ? formatBRL(order.shipping) : "Grátis"}</td>
