@@ -14,8 +14,10 @@ import { AccordionSection } from "./accordion-section"
 import { RelatedProducts } from "./related-products"
 import { ReviewsSection } from "./reviews-section"
 import { VariantSelector } from "./variant-selector"
-import { getVariantSiblings, getSizeSiblings } from "@/lib/products"
-import type { Product, ProductVariant } from "@/lib/products"
+// Import só de TIPOS de lib/products (apagado no build). Os siblings chegam
+// por props, calculados no server — importar as funções aqui arrastaria o
+// catálogo inteiro (~345KB) pro bundle client da PDP.
+import type { Product, ProductVariant, VariantSibling, SizeSibling } from "@/lib/products"
 
 // Lista de tamanhos que conhecemos
 const sizeKeywords = ["Solteiro", "Casal", "Queen", "King"]
@@ -206,9 +208,11 @@ function buildProductCharacteristics(
 interface ProductPageProps {
   product: Product
   relatedProducts: Product[]
+  variantSiblings?: VariantSibling[]
+  sizeSiblings?: SizeSibling[]
 }
 
-export function ProductPage({ product, relatedProducts }: ProductPageProps) {
+export function ProductPage({ product, relatedProducts, variantSiblings = [], sizeSiblings = [] }: ProductPageProps) {
   const shouldReduceMotion = useReducedMotion()
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
@@ -287,8 +291,6 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
     () => buildProductCharacteristics(product, productSize, productColor),
     [product, productSize, productColor]
   )
-  const variantSiblings = useMemo(() => getVariantSiblings(product.slug), [product.slug])
-  const sizeSiblings = useMemo(() => getSizeSiblings(product.slug), [product.slug])
 
   // Escassez: nº "restam X" estável por produto (hash do slug — não muda a cada
   // refresh, senão fica óbvio que é fake). Baixo de propósito, pra criar urgência.

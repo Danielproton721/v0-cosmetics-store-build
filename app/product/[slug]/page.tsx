@@ -3,7 +3,7 @@ import { Header } from "@/components/store/header"
 import { Footer } from "@/components/store/footer"
 import { ProductPage } from "@/components/store/product-page"
 import { PageTransition } from "@/components/store/page-transition"
-import { getProductBySlug, getProductsByCategory, products } from "@/lib/products"
+import { getProductBySlug, getProductsByCategory, getVariantSiblings, getSizeSiblings, products } from "@/lib/products"
 import { applyOverlay, applyOverlayOne } from "@/lib/catalog-runtime"
 import type { Metadata } from "next"
 
@@ -51,7 +51,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="h-14" />
 
       <PageTransition>
-        <ProductPage product={product} relatedProducts={relatedProducts} />
+        <ProductPage
+          product={product}
+          relatedProducts={relatedProducts}
+          variantSiblings={getVariantSiblings(slug)}
+          sizeSiblings={getSizeSiblings(slug)}
+        />
       </PageTransition>
 
       <Footer />

@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
-import { getProductBySlug } from "@/lib/products"
 
 export interface CartItem {
   id: number
@@ -50,23 +49,15 @@ function getValidCompareAtPrice(item: Pick<CartItem, "price" | "compareAtPrice">
     : undefined
 }
 
-function enrichCartItem<T extends Pick<CartItem, "slug" | "price" | "compareAtPrice">>(item: T): T {
-  if (getValidCompareAtPrice(item) || !item.slug) return item
-
-  const product = getProductBySlug(item.slug)
-  const compareAtPrice = product?.compareAtPrice
-
-  return compareAtPrice && compareAtPrice > item.price
-    ? { ...item, compareAtPrice }
-    : item
-}
-
+// Nota de performance: este arquivo NÃO pode importar lib/products — ele vive
+// no layout raiz, e o catálogo inteiro (~345KB) iria pro bundle client de
+// todas as páginas. O compareAtPrice já chega pronto de quem chama addItem.
 function loadCart(): CartItem[] {
   if (typeof window === "undefined") return []
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     const parsed = stored ? JSON.parse(stored) : []
-    return Array.isArray(parsed) ? parsed.map(enrichCartItem) : []
+    return Array.isArray(parsed) ? parsed : []
   } catch {
     return []
   }
@@ -133,16 +124,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback((newItem: Omit<CartItem, "quantity">, quantity = 1) => {
     setItems((prev) => {
-      const normalizedItem = enrichCartItem(newItem)
       const existing = prev.find((item) => item.id === newItem.id)
       if (existing) {
         return prev.map((item) =>
           item.id === newItem.id
-            ? { ...item, ...normalizedItem, quantity: item.quantity + quantity }
+            ? { ...item, ...newItem, quantity: item.quantity + quantity }
             : item
         )
       }
-      return [...prev, { ...normalizedItem, quantity }]
+      return [...prev, { ...newItem, quantity }]
     })
     setIsOpen(true)
   }, [])

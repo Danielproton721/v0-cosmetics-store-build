@@ -6,7 +6,22 @@ import Link from "next/link"
 import { Menu, Search, ShoppingBag, Home, X, Grid3X3, Tag, ChevronDown, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { useMenu } from "@/lib/menu-context"
-import { collections, products } from "@/lib/products"
+import { collections } from "@/lib/collections"
+
+// Item do \u00edndice magro servido por /api/search-index. O header N\u00c3O importa
+// mais o cat\u00e1logo inteiro (lib/products) \u2014 isso colocava ~345KB no bundle
+// client de todas as p\u00e1ginas; o \u00edndice \u00e9 baixado quando a busca abre.
+interface SearchIndexItem {
+  id: number
+  slug: string
+  name: string
+  category: string
+  image: string
+  price: number
+  tags?: string[]
+}
+
+let searchIndexCache: SearchIndexItem[] | null = null
 
 function normalizeSearchValue(value: string) {
   return value
@@ -16,14 +31,9 @@ function normalizeSearchValue(value: string) {
     .trim()
 }
 
-function productSearchText(product: (typeof products)[number]) {
+function productSearchText(product: SearchIndexItem) {
   return normalizeSearchValue(
-    [
-      product.name,
-      product.category,
-      product.description,
-      ...(product.tags ?? []),
-    ].join(" ")
+    [product.name, product.category, ...(product.tags ?? [])].join(" ")
   )
 }
 
@@ -60,6 +70,7 @@ export function Header() {
   const { isOpen: menuOpen, open: openMenu, close: closeMenuCtx } = useMenu()
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [searchIndex, setSearchIndex] = useState<SearchIndexItem[] | null>(searchIndexCache)
   const [collectionsOpen, setCollectionsOpen] = useState(true)
   const [headerVisible, setHeaderVisible] = useState(true)
   const { totalItems, toggleCart } = useCart()
@@ -92,20 +103,40 @@ export function Header() {
     setSearchQuery("")
   }, [])
 
+  // Baixa o índice na primeira abertura da busca (e guarda em módulo pra não
+  // rebaixar em navegações seguintes).
+  useEffect(() => {
+    if (!searchOpen || searchIndex) return
+    let cancelled = false
+    fetch("/api/search-index")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: SearchIndexItem[]) => {
+        if (cancelled) return
+        searchIndexCache = Array.isArray(data) ? data : []
+        setSearchIndex(searchIndexCache)
+      })
+      .catch(() => {
+        if (!cancelled) setSearchIndex([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [searchOpen, searchIndex])
+
   const normalizedSearchQuery = normalizeSearchValue(searchQuery)
 
   const searchResults = useMemo(() => {
-    if (normalizedSearchQuery.length < 2) return []
+    if (normalizedSearchQuery.length < 2 || !searchIndex) return []
 
     const searchTerms = normalizedSearchQuery.split(/\s+/).filter(Boolean)
 
-    return products
+    return searchIndex
       .filter((product) => {
         const indexedText = productSearchText(product)
         return searchTerms.every((term) => indexedText.includes(term))
       })
       .slice(0, 8)
-  }, [normalizedSearchQuery])
+  }, [normalizedSearchQuery, searchIndex])
 
   const handleSelectProduct = (slug: string) => {
     closeSearch()
@@ -225,6 +256,10 @@ export function Header() {
                       </div>
                     </button>
                   ))
+                ) : searchIndex === null ? (
+                  <div className="px-4 py-6 text-center">
+                    <p className="text-sm text-gray-400 font-medium">Carregando produtos…</p>
+                  </div>
                 ) : (
                   <div className="px-4 py-6 text-center">
                     <p className="text-sm text-gray-400 font-medium">Nenhum produto encontrado</p>
