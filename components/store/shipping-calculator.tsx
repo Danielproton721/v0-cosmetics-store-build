@@ -80,7 +80,7 @@ export function ShippingCalculator() {
         </div>
 
         <div className="border-y border-[#e5e5e5] bg-white/70 px-4 py-3">
-          <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#d4a017]">
+          <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#ff5252]">
             <Timer size={14} />
             <span>Oferta termina em</span>
           </div>

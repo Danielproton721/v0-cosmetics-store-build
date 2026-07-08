@@ -13,7 +13,7 @@ export default function PoliticaDePrivacidadePage() {
       <div className="h-14" />
 
       <section className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
           Institucional
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
@@ -32,7 +32,7 @@ export default function PoliticaDePrivacidadePage() {
             </p>
             <p className="mt-2">
               Contato do encarregado de dados (DPO):{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>
             </p>
@@ -107,7 +107,7 @@ export default function PoliticaDePrivacidadePage() {
             </ul>
             <p className="mt-2">
               Para exercer qualquer um desses direitos, entre em contato pelo e-mail{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>.
             </p>

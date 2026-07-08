@@ -143,7 +143,7 @@ export function Header() {
           <div className="ml-auto flex items-center gap-1">
             <Link
               href="/rastreio-de-pedido"
-              className="hidden min-[420px]:inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#d4a017]/35 bg-[#fff8e5] px-3 text-[11px] font-black uppercase tracking-[0.08em] text-[#1a1a1a] transition-all hover:border-[#d4a017] hover:bg-[#d4a017] hover:text-white"
+              className="hidden min-[420px]:inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-[#ff5252]/35 bg-[#ffe3b3] px-3 text-[11px] font-black uppercase tracking-[0.08em] text-[#1a1a1a] transition-all hover:border-[#ff5252] hover:bg-[#ff5252] hover:text-white"
               aria-label="Rastrear pedido"
             >
               <Truck size={15} />
@@ -163,7 +163,7 @@ export function Header() {
             >
               <ShoppingBag size={20} />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#d4a017] text-white text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
+                <span className="absolute -top-0.5 -right-0.5 bg-[#ff5252] text-white text-[10px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
@@ -217,7 +217,7 @@ export function Header() {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-gray-800 truncate">{product.name}</p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-[#d4a017] font-bold">
+                          <span className="text-xs text-[#ff5252] font-bold">
                             R$ {product.price.toFixed(2).replace('.', ',')}
                           </span>
                           <span className="text-[10px] text-gray-400">{product.category}</span>
@@ -253,7 +253,7 @@ export function Header() {
                 onClick={closeMenu}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-sm font-medium"
               >
-                <Home size={18} className="text-[#d4a017]" />
+                <Home size={18} className="text-[#ff5252]" />
                 Inicio
               </Link>
 
@@ -262,7 +262,7 @@ export function Header() {
                 onClick={closeMenu}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-sm font-medium"
               >
-                <Truck size={18} className="text-[#d4a017]" />
+                <Truck size={18} className="text-[#ff5252]" />
                 Rastreio de Pedido
               </Link>
 
@@ -272,7 +272,7 @@ export function Header() {
                   className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-sm font-medium"
                 >
                   <span className="flex items-center gap-3">
-                    <Grid3X3 size={18} className="text-[#d4a017]" />
+                    <Grid3X3 size={18} className="text-[#ff5252]" />
                     Coleções
                   </span>
                   <ChevronDown
@@ -286,13 +286,13 @@ export function Header() {
                   className={`overflow-hidden transition-all duration-250 ease-in-out ${collectionsOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0"
                     }`}
                 >
-                  <div className="ml-4 pl-4 border-l-2 border-[#d4a017]/20 flex flex-col gap-0.5 py-1 overflow-y-auto">
+                  <div className="ml-4 pl-4 border-l-2 border-[#ff5252]/20 flex flex-col gap-0.5 py-1 overflow-y-auto">
                     <Link
                       href="/colecoes"
                       onClick={closeMenu}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-[13px] font-medium"
                     >
-                      <Grid3X3 size={15} className="text-[#d4a017]" />
+                      <Grid3X3 size={15} className="text-[#ff5252]" />
                       Ver Todas
                     </Link>
                     {menuCollections.map((collection) => (
@@ -302,7 +302,7 @@ export function Header() {
                         onClick={closeMenu}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#1a1a1a] hover:bg-[#f5f5f5] transition-colors text-[13px] font-medium"
                       >
-                        <Tag size={15} className="text-[#d4a017]" />
+                        <Tag size={15} className="text-[#ff5252]" />
                         {collection.name}
                       </Link>
                     ))}

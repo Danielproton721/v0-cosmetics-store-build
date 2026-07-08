@@ -85,7 +85,7 @@ export function ProductCard({ name, price, compareAtPrice, image, rating, review
       {/* Info area */}
       <div className="flex flex-grow flex-col p-3">
         <Link href={productHref} prefetch={true}>
-          <h3 className="line-clamp-2 min-h-[2rem] text-xs font-semibold leading-tight text-[#1a1a1a] transition-colors hover:text-[#d4a017]">
+          <h3 className="line-clamp-2 min-h-[2rem] text-xs font-semibold leading-tight text-[#1a1a1a] transition-colors hover:text-[#ff5252]">
             {name}
           </h3>
         </Link>

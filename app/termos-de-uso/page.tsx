@@ -13,7 +13,7 @@ export default function TermosDeUsoPage() {
       <div className="h-14" />
 
       <section className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
           Institucional
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
@@ -81,7 +81,7 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">8. Trocas e Devoluções</h2>
             <p className="mt-2">
               Aceitamos trocas em caso de produto com defeito de fabricação, divergência com o produto anunciado ou avaria no transporte. O prazo para comunicar a solicitação é de até 30 dias após o recebimento. Para iniciar o processo, entre em contato pelo e-mail{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>.
             </p>
@@ -112,7 +112,7 @@ export default function TermosDeUsoPage() {
             <h2 className="text-base font-bold text-[#1a1a1a]">12. Contato</h2>
             <p className="mt-2">
               Dúvidas sobre estes Termos de Uso? Entre em contato conosco:{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>
             </p>
@@ -124,7 +124,7 @@ export default function TermosDeUsoPage() {
               <strong className="text-[#1a1a1a]">CNPJ:</strong> 64.846.844/0001-30<br />
               <strong className="text-[#1a1a1a]">Sede:</strong> Capitão Poço — Pará — Brasil<br />
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>
             </p>

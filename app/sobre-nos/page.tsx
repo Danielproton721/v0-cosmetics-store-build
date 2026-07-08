@@ -22,7 +22,7 @@ export default function SobreNosPage() {
         </div>
 
         <div className="mx-auto max-w-3xl pt-8 text-center md:pt-10">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
             A Loja
           </p>
           <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">

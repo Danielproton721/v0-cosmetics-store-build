@@ -56,7 +56,7 @@ export function VariantSelector({
 
               {/* Discount badge */}
               {isAvailable && discount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-[#d4a017] text-[#ffffff] text-[8px] font-bold px-1 py-px rounded-full leading-tight">
+                <span className="absolute -top-1.5 -right-1.5 bg-[#ff5252] text-[#ffffff] text-[8px] font-bold px-1 py-px rounded-full leading-tight">
                   -{discount}%
                 </span>
               )}

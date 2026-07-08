@@ -14,7 +14,7 @@ export default function ContatoECatalogoPage() {
       <div className="h-14" />
 
       <section className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
           Fale Conosco
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">
@@ -29,9 +29,9 @@ export default function ContatoECatalogoPage() {
         <div className="mt-10 space-y-4">
 
           {/* E-mail */}
-          <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#d4a017] transition-colors">
+          <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#ff5252] transition-colors">
             <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fdf6e3]">
-              <Mail size={18} className="text-[#d4a017]" />
+              <Mail size={18} className="text-[#ff5252]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1a1a1a]">E-mail</p>
@@ -40,7 +40,7 @@ export default function ContatoECatalogoPage() {
               </p>
               <a
                 href="mailto:suporte@fionobres.shop"
-                className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
+                className="mt-2 inline-block text-sm font-medium text-[#ff5252] underline"
               >
                 suporte@fionobres.shop
               </a>
@@ -50,9 +50,9 @@ export default function ContatoECatalogoPage() {
 
 
           {/* Instagram */}
-          <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#d4a017] transition-colors">
+          <div className="flex items-start gap-4 rounded-lg border border-[#e5e5e5] p-5 hover:border-[#ff5252] transition-colors">
             <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fdf6e3]">
-              <Instagram size={18} className="text-[#d4a017]" />
+              <Instagram size={18} className="text-[#ff5252]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1a1a1a]">Instagram</p>
@@ -63,7 +63,7 @@ export default function ContatoECatalogoPage() {
                 href="https://instagram.com/fionobres"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-block text-sm font-medium text-[#d4a017] underline"
+                className="mt-2 inline-block text-sm font-medium text-[#ff5252] underline"
               >
                 @fionobres
               </a>
@@ -77,7 +77,7 @@ export default function ContatoECatalogoPage() {
           <h2 className="text-base font-bold text-[#1a1a1a]">Solicitar Catálogo Completo</h2>
           <p className="mt-2 text-sm leading-7 text-[#525252]">
             Quer conhecer toda a nossa linha de produtos? Envie um e-mail para{" "}
-            <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+            <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
               suporte@fionobres.shop
             </a>{" "}
             com o assunto <strong>"Solicitar Catálogo"</strong> e nossa equipe enviará o PDF completo
@@ -99,7 +99,7 @@ export default function ContatoECatalogoPage() {
             <p><strong className="text-[#1a1a1a]">Localização:</strong> Capitão Poço — Pará — Brasil</p>
             <p>
               <strong className="text-[#1a1a1a]">E-mail:</strong>{" "}
-              <a href="mailto:suporte@fionobres.shop" className="text-[#d4a017] underline">
+              <a href="mailto:suporte@fionobres.shop" className="text-[#ff5252] underline">
                 suporte@fionobres.shop
               </a>
             </p>

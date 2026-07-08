@@ -62,14 +62,14 @@ export function CollectionGrid({ collections }: CollectionGridProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-transparent to-transparent" />
 
                   {/* Product count badge */}
-                  <span className="absolute top-2.5 right-2.5 bg-[#d4a017] text-[#ffffff] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  <span className="absolute top-2.5 right-2.5 bg-[#ff5252] text-[#ffffff] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
                     {collection.productCount} {collection.productCount === 1 ? "produto" : "produtos"}
                   </span>
 
                   {/* Name over the image */}
                   <div className="absolute bottom-0 left-0 right-0 px-3 pb-3">
                     <h3
-                      className={`font-bold text-[#ffffff] group-hover:text-[#d4a017] transition-colors text-balance leading-tight ${
+                      className={`font-bold text-[#ffffff] group-hover:text-[#ff5252] transition-colors text-balance leading-tight ${
                         isFirst ? "text-base" : "text-sm"
                       }`}
                     >

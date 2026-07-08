@@ -183,7 +183,7 @@ export default async function Home() {
           </div>
 
           <div className="mx-auto max-w-2xl px-2 pt-7 text-center md:pt-9">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
               Sobre nós
             </p>
             <h2 className="mt-3 font-serif text-[28px] font-medium leading-tight tracking-tight text-[#1a1a1a] md:text-[42px]">

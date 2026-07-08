@@ -107,7 +107,7 @@ export function CartDrawer() {
               Seu Carrinho
             </h2>
             {totalItems > 0 && (
-              <span className="bg-[#d4a017] text-[#1a1a1a] text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <span className="bg-[#ff5252] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 {totalItems} {totalItems === 1 ? "item" : "itens"}
               </span>
             )}
@@ -166,7 +166,7 @@ export function CartDrawer() {
                         <Link
                           href={`/product/${item.slug}`}
                           onClick={handleCloseCart}
-                          className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight hover:text-[#d4a017] transition-colors"
+                          className="text-xs font-medium text-[#1a1a1a] line-clamp-2 leading-tight hover:text-[#ff5252] transition-colors"
                         >
                           {item.name}
                         </Link>

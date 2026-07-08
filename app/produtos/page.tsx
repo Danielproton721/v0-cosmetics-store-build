@@ -27,7 +27,7 @@ export default async function ProdutosPage() {
       <div className="h-14" />
 
       <section className="px-4 pt-8 pb-4 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
           Loja
         </p>
         <h1 className="mt-3 text-2xl font-bold text-[#1a1a1a]">

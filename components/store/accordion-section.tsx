@@ -43,7 +43,7 @@ export function AccordionSection({
             <ul className="flex flex-col gap-1.5">
               {hairTypes.map((type, i) => (
                 <li key={i} className="text-sm text-[#737373] flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4a017] mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff5252] mt-1.5 shrink-0" />
                   {type}
                 </li>
               ))}
@@ -59,7 +59,7 @@ export function AccordionSection({
             <ul className="flex flex-col gap-1.5">
               {needs.map((need, i) => (
                 <li key={i} className="text-sm text-[#737373] flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4a017] mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff5252] mt-1.5 shrink-0" />
                   {need}
                 </li>
               ))}
@@ -75,7 +75,7 @@ export function AccordionSection({
             <ul className="flex flex-col gap-1.5">
               {benefits.map((benefit, i) => (
                 <li key={i} className="text-sm text-[#737373] flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4a017] mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff5252] mt-1.5 shrink-0" />
                   {benefit}
                 </li>
               ))}
@@ -91,7 +91,7 @@ export function AccordionSection({
             <ol className="flex flex-col gap-2">
               {howToUse.map((step, i) => (
                 <li key={i} className="text-sm text-[#737373] flex items-start gap-2">
-                  <span className="text-xs font-bold text-[#d4a017] mt-0.5 shrink-0">{i + 1}.</span>
+                  <span className="text-xs font-bold text-[#ff5252] mt-0.5 shrink-0">{i + 1}.</span>
                   {step}
                 </li>
               ))}
@@ -107,7 +107,7 @@ export function AccordionSection({
             <ul className="flex flex-col gap-2">
               {touchTest.map((item, i) => (
                 <li key={i} className="text-sm text-[#737373] flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4a017] mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff5252] mt-1.5 shrink-0" />
                   {item}
                 </li>
               ))}

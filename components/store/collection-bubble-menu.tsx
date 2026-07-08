@@ -70,7 +70,7 @@ export function CollectionBubbleMenu() {
             href={`/colecoes/${item.slug}`}
             className="group flex w-[76px] shrink-0 flex-col items-center gap-2 text-center outline-none"
           >
-            <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[#f7f3ed] ring-1 ring-[#eadfce] transition-transform duration-200 group-hover:-translate-y-0.5 group-focus-visible:ring-2 group-focus-visible:ring-[#d4a017]">
+            <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[#f7f3ed] ring-1 ring-[#eadfce] transition-transform duration-200 group-hover:-translate-y-0.5 group-focus-visible:ring-2 group-focus-visible:ring-[#ff5252]">
               <img
                 src={item.image}
                 alt=""

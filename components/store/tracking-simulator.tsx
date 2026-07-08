@@ -591,7 +591,7 @@ export function TrackingSimulator() {
     <section className="bg-[#fbfaf7]">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-[0.9fr_1.1fr] md:px-6 md:py-14">
         <div className="flex flex-col justify-center">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
             Rastreio de pedido
           </p>
           <h1 className="mt-3 max-w-xl text-3xl font-bold leading-tight text-[#1a1a1a] md:text-5xl">
@@ -605,12 +605,12 @@ export function TrackingSimulator() {
 
           <div className="mt-7 grid gap-3 text-sm text-[#3f3f3f] sm:grid-cols-2">
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
-              <Truck className="h-5 w-5 text-[#d4a017]" />
+              <Truck className="h-5 w-5 text-[#ff5252]" />
               <p className="mt-3 font-bold text-[#1a1a1a]">Transportadoras</p>
               <p className="mt-1 leading-6">Correios, FedEx, DHL, UPS e pedidos Fio Nobre.</p>
             </div>
             <div className="rounded-lg border border-[#eadfca] bg-white/80 p-4">
-              <PackageCheck className="h-5 w-5 text-[#d4a017]" />
+              <PackageCheck className="h-5 w-5 text-[#ff5252]" />
               <p className="mt-3 font-bold text-[#1a1a1a]">Mesmo código</p>
               <p className="mt-1 leading-6">A consulta fica salva neste navegador.</p>
             </div>
@@ -628,7 +628,7 @@ export function TrackingSimulator() {
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="Ex: AN067003514DC"
-                className="mt-2 h-12 w-full rounded-lg border border-[#ded6c8] bg-[#fbfaf7] px-4 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] outline-none transition focus:border-[#d4a017] focus:bg-white focus:ring-2 focus:ring-[#d4a017]/20"
+                className="mt-2 h-12 w-full rounded-lg border border-[#ded6c8] bg-[#fbfaf7] px-4 text-sm font-semibold uppercase tracking-wide text-[#1a1a1a] outline-none transition focus:border-[#ff5252] focus:bg-white focus:ring-2 focus:ring-[#ff5252]/20"
                 autoComplete="off"
               />
               {error && <p className="mt-2 text-sm font-semibold text-red-600">{error}</p>}
@@ -636,7 +636,7 @@ export function TrackingSimulator() {
 
             <button
               type="submit"
-              className="inline-flex h-12 items-center justify-center gap-2 self-end rounded-lg bg-[#1a1a1a] px-5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-[#333333] focus:outline-none focus:ring-2 focus:ring-[#d4a017]/40"
+              className="inline-flex h-12 items-center justify-center gap-2 self-end rounded-lg bg-[#1a1a1a] px-5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-[#333333] focus:outline-none focus:ring-2 focus:ring-[#ff5252]/40"
             >
               <Search className="h-4 w-4" />
               Consultar
@@ -663,7 +663,7 @@ export function TrackingSimulator() {
           <div className="mt-6">
             {!result ? (
               <div className="rounded-lg border border-dashed border-[#ded6c8] bg-[#fbfaf7] px-5 py-8 text-center">
-                <PackageCheck className="mx-auto h-9 w-9 text-[#d4a017]" />
+                <PackageCheck className="mx-auto h-9 w-9 text-[#ff5252]" />
                 <p className="mt-4 text-sm font-bold text-[#1a1a1a]">Aguardando consulta</p>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#666666]">
                   O status do envio aparece aqui depois da primeira consulta.
@@ -674,7 +674,7 @@ export function TrackingSimulator() {
                 <div className="rounded-lg border border-[#eadfca] bg-[#fbfaf7] p-4">
                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#d4a017]">
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#ff5252]">
                         {result.carrierName}
                       </p>
                       {orderLookup?.name && (
@@ -684,7 +684,7 @@ export function TrackingSimulator() {
                       )}
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <h2 className="text-xl font-bold text-[#1a1a1a]">{result.currentStatus}</h2>
-                        <span className="rounded-full bg-[#d4a017] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                        <span className="rounded-full bg-[#ff5252] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                           Atualizado
                         </span>
                       </div>
@@ -701,7 +701,7 @@ export function TrackingSimulator() {
                     <button
                       type="button"
                       onClick={copyCode}
-                      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#ded6c8] bg-white px-3 text-sm font-bold text-[#1a1a1a] transition hover:border-[#d4a017]"
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#ded6c8] bg-white px-3 text-sm font-bold text-[#1a1a1a] transition hover:border-[#ff5252]"
                       aria-label="Copiar código de rastreio"
                     >
                       <Copy className="h-4 w-4" />
@@ -731,7 +731,7 @@ export function TrackingSimulator() {
                               step.state === "pending"
                                 ? "border-[#ded6c8] bg-[#c8c1b5]"
                                 : step.state === "current"
-                                  ? "border-[#d4a017] bg-[#d4a017]"
+                                  ? "border-[#ff5252] bg-[#ff5252]"
                                   : "border-[#1f7a4f] bg-[#1f7a4f]"
                             }`}
                           >
@@ -779,7 +779,7 @@ export function TrackingSimulator() {
                     key={item.code}
                     type="button"
                     onClick={() => openRecent(item)}
-                    className="rounded-lg border border-[#ded6c8] bg-[#fbfaf7] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#1a1a1a] transition hover:border-[#d4a017] hover:bg-white"
+                    className="rounded-lg border border-[#ded6c8] bg-[#fbfaf7] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#1a1a1a] transition hover:border-[#ff5252] hover:bg-white"
                   >
                     {item.displayCode}
                   </button>
@@ -818,7 +818,7 @@ function InfoBlock({
 }) {
   return (
     <div className="rounded-lg border border-[#eadfca] bg-white p-3">
-      <div className="flex items-center gap-2 text-[#d4a017]">
+      <div className="flex items-center gap-2 text-[#ff5252]">
         {icon}
         <span className="text-xs font-bold uppercase tracking-[0.14em]">{label}</span>
       </div>

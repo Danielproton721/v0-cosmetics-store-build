@@ -340,7 +340,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-1 border border-[#e5e5e5] rounded px-2 py-1">
-                  <span className="text-[#d4a017] font-bold text-sm">★ 5</span>
+                  <span className="text-[#ff5252] font-bold text-sm">★ 5</span>
                   <span className="text-xs text-[#737373]">(3)</span>
                 </div>
                 <a href="#descricao" className="text-xs text-[#1a1a1a] underline underline-offset-2">Ver descrição do produto</a>
@@ -391,7 +391,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                 <button
                   type="button"
                   onClick={() => setInstallmentsOpen(true)}
-                  className="mt-1 block text-left text-xs font-semibold text-[#1a1a1a] underline underline-offset-2 transition-colors hover:text-[#d4a017]"
+                  className="mt-1 block text-left text-xs font-semibold text-[#1a1a1a] underline underline-offset-2 transition-colors hover:text-[#ff5252]"
                 >
                   Ver parcelamento
                 </button>
@@ -547,7 +547,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                   <h3 className="text-lg font-bold text-[#1a1a1a] mb-4">Características</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {productCharacteristics.map((item) => (
-                      <div key={item.label} className="bg-[#fff9e6] p-3 rounded-lg flex flex-col items-center text-center">
+                      <div key={item.label} className="bg-[#ffe3b3] p-3 rounded-lg flex flex-col items-center text-center">
                         <span className="text-xs text-[#1a1a1a] font-medium mb-1">{item.label}</span>
                         <span className="text-sm font-medium text-[#737373]">{item.value}</span>
                       </div>
@@ -619,7 +619,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                 >
                   <div className="flex items-start justify-between border-b border-[#eee7dc] bg-[#fffaf0] px-5 py-4">
                     <div>
-                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d4a017]">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#ff5252]">
                         Cartão de crédito
                       </p>
                       <h2 id="installments-title" className="mt-1 text-lg font-extrabold text-[#1a1a1a]">
@@ -667,7 +667,7 @@ export function ProductPage({ product, relatedProducts }: ProductPageProps) {
                               {option.rate.toFixed(2).replace(".", ",")}%
                             </span>
                           </div>
-                          <p className="mt-2 text-sm font-bold text-[#d4a017]">
+                          <p className="mt-2 text-sm font-bold text-[#ff5252]">
                             {formatCurrency(option.installmentValue)}
                           </p>
                           <p className="mt-1 text-[11px] font-medium text-[#737373]">

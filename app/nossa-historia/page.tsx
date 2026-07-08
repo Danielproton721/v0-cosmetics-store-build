@@ -13,7 +13,7 @@ export default function NossaHistoriaPage() {
       <div className="h-14" />
 
       <section className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
           A Loja
         </p>
         <h1 className="mt-3 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-4xl">

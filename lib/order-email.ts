@@ -42,7 +42,7 @@ const BRAND_LOGO_URL = `${BRAND_TRACKING_URL}/images/logo-fio-nobre.png`;
 const C = {
   primary: "#1a1a1a",
   dark: "#202020",
-  accent: "#d4a017", // dourado
+  accent: "#ff5252", // dourado
   accentSoft: "#fff8e8",
   accentBorder: "#f1d6a4",
   green: "#14752d",
@@ -189,7 +189,7 @@ export function renderOrderConfirmationEmail(order: OrderEmailInput) {
               </p>
             </div>
 
-            <a href="${escapeHtml(trackingHref)}" style="display:block;background:${C.accent};color:${C.primary};text-decoration:none;padding:0 18px;border-radius:999px;font-size:14px;font-weight:800;line-height:54px;min-height:54px;box-shadow:0 8px 18px rgba(212,160,23,0.28);letter-spacing:0.4px;text-transform:uppercase;">
+            <a href="${escapeHtml(trackingHref)}" style="display:block;background:${C.accent};color:${C.primary};text-decoration:none;padding:0 18px;border-radius:999px;font-size:14px;font-weight:800;line-height:54px;min-height:54px;box-shadow:0 8px 18px rgba(255,82,82,0.28);letter-spacing:0.4px;text-transform:uppercase;">
               Acompanhar meu pedido
             </a>
 

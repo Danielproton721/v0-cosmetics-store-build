@@ -72,7 +72,7 @@ function ReviewStars({ rating, size = 14 }: { rating: number; size?: number }) {
           size={size}
           className={
             i < Math.round(rating)
-              ? "fill-[#d4a017] text-[#d4a017]"
+              ? "fill-[#ff5252] text-[#ff5252]"
               : "fill-[#e5e5e5] text-[#e5e5e5]"
           }
         />
@@ -95,7 +95,7 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
     <section className="bg-[#ffffff] px-4 py-8 md:py-12 border-t border-[#f5f5f5]">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 md:mb-8">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#d4a017]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff5252]">
             Avaliacoes
           </p>
           <h2 className="mt-2 text-2xl font-bold leading-tight text-[#1a1a1a] md:text-3xl">
@@ -123,10 +123,10 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
               {starDistribution.map((item) => (
                 <div key={item.stars} className="flex items-center gap-2">
                   <span className="w-4 text-right text-xs text-[#737373]">{item.stars}</span>
-                  <Star size={12} className="fill-[#d4a017] text-[#d4a017] shrink-0" />
+                  <Star size={12} className="fill-[#ff5252] text-[#ff5252] shrink-0" />
                   <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#f5f5f5]">
                     <div
-                      className="h-full rounded-full bg-[#d4a017] transition-all"
+                      className="h-full rounded-full bg-[#ff5252] transition-all"
                       style={{ width: `${item.percentage}%` }}
                     />
                   </div>
@@ -151,14 +151,14 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
                     <button key={i} aria-label={`${i + 1} estrelas`}>
                       <Star
                         size={24}
-                        className="cursor-pointer text-[#e5e5e5] transition-colors hover:fill-[#d4a017] hover:text-[#d4a017]"
+                        className="cursor-pointer text-[#e5e5e5] transition-colors hover:fill-[#ff5252] hover:text-[#ff5252]"
                       />
                     </button>
                   ))}
                 </div>
                 <textarea
                   placeholder="Conte sobre sua experiência com o produto..."
-                  className="h-24 w-full resize-none rounded-lg border border-[#e5e5e5] bg-[#ffffff] p-3 text-sm text-[#1a1a1a] outline-none placeholder:text-[#737373]/50 focus:border-[#d4a017] focus:ring-1 focus:ring-[#d4a017]/30"
+                  className="h-24 w-full resize-none rounded-lg border border-[#e5e5e5] bg-[#ffffff] p-3 text-sm text-[#1a1a1a] outline-none placeholder:text-[#737373]/50 focus:border-[#ff5252] focus:ring-1 focus:ring-[#ff5252]/30"
                 />
                 <button className="mt-3 w-full rounded-lg bg-[#1a1a1a] py-2.5 text-sm font-semibold text-[#ffffff] transition-all hover:bg-[#1a1a1a]/85">
                   Enviar avaliação
@@ -174,7 +174,7 @@ export function ReviewsSection({ rating, totalReviews, reviews }: ReviewsSection
                 className="rounded-2xl border border-[#eeeeee] bg-[#ffffff] p-4 shadow-sm md:p-5"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#fff4d8] text-sm font-bold text-[#8a6410] ring-2 ring-[#fff9e6]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#fff4d8] text-sm font-bold text-[#8a6410] ring-2 ring-[#ffe3b3]">
                     {getAuthorInitials(review.author)}
                   </div>
                   <div className="min-w-0 flex-1">

@@ -41,8 +41,8 @@ export function ProductInfo({
       {/* Recent sales indicator */}
       {recentSales > 0 && (
         <div className="flex items-center gap-1.5 mt-2">
-          <Zap size={14} className="text-[#d4a017] fill-[#d4a017]" />
-          <span className="text-xs text-[#d4a017] font-medium">
+          <Zap size={14} className="text-[#ff5252] fill-[#ff5252]" />
+          <span className="text-xs text-[#ff5252] font-medium">
             {recentSales} vendidos nas últimas 21 horas
           </span>
         </div>
@@ -56,7 +56,7 @@ export function ProductInfo({
             size={14}
             className={
               i < Math.floor(rating)
-                ? "fill-[#d4a017] text-[#d4a017]"
+                ? "fill-[#ff5252] text-[#ff5252]"
                 : "text-[#e5e5e5] fill-[#e5e5e5]"
             }
           />
@@ -80,7 +80,7 @@ export function ProductInfo({
             R$ {compareAtPrice.toFixed(2).replace(".", ",")}
           </span>
           {discount > 0 && (
-            <span className="text-xs font-semibold text-[#ffffff] bg-[#d4a017] px-2 py-0.5 rounded-full">
+            <span className="text-xs font-semibold text-[#ffffff] bg-[#ff5252] px-2 py-0.5 rounded-full">
               -{discount}%
             </span>
           )}

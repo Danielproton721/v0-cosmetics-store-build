@@ -457,7 +457,7 @@ function CheckoutContent() {
 
   const getInputClass = (field: string) => {
     const base = "w-full px-4 py-3 border rounded-xl bg-gray-50 focus:bg-white focus:outline-none transition-all ";
-    return base + (errors[field] ? "border-red-500 focus:ring-2 focus:ring-red-500/30" : "border-gray-200 focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017]");
+    return base + (errors[field] ? "border-red-500 focus:ring-2 focus:ring-red-500/30" : "border-gray-200 focus:ring-2 focus:ring-[#ff5252]/30 focus:border-[#ff5252]");
   };
 
   const sendOrderConfirmationEmail = useCallback(
@@ -1055,7 +1055,7 @@ function CheckoutContent() {
         <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
         <h2 className="text-xl font-bold text-gray-900 mb-2">Seu carrinho está vazio</h2>
         <p className="text-gray-500 mb-6">Adicione produtos para finalizar sua compra.</p>
-        <a href="/" className="bg-[#d4a017] text-[#1a1a1a] font-bold px-8 py-3 rounded-full uppercase tracking-wider">Voltar para a loja</a>
+        <a href="/" className="bg-[#ff5252] text-white font-bold px-8 py-3 rounded-full uppercase tracking-wider">Voltar para a loja</a>
       </div>
     );
   }
@@ -1084,7 +1084,7 @@ function CheckoutContent() {
           className="bg-white rounded-3xl shadow-2xl p-8 sm:p-12 max-w-lg w-full text-center relative overflow-hidden"
         >
           {/* Barra dourada no topo */}
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#d4a017] via-[#f0c850] to-[#d4a017]" />
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#ff5252] via-[#ff9a52] to-[#ff5252]" />
 
           {/* Botão de fechar — dispensa a tela persistente e volta para a loja */}
           <button
@@ -1150,7 +1150,7 @@ function CheckoutContent() {
               className="bg-[#1a1a1a] rounded-2xl p-5 mb-6 text-left shadow-lg"
             >
               <div className="flex items-start gap-3">
-                <PackageCheck className="w-5 h-5 text-[#d4a017] shrink-0 mt-0.5" />
+                <PackageCheck className="w-5 h-5 text-[#ff5252] shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-black">Código do pedido</p>
                   <p className="mt-2 text-2xl font-black tracking-wide text-white break-words">{display.orderCode}</p>
@@ -1255,7 +1255,7 @@ function CheckoutContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="inline-block w-full py-4 bg-[#d4a017] hover:bg-[#b8891a] text-[#1a1a1a] rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
+            className="inline-block w-full py-4 bg-[#ff5252] hover:bg-[#c91e5a] text-white rounded-xl font-black text-sm uppercase tracking-wide shadow-lg transition-all hover:-translate-y-0.5"
           >
             Continuar Comprando
           </motion.button>
@@ -1279,7 +1279,7 @@ function CheckoutContent() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-white rounded-3xl p-6 sm:p-8 pt-8 sm:pt-10 max-w-md w-full shadow-2xl relative text-center border-4 border-[#d4a017]"
+              className="bg-white rounded-3xl p-6 sm:p-8 pt-8 sm:pt-10 max-w-md w-full shadow-2xl relative text-center border-4 border-[#ff5252]"
             >
               <button 
                 onClick={() => setShowExitWarning(false)}
@@ -1321,7 +1321,7 @@ function CheckoutContent() {
       <div className="bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2">
           <img src="/images/logo-fio-nobre.png" alt="Fio Nobre" className="h-8 object-contain" />
-          <span className="text-[10px] text-[#d4a017] tracking-widest uppercase font-semibold">Checkout</span>
+          <span className="text-[10px] text-[#ff5252] tracking-widest uppercase font-semibold">Checkout</span>
         </div>
         <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs sm:text-sm">
           <ShieldCheck className="w-4 h-4 text-emerald-600" /> Pagamento 100% seguro
@@ -1329,7 +1329,7 @@ function CheckoutContent() {
       </div>
 
       {/* Timer Bar */}
-      <div className="bg-[#1a1a1a] text-[#d4a017] text-center py-2.5 font-bold text-sm shadow-md">
+      <div className="bg-[#1a1a1a] text-[#ff5252] text-center py-2.5 font-bold text-sm shadow-md">
         ⏰ Oferta expira em <strong className="font-black tabular-nums tracking-wider">{minutes}:{seconds}</strong> — finalize seu pedido agora
       </div>
 
@@ -1340,14 +1340,14 @@ function CheckoutContent() {
         <div className="space-y-4">
           
           {/* Sessão 1: Dados Pessoais */}
-          <motion.div layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 1 ? 'border-[#d4a017] ring-1 ring-[#d4a017]' : 'border-gray-200'}`}>
+          <motion.div layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 1 ? 'border-[#ff5252] ring-1 ring-[#ff5252]' : 'border-gray-200'}`}>
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-extrabold text-gray-800 flex items-center gap-2">
-                <span className={`w-6 h-6 rounded-full text-[#1a1a1a] flex items-center justify-center text-xs ${currentStep >= 1 ? 'bg-[#d4a017]' : 'bg-gray-300'}`}>1</span>
+                <span className={`w-6 h-6 rounded-full text-white flex items-center justify-center text-xs ${currentStep >= 1 ? 'bg-[#ff5252]' : 'bg-gray-300'}`}>1</span>
                 Identificação
               </h2>
               {currentStep > 1 && (
-                <button onClick={() => setCurrentStep(1)} className="text-[#d4a017] text-xs font-bold hover:underline">Editar</button>
+                <button onClick={() => setCurrentStep(1)} className="text-[#ff5252] text-xs font-bold hover:underline">Editar</button>
               )}
             </div>
             
@@ -1397,14 +1397,14 @@ function CheckoutContent() {
           </motion.div>
 
           {/* Sessão 2: Endereço de Entrega */}
-          <motion.div layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 2 ? 'border-[#d4a017] ring-1 ring-[#d4a017]' : 'border-gray-200 opacity-60'}`}>
+          <motion.div layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 2 ? 'border-[#ff5252] ring-1 ring-[#ff5252]' : 'border-gray-200 opacity-60'}`}>
             <div className="flex items-center justify-between mb-5">
               <h2 className={`text-lg font-extrabold flex items-center gap-2 ${currentStep >= 2 ? 'text-gray-800' : 'text-gray-400'}`}>
-                <span className={`w-6 h-6 rounded-full text-[#1a1a1a] flex items-center justify-center text-xs ${currentStep >= 2 ? 'bg-[#d4a017]' : 'bg-gray-300'}`}>2</span>
+                <span className={`w-6 h-6 rounded-full text-white flex items-center justify-center text-xs ${currentStep >= 2 ? 'bg-[#ff5252]' : 'bg-gray-300'}`}>2</span>
                 Endereço de Entrega
               </h2>
               {currentStep > 2 && (
-                <button onClick={() => setCurrentStep(2)} className="text-[#d4a017] text-xs font-bold hover:underline">Editar</button>
+                <button onClick={() => setCurrentStep(2)} className="text-[#ff5252] text-xs font-bold hover:underline">Editar</button>
               )}
             </div>
             
@@ -1463,7 +1463,7 @@ function CheckoutContent() {
                           onClick={() => setShippingOptionId(option.id)}
                           className={`rounded-xl border-2 bg-white p-4 text-left transition-all ${
                             isSelected
-                              ? 'border-[#d4a017] shadow-[0_10px_25px_rgba(212,160,23,0.14)]'
+                              ? 'border-[#ff5252] shadow-[0_10px_25px_rgba(255,82,82,0.14)]'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                         >
@@ -1472,7 +1472,7 @@ function CheckoutContent() {
                               <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                                 option.price === 0
                                   ? 'bg-emerald-50 text-emerald-600'
-                                  : 'bg-[#fff8e5] text-[#d4a017]'
+                                  : 'bg-[#ffe3b3] text-[#c91e5a]'
                               }`}>
                                 <Truck className="h-4 w-4" />
                               </span>
@@ -1481,7 +1481,7 @@ function CheckoutContent() {
                             <span className={`rounded-full px-2.5 py-1 text-xs font-black ${
                               option.price === 0
                                 ? 'bg-emerald-50 text-emerald-700'
-                                : 'bg-[#fff8e5] text-[#9a7100]'
+                                : 'bg-[#ffe3b3] text-[#9a7100]'
                             }`}>
                               {option.price === 0 ? 'Grátis' : `R$ ${option.price.toFixed(2).replace('.', ',')}`}
                             </span>
@@ -1503,9 +1503,9 @@ function CheckoutContent() {
           </motion.div>
           
           {/* Sessão 3: Pagamento */}
-          <motion.div id="payment-section" layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 3 ? 'border-[#d4a017] ring-1 ring-[#d4a017]' : 'border-gray-200 opacity-50'}`}>
+          <motion.div id="payment-section" layout className={`bg-white border rounded-2xl p-6 shadow-sm transition-all duration-300 ${currentStep === 3 ? 'border-[#ff5252] ring-1 ring-[#ff5252]' : 'border-gray-200 opacity-50'}`}>
             <h2 className={`text-lg font-extrabold mb-5 flex items-center gap-2 ${currentStep >= 3 ? 'text-gray-800' : 'text-gray-400'}`}>
-              <span className={`w-6 h-6 rounded-full text-[#1a1a1a] flex items-center justify-center text-xs ${currentStep >= 3 ? 'bg-[#d4a017]' : 'bg-gray-300'}`}>3</span>
+              <span className={`w-6 h-6 rounded-full text-white flex items-center justify-center text-xs ${currentStep >= 3 ? 'bg-[#ff5252]' : 'bg-gray-300'}`}>3</span>
               Forma de pagamento
             </h2>
             
@@ -1523,13 +1523,13 @@ function CheckoutContent() {
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   <button 
                     onClick={() => setPayMethod('pix')}
-                    className={`p-4 border-2 rounded-xl flex items-center gap-3 font-extrabold transition-all ${payMethod === 'pix' ? 'border-[#d4a017] bg-[#d4a017]/5 text-[#d4a017]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}
+                    className={`p-4 border-2 rounded-xl flex items-center gap-3 font-extrabold transition-all ${payMethod === 'pix' ? 'border-[#ff5252] bg-[#ff5252]/5 text-[#ff5252]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}
                   >
                   <img src="https://icons.yampi.me/svg/card-pix.svg" alt="Pix" width="28" height="20" /> PIX
                   </button>
                   <button 
                     onClick={() => setPayMethod('card')}
-                    className={`p-4 border-2 rounded-xl flex items-center gap-3 font-extrabold transition-all ${payMethod === 'card' ? 'border-[#d4a017] bg-[#d4a017]/5 text-[#d4a017]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}
+                    className={`p-4 border-2 rounded-xl flex items-center gap-3 font-extrabold transition-all ${payMethod === 'card' ? 'border-[#ff5252] bg-[#ff5252]/5 text-[#ff5252]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}
                   >
                     <CreditCard className="w-5 h-5" /> Cartão
                   </button>
@@ -1542,7 +1542,7 @@ function CheckoutContent() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    className="bg-gradient-to-b from-[#d4a017]/5 to-white border border-dashed border-[#d4a017]/40 rounded-xl p-5 text-center flex flex-col items-center"
+                    className="bg-gradient-to-b from-[#ff5252]/5 to-white border border-dashed border-[#ff5252]/40 rounded-xl p-5 text-center flex flex-col items-center"
                   >
                     {!pixData ? (
                       <>
@@ -1571,11 +1571,11 @@ function CheckoutContent() {
                         <p className="text-xs text-gray-500 mb-2">Ou copie o código abaixo (PIX Copia e Cola):</p>
                         <div className="flex items-center gap-2 w-full max-w-sm">
                           <input type="text" readOnly value={pixData.qrCode} className="flex-1 bg-white text-gray-700 text-xs p-3 rounded-xl border border-gray-200 font-mono focus:outline-none" />
-                          <button onClick={handleCopyPix} className="bg-[#d4a017] text-[#1a1a1a] text-xs font-bold px-4 py-3 rounded-xl hover:bg-[#d4a017]/80 transition-colors">COPIAR</button>
+                          <button onClick={handleCopyPix} className="bg-[#ff5252] text-white text-xs font-bold px-4 py-3 rounded-xl hover:bg-[#c91e5a] transition-colors">COPIAR</button>
                         </div>
                         <div className="mt-4 w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-3 text-left shadow-sm">
                           <div className="flex items-start gap-3">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fff8e5] text-[#d4a017]">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#ffe3b3] text-[#c91e5a]">
                               {pixProof ? <FileCheck2 className="h-5 w-5" /> : <Upload className="h-5 w-5" />}
                             </div>
                             <div className="min-w-0 flex-1">
@@ -1586,8 +1586,8 @@ function CheckoutContent() {
                             </div>
                           </div>
 
-                          <label className="mt-3 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#d4a017]/60 bg-[#fffdf5] px-4 py-3 text-xs font-black uppercase tracking-wide text-[#1a1a1a] transition hover:border-[#d4a017] hover:bg-[#fff8e5]">
-                            <Upload className="h-4 w-4 text-[#d4a017]" />
+                          <label className="mt-3 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[#ff5252]/60 bg-[#fff3df] px-4 py-3 text-xs font-black uppercase tracking-wide text-[#1a1a1a] transition hover:border-[#ff5252] hover:bg-[#ffe3b3]">
+                            <Upload className="h-4 w-4 text-[#ff5252]" />
                             {pixProof ? 'Trocar comprovante' : 'Enviar comprovante'}
                             <input
                               type="file"
@@ -1634,7 +1634,7 @@ function CheckoutContent() {
                           <button
                             type="button"
                             onClick={retryCardForm}
-                            className="w-full py-3 rounded-xl bg-[#d4a017] text-white font-bold text-sm hover:bg-[#b8890e] transition-colors"
+                            className="w-full py-3 rounded-xl bg-[#ff5252] text-white font-bold text-sm hover:bg-[#c91e5a] transition-colors"
                           >
                             Tentar com outro cartão
                           </button>
@@ -1652,7 +1652,7 @@ function CheckoutContent() {
                           />
                           {!cardSdkReady && !cardSdkError && (
                             <p className="mt-2 text-xs text-gray-500 flex items-center gap-1.5">
-                              <span className="inline-block h-2 w-2 rounded-full bg-[#d4a017] animate-pulse" />
+                              <span className="inline-block h-2 w-2 rounded-full bg-[#ff5252] animate-pulse" />
                               Carregando formulário seguro…
                             </p>
                           )}
@@ -1669,7 +1669,7 @@ function CheckoutContent() {
                           <select
                             value={cardInstallments}
                             onChange={e => setCardInstallments(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#d4a017]/30 focus:border-[#d4a017] transition-all"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#ff5252]/30 focus:border-[#ff5252] transition-all"
                           >
                             {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => (
                               <option key={n} value={n}>{n}x de R$ {(checkoutTotal / n).toFixed(2).replace('.', ',')} {n === 1 ? '(sem juros)' : ''}</option>
@@ -1682,7 +1682,7 @@ function CheckoutContent() {
                             <button
                               type="button"
                               onClick={retryCardForm}
-                              className="w-full py-2.5 rounded-xl border-2 border-[#d4a017] text-[#d4a017] font-bold text-sm hover:bg-[#fff9e6] transition-colors"
+                              className="w-full py-2.5 rounded-xl border-2 border-[#ff5252] text-[#ff5252] font-bold text-sm hover:bg-[#ffe3b3] transition-colors"
                             >
                               Tentar novamente
                             </button>

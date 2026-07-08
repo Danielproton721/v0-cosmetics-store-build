@@ -21,7 +21,7 @@ import "react-day-picker/style.css"
 type Day = { date: string; count: number }
 type Report = { days: Day[]; total: number; prevTotal: number }
 
-const GOLD = "#d4a017"
+const GOLD = "#ff5252"
 
 // Data local → "AAAA-MM-DD" (usa o que o usuário VÊ no calendário, sem conversão
 // de fuso — loja e operador são BR, bate com o servidor).
