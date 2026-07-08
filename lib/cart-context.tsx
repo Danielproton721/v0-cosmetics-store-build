@@ -40,7 +40,7 @@ const CartContext = createContext<CartContextType | null>(null)
 const STORAGE_KEY = "gota-dourada-cart"
 // Cupom do popup de boas-vindas. Aplicado aqui, o desconto flui pro carrinho,
 // checkout e valor cobrado no gateway (tudo deriva do totalPrice do contexto).
-export const COUPON_CODE = "BEMVINDO5"
+export const COUPON_CODE = "PRIMEIRACOMPRA"
 export const COUPON_PCT = 5
 const COUPON_KEY = "fn_coupon_applied"
 

@@ -73,13 +73,13 @@ export function CouponPopup() {
         <div className="bg-gradient-to-r from-[#ff5252] to-[#c91e5a] px-6 pb-7 pt-8 text-center text-white">
           <BadgePercent size={40} className="mx-auto mb-2 drop-shadow" />
           <p className="text-xs font-black uppercase tracking-[0.2em] text-white/85">
-            Presente de boas-vindas
+            Cupom de primeira compra
           </p>
           <p className="mt-1 font-serif text-5xl font-black leading-none drop-shadow-sm">
             {couponPct}% OFF
           </p>
           <p className="mt-2 text-[13px] font-semibold text-white/90">
-            em TODO o site — sem valor mínimo
+            na sua primeira compra — sem valor mínimo
           </p>
         </div>
 
