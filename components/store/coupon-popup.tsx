@@ -79,7 +79,7 @@ export function CouponPopup() {
             {couponPct}% OFF
           </p>
           <p className="mt-2 text-[13px] font-semibold text-white/90">
-            na sua primeira compra — sem valor mínimo
+            na sua primeira compra
           </p>
         </div>
 
